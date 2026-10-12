@@ -1,0 +1,117 @@
+{
+ "name": "KOMOK_РЕСЕЙЛ",
+ "sub": "роскошные сумки, Екатеринбург",
+ "tagline": "Вещи из канала — с бронью в один тап.",
+ "channel": "komok_resale",
+ "manager": "@komok_ru",
+ "ns": "novacode-demo-1d9b6a",
+ "items": [
+  {
+   "brand": "Celine",
+   "name": "Кросс боди",
+   "cat": "Сумки",
+   "size": "—",
+   "sizes": [],
+   "price": 105000,
+   "boutique": null,
+   "tb": "#E07A63",
+   "tc": "#FFF3EE",
+   "fs": 24,
+   "sold": false,
+   "id": "i0"
+  },
+  {
+   "brand": "Bottega Veneta",
+   "name": "Chain Pouch",
+   "cat": "Сумки",
+   "size": "—",
+   "sizes": [],
+   "price": 65000,
+   "boutique": null,
+   "tb": "#B08A4A",
+   "tc": "#FFF8EA",
+   "fs": 15,
+   "sold": false,
+   "id": "i1"
+  },
+  {
+   "brand": "David Koma",
+   "name": "Ботфорты",
+   "cat": "Обувь",
+   "size": "38",
+   "sizes": [
+    "38"
+   ],
+   "price": 33800,
+   "boutique": null,
+   "tb": "#2F4F3E",
+   "tc": "#EAF2E3",
+   "fs": 18,
+   "sold": false,
+   "id": "i2"
+  },
+  {
+   "brand": "Sporty&Rich",
+   "name": "Джинсы",
+   "cat": "Одежда",
+   "size": "30, S/M",
+   "sizes": [
+    "30",
+    "S/M"
+   ],
+   "price": 7000,
+   "boutique": null,
+   "tb": "#1F2E55",
+   "tc": "#E9E3D6",
+   "fs": 18,
+   "sold": false,
+   "id": "i3"
+  },
+  {
+   "brand": "Chanel",
+   "name": "Кросс-боди",
+   "cat": "Сумки",
+   "size": "—",
+   "sizes": [],
+   "price": 310000,
+   "boutique": null,
+   "tb": "#2A2A2A",
+   "tc": "#E9D7A8",
+   "fs": 24,
+   "sold": false,
+   "id": "i4"
+  },
+  {
+   "brand": "Ushatava",
+   "name": "Брюки",
+   "cat": "Одежда",
+   "size": "—",
+   "sizes": [],
+   "price": 7000,
+   "boutique": null,
+   "tb": "#E8DCC6",
+   "tc": "#3A2F23",
+   "fs": 22,
+   "sold": false,
+   "id": "i5"
+  }
+ ],
+ "brands": [
+  "Celine",
+  "Bottega Veneta",
+  "David Koma",
+  "Sporty&Rich",
+  "Chanel",
+  "Ushatava"
+ ],
+ "sizes": [
+  "38",
+  "30",
+  "S/M"
+ ],
+ "cats": [
+  "Сумки",
+  "Обувь",
+  "Одежда"
+ ]
+}
