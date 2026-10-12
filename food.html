@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Меню и предзаказ в Telegram — демо</title>
+<link rel="icon" href="data:,">
+<link rel="preload" href="fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* шрифты лежат на сайте, без запросов к Google */
+@font-face{font-family:"Playfair Display";src:url("fonts/playfair-display-cyrillic-wght-normal.woff2") format("woff2");font-weight:400 900;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Playfair Display";src:url("fonts/playfair-display-latin-wght-normal.woff2") format("woff2");font-weight:400 900;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Manrope";src:url("fonts/manrope-cyrillic-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Manrope";src:url("fonts/manrope-latin-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Manrope";src:url("fonts/manrope-latin-ext-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+:root{
+  --blush:#F3E6E3; --blush-2:#EAD5D1; --paper:#FFFFFF; --cocoa:#2B1F1D; --cocoa-2:#5E4C48;
+  --rose:#C27C82; --rose-deep:#9C4E57; --line:#E2CFCB; --ok:#2F6B4F;
+  --stage:#2A2220;
+  --serif:"Playfair Display", "Didot", "Times New Roman", serif;
+  --sans:"Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--stage);color:#F3E6E3;font:400 15px/1.45 var(--sans);-webkit-font-smoothing:antialiased}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--rose);outline-offset:2px;border-radius:6px}
+
+/* ---------- stage (desktop) ---------- */
+.stage{min-height:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(32px,6vw,96px);align-items:center;max-width:1180px;margin:0 auto;padding:40px clamp(20px,5vw,56px)}
+.story h1{font:500 clamp(38px,4.6vw,64px)/1.02 var(--serif);letter-spacing:-.01em;margin:0 0 18px;color:#FBF3F1}
+.story p.lead{max-width:40ch;color:#CDB9B4;font-size:17px;margin:0 0 30px}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s;max-width:420px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:28px 1fr;gap:12px;padding:12px 0;border-top:1px solid #43372F;color:#9F8B86;transition:color .3s}
+.steps li::before{content:counter(s);font:700 13px/1.6 var(--sans);color:#6E5C57;transition:color .3s}
+.steps li b{display:block;font-weight:600;color:inherit}
+.steps li.on{color:#FBF3F1}
+.steps li.on::before{color:var(--rose)}
+.tourbtn{margin-top:26px;display:inline-flex;align-items:center;gap:10px;background:#FBF3F1;color:var(--cocoa);border:0;border-radius:999px;padding:13px 22px;font-weight:700}
+.tourbtn:hover{background:#fff}
+.credit{margin-top:22px;font-size:13px;color:#7D6A65}
+.credit a{color:#B9A39E}
+
+/* ---------- phone ---------- */
+.phone{position:relative;width:390px;height:812px;border-radius:52px;padding:12px;background:#0d0a09;box-shadow:0 0 0 1px #4a3d38,0 50px 80px -40px rgba(0,0,0,.7)}
+.screen{position:relative;width:100%;height:100%;border-radius:41px;overflow:hidden;background:var(--blush);color:var(--cocoa)}
+.status{position:absolute;inset:0 0 auto;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font:700 14px/1 var(--sans);z-index:6;color:var(--cocoa)}
+.status i{font-style:normal;letter-spacing:2px;font-size:11px}
+.tgbar{position:absolute;top:44px;left:0;right:0;height:46px;display:flex;align-items:center;gap:10px;padding:0 16px;z-index:5;background:var(--blush);border-bottom:1px solid var(--line)}
+.tgbar__close{font-size:14px;font-weight:600;color:var(--rose-deep);background:none;border:0;padding:6px 0}
+.tgbar__title{flex:1;text-align:center;line-height:1.15}
+.tgbar__title b{display:block;font-size:15px}
+.tgbar__title small{font-size:11.5px;color:var(--cocoa-2)}
+.tgbar__dots{width:28px;text-align:right;font-weight:800;color:var(--cocoa-2)}
+
+.views{position:absolute;top:90px;left:0;right:0;bottom:0;overflow:hidden}
+.view{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;background:var(--blush);transition:transform .42s var(--ease),opacity .3s}
+.view::-webkit-scrollbar{display:none}
+.view.enter{transform:translateX(100%)}
+.view.leave{transform:translateX(-25%);opacity:.4}
+.view.back-enter{transform:translateX(-25%);opacity:.4}
+.view.back-leave{transform:translateX(100%)}
+
+/* home */
+.brand{padding:18px 18px 4px;display:flex;align-items:flex-end;justify-content:space-between}
+.brand h2{margin:0;font:700 34px/1 var(--serif);letter-spacing:.02em}
+.brand span{font-size:12.5px;color:var(--cocoa-2);padding-bottom:4px}
+.tagline{padding:4px 18px 14px;color:var(--cocoa-2);font-size:13.5px}
+.tools{display:flex;gap:8px;padding:0 18px 12px;position:sticky;top:0;background:var(--blush);z-index:2;padding-top:6px}
+.search{flex:1;display:flex;align-items:center;gap:8px;height:42px;padding:0 14px;border-radius:14px;background:var(--paper);color:#9a8783;font-size:14px}
+.fbtn{height:42px;padding:0 14px;border-radius:14px;border:0;background:var(--cocoa);color:#fff;font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:6px}
+.fbtn em{font-style:normal;min-width:18px;height:18px;border-radius:9px;background:var(--rose);font-size:11px;line-height:18px;text-align:center;padding:0 5px}
+.cats{display:flex;gap:6px;padding:0 18px 14px;overflow-x:auto;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.cats span{flex:none;padding:7px 12px;border-radius:20px;border:1px solid var(--line);font-size:12.5px;font-weight:600;background:transparent}
+.cats .on{background:var(--paper);border-color:var(--paper)}
+.active-f{display:none;padding:0 18px 12px;gap:6px;flex-wrap:wrap}
+.active-f.show{display:flex}
+.active-f span{padding:5px 10px;border-radius:20px;background:var(--rose);color:#fff;font-size:12px;font-weight:700}
+.active-f button{border:0;background:none;color:var(--rose-deep);font-weight:700;font-size:12px;padding:5px 4px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px 28px}
+.card{position:relative;background:var(--paper);border-radius:18px;padding:8px 8px 11px;border:0;text-align:left;color:inherit}
+.card.sold .tag{filter:grayscale(1) opacity(.55)}
+.card .meta{padding:9px 4px 0}
+.card .nm{font-size:12.5px;line-height:1.3;height:33px;overflow:hidden}
+.card .pr{margin-top:5px;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.card .pr b{font-size:14.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.card .pr s{font-size:11.5px;color:#a7928e}
+.card .sz{font-size:11.5px;color:var(--cocoa-2);margin-top:2px}
+.badge{position:absolute;top:14px;left:14px;z-index:2;padding:3px 7px;border-radius:7px;background:var(--cocoa);color:#fff;font-size:11px;font-weight:800}
+.badge.soldb{background:#8f817e}
+.badge.res{background:var(--ok)}
+
+/* the hang tag — the one bold element */
+.tag{position:relative;aspect-ratio:4/5;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;color:var(--tc,#fff);background:var(--tb,#2B1F1D);transition:filter .3s}
+.tag::before{content:"";position:absolute;top:12px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:var(--blush);box-shadow:inset 0 1px 2px rgba(0,0,0,.25)}
+.tag::after{content:"";position:absolute;top:-30px;left:50%;width:1.5px;height:44px;background:rgba(255,255,255,.35);transform:rotate(18deg);transform-origin:bottom}
+.tag .bn{font:700 var(--fs,22px)/1 var(--serif);letter-spacing:.06em;text-align:center;padding:0 10px;text-transform:none}
+.tag .it{margin-top:8px;font-size:11px;opacity:.75;letter-spacing:.02em}
+.tag.big{aspect-ratio:1/1.02;border-radius:22px}
+.tag.big .bn{font-size:calc(var(--fs,22px)*1.9)}
+.tag.big .it{font-size:14px;margin-top:12px}
+.tag.big::before{top:20px;width:18px;height:18px;margin-left:-9px}
+
+/* product */
+.pv{padding:14px 16px 120px}
+.pv .tag{margin-bottom:16px}
+.pv .brandline{font:700 24px/1.1 var(--serif);letter-spacing:.02em}
+.pv .title{margin-top:4px;font-size:15px;color:var(--cocoa-2)}
+.pv .prices{display:flex;align-items:baseline;gap:10px;margin-top:14px}
+.pv .prices b{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
+.pv .prices s{color:#a7928e;font-size:14px}
+.pv .save{display:inline-block;margin-top:8px;padding:4px 9px;border-radius:8px;background:var(--blush-2);color:var(--rose-deep);font-size:12.5px;font-weight:800}
+.facts{margin-top:16px;background:var(--paper);border-radius:16px;padding:4px 14px}
+.facts div{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid #f0e4e1;font-size:13.5px}
+.facts div:last-child{border-bottom:0}
+.facts span{color:var(--cocoa-2)}
+.facts b{font-weight:600;text-align:right}
+.back{position:absolute;top:24px;left:26px;z-index:3;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.85);font-size:18px;font-weight:700;display:grid;place-items:center}
+.cta{position:absolute;left:0;right:0;bottom:0;padding:12px 16px 22px;background:linear-gradient(transparent,var(--blush) 30%);display:flex;flex-direction:column;gap:8px;z-index:4}
+.btn{height:52px;border-radius:16px;border:0;background:var(--cocoa);color:#fff;font-weight:800;font-size:15.5px}
+.btn.ghost{background:var(--paper);color:var(--cocoa);font-weight:700;height:46px;font-size:14.5px}
+.btn.rose{background:var(--rose-deep)}
+.btn[disabled]{background:#cdbcb8}
+.soldnote{margin-top:14px;padding:12px 14px;border-radius:14px;background:var(--paper);font-size:13.5px;color:var(--cocoa-2)}
+.soldnote b{color:var(--cocoa)}
+
+/* sheets */
+.scrim{position:absolute;inset:0;z-index:20;background:rgba(43,31,29,.35);opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:21;background:var(--paper);border-radius:26px 26px 0 0;padding:10px 18px 26px;transform:translateY(105%);transition:transform .42s var(--ease);max-height:86%;overflow-y:auto}
+.sheet.on{transform:none}
+.grab{width:40px;height:5px;border-radius:3px;background:#e2d3cf;margin:0 auto 14px}
+.sheet h3{margin:0 0 4px;font:700 22px/1.15 var(--serif)}
+.sheet .sub{color:var(--cocoa-2);font-size:13.5px;margin-bottom:14px}
+.sheet h4{margin:16px 0 8px;font-size:13px;color:var(--cocoa-2);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:9px 13px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:13.5px;font-weight:600;transition:background-color .2s,color .2s,border-color .2s}
+.chip.on{background:var(--cocoa);border-color:var(--cocoa);color:#fff}
+.sheet .btn{width:100%;margin-top:20px}
+.mini{display:flex;gap:12px;align-items:center;padding:10px;border-radius:16px;background:var(--blush)}
+.mini .tag{width:62px;flex:none;border-radius:10px}
+.mini .tag .bn{font-size:11px;letter-spacing:.03em}
+.mini .tag::before{top:6px;width:7px;height:7px;margin-left:-3.5px}
+.mini .tag::after,.mini .tag .it{display:none}
+.mini p{margin:0;font-size:13.5px;line-height:1.35}
+.mini p b{display:block;font-size:15px}
+.field{margin-top:12px}
+.field label{display:block;font-size:12px;color:var(--cocoa-2);margin-bottom:5px}
+.field div{min-height:44px;padding:12px 13px;border-radius:12px;background:var(--blush);font-size:14.5px}
+.share{margin-top:10px;width:100%;height:44px;border-radius:12px;border:1px dashed var(--rose);background:#fff;color:var(--rose-deep);font-weight:700;font-size:13.5px}
+.terms{margin-top:12px;font-size:12.5px;color:var(--cocoa-2)}
+.done{text-align:center;padding:10px 4px 0}
+.done .ring{width:64px;height:64px;margin:6px auto 14px;border-radius:50%;background:var(--ok);display:grid;place-items:center;color:#fff;font-size:30px;animation:pop .45s var(--ease)}
+@keyframes pop{from{transform:scale(.5);opacity:0}}
+.done h3{text-align:center}
+.done .sub{text-align:center}
+.mgr{margin-top:16px;text-align:left;border-radius:16px;background:#17212B;color:#F5F5F5;padding:12px;font-family:-apple-system,"Segoe UI",Roboto,sans-serif}
+.mgr small{display:block;color:#7F91A4;font-size:11.5px;margin-bottom:6px}
+.mgr .bub{background:#182533;border-radius:12px 12px 12px 4px;padding:9px 11px;font-size:13px;line-height:1.4}
+.mgr .bub b{color:#E9C2C6}
+
+/* push */
+.push{position:absolute;top:46px;left:10px;right:10px;z-index:30;display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:20px;background:rgba(255,255,255,.96);box-shadow:0 18px 40px -18px rgba(43,31,29,.5);transform:translateY(-140%);transition:transform .5s var(--ease)}
+.push.on{transform:none}
+.push .ic{width:36px;height:36px;flex:none;border-radius:10px;background:var(--cocoa);color:#fff;display:grid;place-items:center;font:700 15px/1 var(--serif)}
+.push p{margin:0;font-size:13px;line-height:1.35}
+.push p b{font-size:13.5px}
+.push p small{float:right;color:#9a8783;font-size:11.5px}
+
+/* tap indicator for the tour */
+.tap{position:absolute;z-index:40;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:2px solid var(--rose-deep);background:rgba(194,124,130,.25);opacity:0;pointer-events:none;transition:left .5s var(--ease),top .5s var(--ease),opacity .2s}
+.tap.press{animation:press .3s ease-out}
+@keyframes press{50%{transform:scale(.7);background:rgba(194,124,130,.55)}}
+.empty{grid-column:1/-1;padding:30px 10px;text-align:center;color:var(--cocoa-2)}
+
+/* mobile: the app fills the screen */
+@media (max-width:560px){
+  body{background:var(--blush)}
+  .stage{display:block;padding:0}
+  .story{display:none}
+  .phone{width:100%;height:100svh;border-radius:0;padding:0;background:none;box-shadow:none}
+  .screen{border-radius:0}
+  .status{display:none}
+  .tgbar{top:0}
+  .views{top:46px}
+  .back{top:12px}
+  .push{top:8px}
+  .fab{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:50;border:0;border-radius:999px;background:var(--cocoa);color:#fff;font-weight:800;padding:12px 16px;box-shadow:0 12px 30px -12px rgba(0,0,0,.5)}
+}
+@media (min-width:561px){ .fab{display:none} }
+@media (max-width:980px) and (min-width:561px){ .stage{grid-template-columns:1fr;justify-items:center} .story{text-align:left;max-width:520px} }
+@media (prefers-reduced-motion:reduce){ *{transition-duration:0s!important;animation:none!important} }
+</style>
+<style>
+.loading{position:fixed;inset:0;display:grid;place-items:center;background:var(--stage);color:#CDB9B4;font:500 15px/1.4 var(--sans);z-index:99;transition:opacity .3s}
+.loading.off{opacity:0;pointer-events:none}
+.brand{flex-wrap:wrap;gap:4px 12px}.brand h2{white-space:nowrap}.brand h2.mid{font-size:27px}.brand h2.long{font-size:22px}
+.notice{margin-top:10px;font-size:12px;color:#6E5C57}
+.bonus{margin:4px 14px 12px;border-radius:18px;padding:13px 15px;background:var(--cocoa);color:#FBF3F1;font-size:13px;display:flex;gap:10px;align-items:center}
+.bonus b{font:700 16px/1.2 var(--serif);display:block}
+.bonus i{font-style:normal;font-size:22px}
+.group{padding:0 14px 6px}
+.group h4{margin:10px 4px 8px;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--cocoa-2)}
+.dish{display:flex;align-items:center;gap:12px;background:var(--paper);border-radius:16px;padding:12px 12px 12px 14px;margin-bottom:8px}
+.dish .dot{width:44px;height:44px;flex:none;border-radius:12px;display:grid;place-items:center;font:700 17px/1 var(--serif);color:var(--tc);background:var(--tb)}
+.dish .nm{flex:1;font-size:14px;line-height:1.3}.dish .nm small{display:block;color:var(--cocoa-2);font-size:12px;margin-top:2px}
+.dish .pr{font-weight:800;font-size:14px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:32px;height:32px;border-radius:10px;border:0;background:var(--cocoa);color:#fff;font-weight:800;font-size:17px;line-height:1}
+.qty button.minus{background:var(--blush-2);color:var(--cocoa)}
+.qty span{min-width:14px;text-align:center;font-weight:800}
+.cartbar{position:absolute;left:12px;right:12px;bottom:14px;z-index:8;height:54px;border:0;border-radius:16px;background:var(--rose-deep);color:#fff;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;box-shadow:0 14px 30px -14px rgba(43,31,29,.6);transform:translateY(140%);transition:transform .35s var(--ease)}
+.cartbar.on{transform:none}
+.when{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.when button{padding:10px 0;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:700;font-size:13.5px}
+.when button.on{background:var(--cocoa);border-color:var(--cocoa);color:#fff}
+.lines{margin:12px 0;background:var(--blush);border-radius:16px;padding:10px 14px;font-size:13.5px}
+.lines div{display:flex;justify-content:space-between;padding:4px 0}.lines .tot{border-top:1px solid var(--line);margin-top:4px;padding-top:8px;font-weight:800}
+</style>
+</head>
+<body>
+<div class="loading" id="loading">Открываю меню…</div>
+<div class="stage">
+  <section class="story" aria-label="Что показывает демо">
+    <h1 id="storyTitle">Меню и предзаказ прямо в&nbsp;Telegram</h1>
+    <p class="lead">Гость выбирает блюда, оформляет заказ к нужному времени и забирает без очереди, а вы получаете готовый заказ — без переписки.</p>
+    <ol class="steps" id="steps">
+      <li data-s="0"><div><b>Меню и цены из канала</b>всё на одном экране</div></li>
+      <li data-s="1"><div><b>Корзина в один тап</b>без звонков и переписки</div></li>
+      <li data-s="2"><div><b>Заказ к нужному времени</b>«заберу через 20 минут»</div></li>
+      <li data-s="3"><div><b>Кафе получает заказ</b>сразу с составом и временем</div></li>
+      <li data-s="4"><div><b>«Заказ готов» и бонусы</b>гости возвращаются чаще</div></li>
+    </ol>
+    <button class="tourbtn" id="tourBtn" type="button">▶ Показать за 30 секунд</button>
+    <p class="credit" id="credit">Демо-концепт от NOVACODE · <a href="https://new-coder.ru">new-coder.ru</a></p>
+    <p class="notice">Это демо-страница. Она считает только число открытий ссылки — без cookie и личных данных.</p>
+  </section>
+
+  <div class="phone">
+    <div class="screen" id="screen">
+      <div class="status"><span>12:40</span><i>●●● 5G ▮</i></div>
+      <header class="tgbar">
+        <button class="tgbar__close" type="button">Закрыть</button>
+        <div class="tgbar__title"><b id="barTitle">Меню</b><small>мини-приложение</small></div>
+        <span class="tgbar__dots" aria-hidden="true">···</span>
+      </header>
+      <div class="views" id="views"></div>
+      <button class="cartbar" id="cartbar" type="button" data-act="cart"><span id="cartN">Корзина</span><span id="cartSum"></span></button>
+      <div class="scrim" id="scrim"></div>
+      <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Окно"></div>
+      <div class="push" id="push" role="status"></div>
+      <span class="tap" id="tap" aria-hidden="true"></span>
+    </div>
+  </div>
+</div>
+<button class="fab" id="fab" type="button">▶ Показ</button>
+
+<script>
+(() => {
+'use strict';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const Q = new URLSearchParams(location.search);
+const ID = (Q.get('id') || '').replace(/[^a-z0-9]/gi, '');
+const PREVIEW = Q.has('preview');
+const FALLBACK = 'https://new-coder.ru';
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => n.toLocaleString('ru-RU') + ' ₽';
+const WHEN = ['через 15 мин', 'через 30 мин', 'к 13:30'];
+
+let D, M;
+const views = document.getElementById('views'), sheet = document.getElementById('sheet'), scrim = document.getElementById('scrim');
+const push = document.getElementById('push'), tapEl = document.getElementById('tap'), screen = document.getElementById('screen');
+const stepsEl = document.getElementById('steps'), cartbar = document.getElementById('cartbar');
+const state = { cart:{}, when:1 };
+
+const count = () => Object.values(state.cart).reduce((a, b) => a + b, 0);
+const total = () => Object.entries(state.cart).reduce((a, [id, q]) => a + M.find(x => x.id === id).price * q, 0);
+function updateBar(){
+  const n = count();
+  cartbar.classList.toggle('on', n > 0);
+  document.getElementById('cartN').textContent = `Корзина · ${n}`;
+  document.getElementById('cartSum').textContent = n ? fmt(total()) : '';
+}
+function dishRow(d){
+  const q = state.cart[d.id] || 0;
+  return `<div class="dish"><span class="dot" style="--tb:${d.tb};--tc:${d.tc}">${esc(d.name.slice(0,1))}</span>
+    <span class="nm">${esc(d.name)}${d.weight ? `<small>${esc(d.weight)}</small>` : ''}</span>
+    ${q ? `<span class="qty"><button type="button" class="minus" data-minus="${d.id}" aria-label="Убрать">−</button><span>${q}</span><button type="button" data-plus="${d.id}" aria-label="Добавить">+</button></span>`
+        : `<span class="pr">${fmt(d.price)}</span><span class="qty"><button type="button" data-plus="${d.id}" aria-label="Добавить">+</button></span>`}</div>`;
+}
+function homeHTML(){
+  const cls = D.name.length > 14 ? 'long' : D.name.length > 9 ? 'mid' : '';
+  const groups = D.cats.map(c => ({c, list: M.filter(d => d.cat === c)})).filter(g => g.list.length);
+  return `<div class="view" data-v="home">
+    <div class="brand"><h2 class="${cls}">${esc(D.name)}</h2><span>${esc(D.sub)}</span></div>
+    <div class="tagline">${esc(D.tagline)}</div>
+    <div class="bonus"><i>☕</i><div><b>5% вернётся баллами</b>копите и платите ими за следующий заказ</div></div>
+    ${groups.map(g => `<div class="group"><h4>${esc(g.c)}</h4>${g.list.map(dishRow).join('')}</div>`).join('')}
+    <div style="height:84px"></div></div>`;
+}
+function rerender(){ const cur = views.lastElementChild, top = cur ? cur.scrollTop : 0; views.innerHTML = homeHTML();
+  views.lastElementChild.scrollTop = top; updateBar(); }
+
+function openSheet(html){ sheet.innerHTML = '<div class="grab"></div>' + html; scrim.classList.add('on'); sheet.classList.add('on'); }
+function closeSheet(){ scrim.classList.remove('on'); sheet.classList.remove('on'); }
+scrim.addEventListener('click', closeSheet);
+function cartSheet(){
+  const lines = Object.entries(state.cart).map(([id, q]) => { const d = M.find(x => x.id === id);
+    return `<div><span>${esc(d.name)} × ${q}</span><b>${fmt(d.price * q)}</b></div>`; }).join('');
+  openSheet(`<h3>Ваш заказ</h3><div class="sub">Заберёте без очереди — всё будет готово к вашему приходу</div>
+    <div class="lines">${lines}<div class="tot"><span>Итого</span><span>${fmt(total())}</span></div></div>
+    <h4>Когда заберёте</h4><div class="when">${WHEN.map((w, i) => `<button type="button" class="${state.when === i ? 'on' : ''}" data-when="${i}">${w}</button>`).join('')}</div>
+    <div class="field"><label>Телефон</label><div id="phoneF" style="color:#9a8783">Не указан</div></div>
+    <button type="button" class="share" data-act="share">Поделиться номером из Telegram</button>
+    <button type="button" class="btn" data-act="order" id="orderBtn" disabled>Заказать</button>`);
+}
+function doneSheet(){
+  const lines = Object.entries(state.cart).map(([id, q]) => `${esc(M.find(x => x.id === id).name)} × ${q}`).join('<br>');
+  openSheet(`<div class="done"><div class="ring">✓</div><h3>Заказ №27 принят</h3>
+    <div class="sub">Заберите ${WHEN[state.when]}. Начислим ${Math.round(total() * 0.05)} баллов.</div></div>
+    <div class="mgr"><small>Так это видит ${D.manager ? esc(D.manager) : 'кафе'}</small>
+      <div class="bub"><b>Новый заказ №27</b> — ${WHEN[state.when]}<br>${lines}<br>Итого ${fmt(total())} · +7 912 ••• 12 40</div></div>
+    <button type="button" class="btn" data-act="close">Готово</button>`);
+}
+function showPush(){
+  push.innerHTML = `<div class="ic">${esc(D.name.slice(0,1))}</div><p><b>${esc(D.name)}</b><small>сейчас</small><br>Заказ №27 готов — можно забирать! Баллы уже на счёте.</p>`;
+  push.classList.add('on'); setTimeout(() => push.classList.remove('on'), 4200);
+}
+
+screen.addEventListener('click', e => {
+  const t = e.target.closest('[data-plus],[data-minus],[data-act],[data-when]'); if (!t) return;
+  if (t.dataset.plus){ state.cart[t.dataset.plus] = (state.cart[t.dataset.plus] || 0) + 1; return rerender(); }
+  if (t.dataset.minus){ const id = t.dataset.minus; state.cart[id]--; if (state.cart[id] <= 0) delete state.cart[id]; return rerender(); }
+  if (t.dataset.when){ state.when = +t.dataset.when; sheet.querySelectorAll('[data-when]').forEach(b => b.classList.toggle('on', b === t)); return; }
+  const a = t.dataset.act;
+  if (a === 'cart') cartSheet();
+  else if (a === 'share'){ const f = document.getElementById('phoneF'); f.textContent = '+7 912 ••• 12 40'; f.style.color = ''; t.remove(); document.getElementById('orderBtn').disabled = false; }
+  else if (a === 'order'){ doneSheet(); }
+  else if (a === 'close'){ closeSheet(); state.cart = {}; rerender(); views.lastElementChild.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'}); }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+
+let touring = false;
+const sleep = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
+function mark(i){ stepsEl.querySelectorAll('li').forEach(li => li.classList.toggle('on', +li.dataset.s === i)); }
+async function tap(sel){
+  const el = typeof sel === 'string' ? screen.querySelector(sel) : sel; if (!el) return;
+  const r = el.getBoundingClientRect(), b = screen.getBoundingClientRect(), v = el.closest('.view');
+  if (v && (r.bottom > b.bottom - 90 || r.top < b.top + 120)){ const vr = v.getBoundingClientRect();
+    v.scrollTo({top: v.scrollTop + (r.top - vr.top) - vr.height / 2 + r.height / 2, behavior: reduce ? 'auto' : 'smooth'}); await sleep(650); }
+  const r2 = el.getBoundingClientRect();
+  tapEl.style.left = (r2.left - b.left + r2.width / 2) + 'px'; tapEl.style.top = (r2.top - b.top + r2.height / 2) + 'px'; tapEl.style.opacity = '1';
+  await sleep(560); tapEl.classList.remove('press'); void tapEl.offsetWidth; tapEl.classList.add('press'); await sleep(200); el.click(); await sleep(250);
+}
+async function tour(){
+  if (touring) return; touring = true; document.getElementById('fab').style.display = 'none';
+  closeSheet(); state.cart = {}; state.when = 1; rerender(); views.lastElementChild.scrollTop = 0; await sleep(900);
+  mark(0); views.lastElementChild.scrollTo({top:220, behavior: reduce ? 'auto' : 'smooth'}); await sleep(900);
+  views.lastElementChild.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'}); await sleep(700);
+  mark(1); await tap(`[data-plus="${M[0].id}"]`); await sleep(400); await tap(`[data-plus="${M[0].id}"]`); await sleep(400);
+  await tap(`[data-plus="${M[Math.min(2, M.length - 1)].id}"]`); await sleep(700);
+  mark(2); await tap('#cartbar'); await sleep(800); await tap('[data-when="0"]'); await sleep(400);
+  await tap('[data-act="share"]'); await sleep(400); await tap('#orderBtn');
+  mark(3); await sleep(3400); await tap('[data-act="close"]'); await sleep(300);
+  tapEl.style.opacity = '0';
+  mark(4); showPush(); await sleep(4600);
+  mark(-1); touring = false; document.getElementById('fab').style.display = '';
+}
+
+function start(data){
+  D = data; M = data.dishes;
+  document.title = `${D.name}: меню в Telegram — демо`;
+  document.getElementById('storyTitle').innerHTML = `${esc(D.name)}: меню и предзаказ прямо в&nbsp;Telegram`;
+  document.getElementById('barTitle').textContent = D.name;
+  if (D.channel) document.getElementById('credit').innerHTML =
+    `Демо-концепт от NOVACODE · <a href="https://new-coder.ru">new-coder.ru</a>. Блюда и цены взяты из канала @${esc(D.channel)} для примера.`;
+  document.getElementById('tourBtn').addEventListener('click', tour);
+  document.getElementById('fab').addEventListener('click', tour);
+  rerender(); document.getElementById('loading').classList.add('off');
+  if (!PREVIEW && D.ns) fetch(`https://abacus.jasoncameron.dev/hit/${encodeURIComponent(D.ns)}/${ID}`).catch(() => {});
+  if (location.hash === '#tour') setTimeout(tour, 600);
+}
+if (!ID) location.replace(FALLBACK);
+else fetch(`d/${ID}.json`, {cache: 'no-cache'})
+  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .then(d => { if (!d.dishes || d.dishes.length < 5) throw new Error('empty'); start(d); })
+  .catch(() => location.replace(FALLBACK));
+})();
+</script>
+</body>
+</html>
