@@ -1,0 +1,154 @@
+{
+ "kind": "booking",
+ "name": "Парфюмерная",
+ "sub": "парфюмерия и косметика оригиналы, Москва",
+ "tagline": "Свободные окошки — сразу в записи.",
+ "channel": "parfumsalles",
+ "manager": "@LesjaLisa",
+ "ns": "novacode-demo-1d9b6a",
+ "cats": [
+  "Услуги"
+ ],
+ "services": [
+  {
+   "name": "Room 1015 Cherry Punk edp",
+   "price": 150,
+   "from": false,
+   "dur": "",
+   "cat": "Услуги",
+   "tb": "#E8DCC6",
+   "tc": "#3A2F23",
+   "id": "s0"
+  },
+  {
+   "name": "Jasmine Freak Room 1015 edp",
+   "price": 150,
+   "from": false,
+   "dur": "",
+   "cat": "Услуги",
+   "tb": "#141414",
+   "tc": "#F3F3F3",
+   "id": "s1"
+  },
+  {
+   "name": "Galleria Milano Fragranze",
+   "price": 100,
+   "from": false,
+   "dur": "",
+   "cat": "Услуги",
+   "tb": "#C3202F",
+   "tc": "#FFEFEF",
+   "id": "s2"
+  },
+  {
+   "name": "Diurno Milano Fragranze",
+   "price": 100,
+   "from": false,
+   "dur": "",
+   "cat": "Услуги",
+   "tb": "#111111",
+   "tc": "#EDEDED",
+   "id": "s3"
+  },
+  {
+   "name": "Mandarina Corsica L'Artisan Parfumeur",
+   "price": 230,
+   "from": false,
+   "dur": "",
+   "cat": "Услуги",
+   "tb": "#C3202F",
+   "tc": "#FFEFEF",
+   "id": "s4"
+  },
+  {
+   "name": "Matelda Profumo di Firenze",
+   "price": 150,
+   "from": false,
+   "dur": "",
+   "cat": "Услуги",
+   "tb": "#D9C2A5",
+   "tc": "#4A3826",
+   "id": "s5"
+  },
+  {
+   "name": "Trastevere Pantheon Roma",
+   "price": 220,
+   "from": false,
+   "dur": "",
+   "cat": "Услуги",
+   "tb": "#E07A63",
+   "tc": "#FFF3EE",
+   "id": "s6"
+  },
+  {
+   "name": "Almond Harmony The House of Oud",
+   "price": 150,
+   "from": false,
+   "dur": "",
+   "cat": "Услуги",
+   "tb": "#B98A5E",
+   "tc": "#FFF6EC",
+   "id": "s7"
+  },
+  {
+   "name": "Dreaming With Ghosts Mark Buxton",
+   "price": 120,
+   "from": false,
+   "dur": "",
+   "cat": "Услуги",
+   "tb": "#B08A4A",
+   "tc": "#FFF8EA",
+   "id": "s8"
+  },
+  {
+   "name": "Oasis Dawn Estée Lauder",
+   "price": 150,
+   "from": false,
+   "dur": "",
+   "cat": "Услуги",
+   "tb": "#5B2A6E",
+   "tc": "#F7E3F2",
+   "id": "s9"
+  },
+  {
+   "name": "Barenia intense",
+   "price": 130,
+   "from": false,
+   "dur": "",
+   "cat": "Услуги",
+   "tb": "#B98A5E",
+   "tc": "#FFF6EC",
+   "id": "s10"
+  },
+  {
+   "name": "Chimaera 2024 Tiziana Terenzi",
+   "price": 200,
+   "from": false,
+   "dur": "",
+   "cat": "Услуги",
+   "tb": "#3B3F58",
+   "tc": "#F1EEE6",
+   "id": "s11"
+  },
+  {
+   "name": "Phaedon Ilanguara",
+   "price": 180,
+   "from": false,
+   "dur": "",
+   "cat": "Услуги",
+   "tb": "#D9C2A5",
+   "tc": "#4A3826",
+   "id": "s12"
+  },
+  {
+   "name": "Mind games",
+   "price": 250,
+   "from": false,
+   "dur": "",
+   "cat": "Услуги",
+   "tb": "#B08A4A",
+   "tc": "#FFF8EA",
+   "id": "s13"
+  }
+ ]
+}
