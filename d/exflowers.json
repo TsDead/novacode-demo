@@ -1,0 +1,26 @@
+{
+ "kind": "flowers",
+ "name": "Флёр",
+ "sub": "цветочная мастерская · доставка по городу",
+ "channel": "",
+ "manager": "@fleur_manager",
+ "ns": "",
+ "delivery": "Доставка сегодня от 2 часов · 350 ₽",
+ "note": "Пришлём фото букета перед отправкой",
+ "delivery_price": 350,
+ "base_price": 4500,
+ "card_text": "С днём рождения, мама!",
+ "busy_days": [2, 4],
+ "cats": ["Букеты", "В коробке", "Мини"],
+ "flowers": ["Розы", "Пионовидные розы", "Ранункулюсы", "Микс"],
+ "items": [
+  {"id": "b0", "name": "Букет с ранункулюсами", "cat": "Букеты", "format": "bouquet", "size": "M", "flower": "Ранункулюсы", "pal": "tender", "price": 4900, "hit": true},
+  {"id": "b1", "name": "Пионовидные розы «Облако»", "cat": "Букеты", "format": "bouquet", "size": "L", "flower": "Пионовидные розы", "pal": "white", "price": 5200},
+  {"id": "b2", "name": "Осенний микс", "cat": "Букеты", "format": "bouquet", "size": "M", "flower": "Микс", "pal": "autumn", "price": 4300},
+  {"id": "b3", "name": "Розы в шляпной коробке", "cat": "В коробке", "format": "box", "size": "M", "flower": "Розы", "pal": "bright", "price": 5600, "hit": true},
+  {"id": "b4", "name": "Нежность в коробке", "cat": "В коробке", "format": "box", "size": "S", "flower": "Пионовидные розы", "pal": "tender", "price": 4800},
+  {"id": "b5", "name": "Мини-букет «Комплимент»", "cat": "Мини", "format": "mini", "size": "S", "flower": "Микс", "pal": "bright", "price": 3200},
+  {"id": "b6", "name": "Ранункулюсы к празднику", "cat": "Букеты", "format": "bouquet", "size": "L", "flower": "Ранункулюсы", "pal": "bright", "price": 4600},
+  {"id": "b7", "name": "Белые розы «Классика»", "cat": "Букеты", "format": "bouquet", "size": "M", "flower": "Розы", "pal": "white", "price": 4400}
+ ]
+}

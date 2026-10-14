@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Цветочный магазин в Telegram — демо</title>
+<link rel="icon" href="data:,">
+<link rel="preload" href="fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Playfair Display";src:url("fonts/playfair-display-cyrillic-wght-normal.woff2") format("woff2");font-weight:400 900;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Playfair Display";src:url("fonts/playfair-display-latin-wght-normal.woff2") format("woff2");font-weight:400 900;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Manrope";src:url("fonts/manrope-cyrillic-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Manrope";src:url("fonts/manrope-latin-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{
+  --bg:#FBF3F1; --bg-2:#F3E3E1; --paper:#FFFFFF; --ink:#2E2326; --ink-2:#6C5A5E; --line:#EBD9D6;
+  --accent:#B0476A; --accent-2:#F6E1E7; --sage:#7E9B84; --ok:#2F6B4F; --stage:#2B2124;
+  --serif:"Playfair Display", "Didot", "Times New Roman", serif;
+  --sans:"Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--stage);color:var(--bg);font:400 15px/1.45 var(--sans);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+
+/* desktop stage */
+.stage{min-height:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(32px,6vw,96px);align-items:center;max-width:1180px;margin:0 auto;padding:40px clamp(20px,5vw,56px)}
+.story h1{font:500 clamp(38px,4.6vw,62px)/1.03 var(--serif);margin:0 0 18px;color:#FBF3F1}
+.story p.lead{max-width:40ch;color:#D5BFC2;font-size:17px;margin:0 0 30px}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s;max-width:420px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:28px 1fr;gap:12px;padding:12px 0;border-top:1px solid #45383B;color:#A08E92;transition:color .3s}
+.steps li::before{content:counter(s);font:700 13px/1.6 var(--sans);color:#715F63;transition:color .3s}
+.steps li b{display:block;font-weight:600;color:inherit}
+.steps li.on{color:#FBF3F1}
+.steps li.on::before{color:#E58FAE}
+.tourbtn{margin-top:26px;display:inline-flex;gap:10px;background:#FBF3F1;color:var(--ink);border:0;border-radius:999px;padding:13px 22px;font-weight:700}
+.credit{margin-top:22px;font-size:13px;color:#86757A}
+.credit a{color:#C5AFB4}
+.notice{margin-top:10px;font-size:12px;color:#715F63}
+
+/* phone */
+.phone{position:relative;width:390px;height:812px;border-radius:52px;padding:12px;background:#0d0a0b;box-shadow:0 0 0 1px #4a3d40,0 50px 80px -40px rgba(0,0,0,.7)}
+.screen{position:relative;width:100%;height:100%;border-radius:41px;overflow:hidden;background:var(--bg);color:var(--ink)}
+.status{position:absolute;inset:0 0 auto;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font:700 14px/1 var(--sans);z-index:6}
+.status i{font-style:normal;letter-spacing:2px;font-size:11px}
+.tgbar{position:absolute;top:44px;left:0;right:0;height:48px;display:flex;align-items:center;gap:10px;padding:0 16px;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.tgbar__close{font-size:14px;font-weight:600;color:var(--accent);background:none;border:0;padding:6px 0}
+.tgbar__title{flex:1;text-align:center;line-height:1.15}
+.tgbar__title b{display:block;font-size:15px}
+.tgbar__title small{font-size:11.5px;color:var(--ink-2)}
+.tgbar__dots{width:40px;text-align:right;font-weight:800;color:var(--ink-2)}
+.views{position:absolute;top:92px;left:0;right:0;bottom:0;overflow:hidden}
+.view{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;background:var(--bg);transition:transform .42s var(--ease),opacity .3s}
+.view::-webkit-scrollbar{display:none}
+.view.enter{transform:translateX(100%)}
+.view.leave{transform:translateX(-25%);opacity:.4}
+.view.back-enter{transform:translateX(-25%);opacity:.4}
+.view.back-leave{transform:translateX(100%)}
+
+/* home */
+.hero{margin:14px 14px 0;padding:16px 16px 14px;border-radius:22px;background:var(--paper);display:flex;gap:14px;align-items:center}
+.logo{width:58px;height:58px;flex:none;border-radius:50%;background:var(--accent-2);display:grid;place-items:center;font:italic 600 13px/1.05 var(--serif);color:var(--accent);text-align:center;padding:4px}
+.hero h2{margin:0;font:italic 600 24px/1.1 var(--serif)}
+.hero p{margin:3px 0 0;font-size:12.5px;color:var(--ink-2)}
+.live{display:inline-flex;align-items:center;gap:6px;margin-top:7px;padding:4px 9px;border-radius:999px;background:var(--bg);font-size:11.5px;font-weight:700;color:var(--ink-2)}
+.live::before{content:"";width:7px;height:7px;border-radius:50%;background:#3FA36B}
+.note{margin:10px 14px 0;padding:11px 13px;border-radius:16px;border:1.5px dashed #E3B7C4;background:#FFF8FA;font-size:12.5px;display:flex;gap:9px}
+.note b{display:block;color:var(--accent);font-size:13px}
+.sec{display:flex;justify-content:space-between;align-items:baseline;padding:18px 18px 8px}
+.sec h3{margin:0;font:700 19px/1 var(--sans)}
+.sec small{font-size:11.5px;color:var(--ink-2)}
+.tabs{display:flex;gap:6px;padding:0 14px 12px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:transparent;font-size:12.5px;font-weight:700}
+.tabs .on{background:var(--accent);border-color:var(--accent);color:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px 100px}
+.card{background:var(--paper);border-radius:20px;padding:8px 8px 10px;position:relative}
+.pic{aspect-ratio:1/1.08;border-radius:15px;background:var(--accent-2);display:grid;place-items:center;overflow:hidden}
+.pic svg{width:86%;height:auto}
+.hit{position:absolute;top:14px;left:14px;padding:3px 8px;border-radius:8px;background:var(--ink);color:#fff;font-size:10.5px;font-weight:800}
+.card .nm{margin:8px 4px 0;font-size:13px;font-weight:700;line-height:1.25;min-height:32px}
+.card .mt{margin:2px 4px 0;font-size:11.5px;color:var(--ink-2)}
+.card .pr{margin:4px 4px 0;font-weight:800;font-size:14.5px}
+.want{margin-top:8px;width:100%;height:34px;border-radius:11px;border:1.5px solid #E3B7C4;background:#fff;color:var(--accent);font-weight:800;font-size:12.5px}
+.mainbtn{position:absolute;left:12px;right:12px;bottom:14px;z-index:8;height:54px;border:0;border-radius:16px;background:var(--accent);color:#fff;font-weight:800;font-size:15.5px;box-shadow:0 14px 30px -14px rgba(46,35,38,.6);transition:background-color .3s,transform .35s var(--ease)}
+.mainbtn[disabled]{background:#D9B3BF}
+.mainbtn.hide{transform:translateY(150%)}
+
+/* constructor */
+.top{display:flex;align-items:center;gap:10px;padding:12px 14px 4px}
+.back{width:36px;height:36px;border-radius:50%;border:0;background:var(--paper);font-size:17px;font-weight:800;display:grid;place-items:center}
+.top b{font:700 18px/1.1 var(--sans)}
+.stagepic{margin:8px 14px 0;border-radius:24px;background:var(--accent-2);height:250px;display:grid;place-items:center;position:relative;overflow:hidden;transition:background-color .5s}
+.stagepic svg{height:225px;width:auto}
+.stagepic .sum{position:absolute;right:12px;bottom:12px;padding:6px 11px;border-radius:12px;background:rgba(255,255,255,.92);font-weight:800;font-size:14px}
+.blk{margin:12px 14px 0;padding:12px 14px 14px;border-radius:18px;background:var(--paper)}
+.blk h4{margin:0 0 9px;font-size:13px;font-weight:800;display:flex;justify-content:space-between}
+.blk h4 span{font-weight:600;color:var(--ink-2);font-size:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:13px;font-weight:700;transition:background-color .2s,color .2s,border-color .2s}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip small{font-weight:600;opacity:.75;margin-left:3px}
+.pals{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.pal{border:1.5px solid var(--line);border-radius:14px;background:#fff;padding:9px 4px 7px;font-size:11.5px;font-weight:700;text-align:center;transition:border-color .2s,background-color .2s}
+.pal i{display:flex;justify-content:center;gap:3px;margin-bottom:5px}
+.pal i u{width:13px;height:13px;border-radius:50%;display:block}
+.pal.on{border-color:var(--accent);background:var(--accent-2)}
+.input{min-height:44px;padding:12px 13px;border-radius:12px;border:1.5px solid var(--line);background:#fff;font-size:14px;color:#a8979a;transition:border-color .2s}
+.input.on{border-color:var(--ink);color:var(--ink)}
+.input .cur{display:inline-block;width:1.5px;height:16px;background:var(--ink);vertical-align:-3px;margin-left:1px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.days{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.days::-webkit-scrollbar{display:none}
+.day{flex:none;width:50px;padding:7px 0;border-radius:14px;border:1px solid var(--line);background:#fff;text-align:center;font-weight:800;font-size:16px;line-height:1.1}
+.day small{display:block;font-size:10.5px;font-weight:700;color:var(--ink-2)}
+.day.busy{color:#C9B9BC;text-decoration:line-through;background:var(--bg)}
+.day.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.day.on small{color:#fff}
+.hint{margin-top:8px;font-size:11.5px;color:var(--ink-2)}
+
+/* sheets */
+.scrim{position:absolute;inset:0;z-index:20;background:rgba(46,35,38,.35);opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:21;background:var(--paper);border-radius:26px 26px 0 0;padding:10px 18px 24px;transform:translateY(105%);transition:transform .42s var(--ease);max-height:88%;overflow-y:auto}
+.sheet.on{transform:none}
+.grab{width:40px;height:5px;border-radius:3px;background:#EAD7DB;margin:0 auto 14px}
+.sheet h3{margin:0 0 4px;font:700 22px/1.15 var(--serif)}
+.sheet .sub{color:var(--ink-2);font-size:13.5px;margin-bottom:12px}
+.lines{background:var(--bg);border-radius:16px;padding:10px 14px;font-size:13.5px}
+.lines div{display:flex;justify-content:space-between;gap:10px;padding:4px 0}
+.lines .tot{border-top:1px solid var(--line);margin-top:4px;padding-top:8px;font-weight:800}
+.field{margin-top:12px}
+.field label{display:block;font-size:12px;color:var(--ink-2);margin-bottom:5px}
+.field div{min-height:44px;padding:12px 13px;border-radius:12px;background:var(--bg);font-size:14.5px}
+.share{margin-top:10px;width:100%;height:44px;border-radius:12px;border:1px dashed var(--accent);background:#fff;color:var(--accent);font-weight:700;font-size:13.5px}
+.btn{width:100%;height:52px;margin-top:16px;border-radius:16px;border:0;background:var(--accent);color:#fff;font-weight:800;font-size:15.5px}
+.btn[disabled]{background:#D9B3BF}
+.btn.dark{background:var(--ink)}
+.done{text-align:center;padding:6px 4px 0}
+.ring{width:64px;height:64px;margin:6px auto 12px;border-radius:50%;background:var(--ok);display:grid;place-items:center;color:#fff;font-size:30px;animation:pop .45s var(--ease)}
+@keyframes pop{from{transform:scale(.5);opacity:0}}
+.mgr{margin-top:14px;text-align:left;border-radius:16px;background:#17212B;color:#F5F5F5;padding:12px;font-family:-apple-system,"Segoe UI",Roboto,sans-serif}
+.mgr small{display:block;color:#7F91A4;font-size:11.5px;margin-bottom:6px}
+.mgr .bub{background:#182533;border-radius:12px 12px 12px 4px;padding:9px 11px;font-size:13px;line-height:1.45}
+.mgr .bub b{color:#F2B8CB}
+.push{position:absolute;top:50px;left:10px;right:10px;z-index:30;display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:20px;background:rgba(255,255,255,.97);box-shadow:0 18px 40px -18px rgba(46,35,38,.5);transform:translateY(-150%);transition:transform .5s var(--ease)}
+.push.on{transform:none}
+.push .ic{width:36px;height:36px;flex:none;border-radius:10px;background:var(--accent);color:#fff;display:grid;place-items:center;font:italic 700 15px/1 var(--serif)}
+.push p{margin:0;font-size:13px;line-height:1.35}
+.push small{float:right;color:#9a8b8e;font-size:11.5px}
+.tap{position:absolute;z-index:40;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:2px solid var(--accent);background:rgba(176,71,106,.22);opacity:0;pointer-events:none;transition:left .5s var(--ease),top .5s var(--ease),opacity .2s}
+.tap.press{animation:press .3s ease-out}
+@keyframes press{50%{transform:scale(.7);background:rgba(176,71,106,.5)}}
+.loading{position:fixed;inset:0;display:grid;place-items:center;background:var(--stage);color:#D5BFC2;z-index:99;transition:opacity .3s}
+.loading.off{opacity:0;pointer-events:none}
+
+@media (max-width:560px){
+  body{background:var(--bg)}
+  .stage{display:block;padding:0}
+  .story{display:none}
+  .phone{width:100%;height:100svh;border-radius:0;padding:0;background:none;box-shadow:none}
+  .screen{border-radius:0}
+  .status{display:none}
+  .tgbar{top:0}
+  .views{top:48px}
+  .push{top:8px}
+  .fab{position:fixed;right:14px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:50;border:0;border-radius:999px;background:var(--ink);color:#fff;font-weight:800;padding:11px 15px;box-shadow:0 12px 30px -12px rgba(0,0,0,.5)}
+}
+@media (min-width:561px){ .fab{display:none} }
+@media (max-width:980px) and (min-width:561px){ .stage{grid-template-columns:1fr;justify-items:center} }
+@media (prefers-reduced-motion:reduce){ *{transition-duration:0s!important;animation:none!important} }
+</style>
+</head>
+<body>
+<div class="loading" id="loading">Открываю витрину…</div>
+<div class="stage">
+  <section class="story" aria-label="Что показывает демо">
+    <h1 id="storyTitle">Цветочный магазин прямо в&nbsp;Telegram</h1>
+    <p class="lead">Покупатель выбирает букет из канала или собирает свой, ставит дату и время доставки и пишет открытку, а магазин получает готовый заказ — без переписки.</p>
+    <ol class="steps" id="steps">
+      <li data-s="0"><div><b>Букеты из канала с ценами</b>всё на одном экране</div></li>
+      <li data-s="1"><div><b>«Хочу такой же» и свой букет</b>размер, цветы, палитра</div></li>
+      <li data-s="2"><div><b>Открытка и время доставки</b>занятые слоты видно сразу</div></li>
+      <li data-s="3"><div><b>Магазин получает заказ</b>с составом, адресом и текстом открытки</div></li>
+      <li data-s="4"><div><b>Фото букета перед отправкой</b>и статус доставки</div></li>
+    </ol>
+    <button class="tourbtn" id="tourBtn" type="button">▶ Показать за 30 секунд</button>
+    <p class="credit" id="credit">Демо-концепт от NOVACODE · <a href="https://new-coder.ru">new-coder.ru</a></p>
+    <p class="notice">Это демо-страница. Она считает только число открытий ссылки — без cookie и личных данных.</p>
+  </section>
+  <div class="phone">
+    <div class="screen" id="screen">
+      <div class="status"><span>12:40</span><i>●●● 5G ▮</i></div>
+      <header class="tgbar">
+        <button class="tgbar__close" type="button">Закрыть</button>
+        <div class="tgbar__title"><b id="barTitle">Цветы</b><small>мини-приложение</small></div>
+        <span class="tgbar__dots" aria-hidden="true">···</span>
+      </header>
+      <div class="views" id="views"></div>
+      <button class="mainbtn" id="mainbtn" type="button" data-act="main">💐 Собрать свой букет</button>
+      <div class="scrim" id="scrim"></div>
+      <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Окно"></div>
+      <div class="push" id="push" role="status"></div>
+      <span class="tap" id="tap" aria-hidden="true"></span>
+    </div>
+  </div>
+</div>
+<button class="fab" id="fab" type="button">▶ Показ</button>
+
+<script>
+(() => {
+'use strict';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const Q = new URLSearchParams(location.search);
+const ID = (Q.get('id') || '').replace(/[^a-z0-9]/gi, '');
+const PREVIEW = Q.has('preview');
+const FALLBACK = 'https://new-coder.ru';
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => Math.round(n).toLocaleString('ru-RU') + ' ₽';
+
+const PALS = {
+  tender:{name:'Нежная', c:['#F7C9D4','#FBE3E8','#E9B6C8','#FFF1E8'], bg:'#F8E6EA'},
+  bright:{name:'Яркая', c:['#F2557A','#FF9F43','#FFD166','#E84393'], bg:'#FCE9DF'},
+  autumn:{name:'Осенняя', c:['#C8553D','#E9A14B','#8C3B2E','#F2C57C'], bg:'#F6E7D8'},
+  white:{name:'Белая', c:['#FFFFFF','#F4F1EA','#EDE8DC','#FFFDF8'], bg:'#ECEFE8'},
+};
+const FORMATS = [{k:'bouquet', name:'Букет', add:0}, {k:'box', name:'Коробка', add:600}, {k:'mini', name:'Мини', add:-900}];
+const SIZES = [{k:'S', name:'S', mul:.75, n:7}, {k:'M', name:'M', mul:1, n:11}, {k:'L', name:'L', mul:1.45, n:17}];
+const SLOTS = ['10–12', '12–14', '14–16', '16–18', '18–20'];
+const WD = ['вс','пн','вт','ср','чт','пт','сб'];
+
+let D, ITEMS;
+const views = document.getElementById('views'), sheet = document.getElementById('sheet'), scrim = document.getElementById('scrim');
+const push = document.getElementById('push'), tapEl = document.getElementById('tap'), screen = document.getElementById('screen');
+const stepsEl = document.getElementById('steps'), mainbtn = document.getElementById('mainbtn');
+const S = {tab:0, view:'home', cfg:null, card:'', day:-1, slot:-1, recv:'delivery', phone:false};
+
+/* ---------- illustrations ---------- */
+function head(x, y, r, col, kind){
+  const dark = shade(col, -18), light = shade(col, 14);
+  if (kind === 'rose') return `<g><circle cx="${x}" cy="${y}" r="${r}" fill="${col}"/><circle cx="${x + r * .1}" cy="${y - r * .08}" r="${r * .62}" fill="${light}" opacity=".55"/><path d="M${x} ${y} m${-r * .14} 0 a${r * .14} ${r * .14} 0 1 1 ${r * .28} 0 a${r * .34} ${r * .34} 0 1 1 ${-r * .58} ${-r * .06} a${r * .58} ${r * .58} 0 1 1 ${r * .98} ${r * .16}" fill="none" stroke="${dark}" stroke-width="1.8" stroke-linecap="round" opacity=".8"/></g>`;
+  if (kind === 'peony') return `<g>${[0, 72, 144, 216, 288].map(a => `<circle cx="${x + Math.cos(a * Math.PI / 180) * r * .45}" cy="${y + Math.sin(a * Math.PI / 180) * r * .45}" r="${r * .62}" fill="${col}"/>`).join('')}<circle cx="${x}" cy="${y}" r="${r * .5}" fill="${light}"/><circle cx="${x}" cy="${y}" r="${r * .22}" fill="${dark}" opacity=".5"/></g>`;
+  if (kind === 'ranunculus') return `<g><circle cx="${x}" cy="${y}" r="${r}" fill="${col}"/><circle cx="${x}" cy="${y}" r="${r * .7}" fill="none" stroke="${dark}" stroke-width="1.6" opacity=".7"/><circle cx="${x}" cy="${y}" r="${r * .42}" fill="none" stroke="${dark}" stroke-width="1.6" opacity=".7"/><circle cx="${x}" cy="${y}" r="${r * .16}" fill="${dark}" opacity=".6"/></g>`;
+  return `<g>${[0, 60, 120, 180, 240, 300].map(a => `<ellipse cx="${x + Math.cos(a * Math.PI / 180) * r * .5}" cy="${y + Math.sin(a * Math.PI / 180) * r * .5}" rx="${r * .5}" ry="${r * .32}" transform="rotate(${a} ${x + Math.cos(a * Math.PI / 180) * r * .5} ${y + Math.sin(a * Math.PI / 180) * r * .5})" fill="${col}"/>`).join('')}<circle cx="${x}" cy="${y}" r="${r * .3}" fill="#F2C14E"/></g>`;
+}
+function shade(hex, p){
+  const n = parseInt(hex.slice(1), 16); let r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+  const f = v => Math.max(0, Math.min(255, Math.round(v + (p / 100) * (p < 0 ? v : 255 - v))));
+  return '#' + [f(r), f(g), f(b)].map(v => v.toString(16).padStart(2, '0')).join('');
+}
+const SPOTS = [[100,62,19],[72,80,17],[128,82,17],[86,104,16],[116,106,16],[100,86,15],[58,104,13],[142,104,13],[100,112,13],[70,58,12],[130,58,12],[100,40,12],[52,82,11],[148,80,11],[84,128,11],[116,128,11],[100,132,10]];
+const KIND = {'Розы':'rose', 'Пионовидные розы':'peony', 'Ранункулюсы':'ranunculus', 'Микс':'mix'};
+function bouquet(cfg){
+  const pal = PALS[cfg.pal] || PALS.tender, n = (SIZES.find(s => s.k === cfg.size) || SIZES[1]).n;
+  const kind = KIND[cfg.flower] || 'rose';
+  const spots = SPOTS.slice(0, n).sort((a, b) => a[1] - b[1]);
+  const heads = spots.map((s, i) => head(s[0], s[1], s[2], pal.c[i % pal.c.length], kind === 'mix' ? ['rose','peony','ranunculus','daisy'][i % 4] : kind)).join('');
+  const leaves = [[58,120,-35],[142,120,35],[46,96,-55],[154,96,55],[78,140,-20],[122,140,20]].map(l => `<ellipse cx="${l[0]}" cy="${l[1]}" rx="15" ry="7" transform="rotate(${l[2]} ${l[0]} ${l[1]})" fill="#7E9B84"/>`).join('');
+  if (cfg.format === 'box') return `<svg viewBox="0 0 200 230" aria-hidden="true">${leaves}${heads}
+    <rect x="40" y="122" width="120" height="92" rx="12" fill="#3A2E31"/><ellipse cx="100" cy="122" rx="60" ry="12" fill="#4A3C40"/>
+    <rect x="40" y="160" width="120" height="14" fill="${pal.c[0]}" opacity=".9"/><text x="100" y="200" text-anchor="middle" font-family="Playfair Display,serif" font-style="italic" font-size="15" fill="#F4E7E9">${esc((D && D.name || '').slice(0, 14))}</text></svg>`;
+  const wrapCol = cfg.pal === 'autumn' ? '#E9D3B6' : cfg.pal === 'white' ? '#DCE3D8' : '#F3D6DE';
+  const scale = cfg.format === 'mini' ? .8 : 1;
+  return `<svg viewBox="0 0 200 230" aria-hidden="true"><g transform="translate(${100 - 100 * scale} ${cfg.format === 'mini' ? 30 : 0}) scale(${scale})">
+    <path d="M86 150 L100 222 L114 150Z" fill="#6F8C74"/>${leaves}${heads}
+    <path d="M34 112 L100 226 L166 112 Q150 132 100 136 Q50 132 34 112Z" fill="${wrapCol}"/>
+    <path d="M34 112 L100 226 L72 128Z" fill="${shade(wrapCol, -8)}"/>
+    <path d="M86 168 Q100 176 114 168 L110 182 Q100 186 90 182Z" fill="${pal.c[0] === '#FFFFFF' ? '#B9C4B5' : shade(pal.c[0], -10)}"/></g></svg>`;
+}
+
+/* ---------- views ---------- */
+function priceOf(cfg){
+  const base = cfg.base || D.base_price || 4500;
+  const f = FORMATS.find(x => x.k === cfg.format) || FORMATS[0], s = SIZES.find(x => x.k === cfg.size) || SIZES[1];
+  return Math.round((base * s.mul + f.add) / 50) * 50;
+}
+function homeHTML(){
+  const cats = D.cats, list = ITEMS.filter(it => S.tab === 0 || it.cat === cats[S.tab - 1]);
+  return `<div class="view" data-v="home">
+    <div class="hero"><div class="logo">${esc(D.name.split(' ').slice(0, 2).join(' '))}</div>
+      <div><h2>${esc(D.name)}</h2><p>${esc(D.sub)}</p><span class="live">Принимаем заказы · сегодня до 21:00</span></div></div>
+    <div class="note"><span>🚚</span><div><b>${esc(D.delivery || 'Доставка сегодня от 2 часов')}</b>${esc(D.note || 'Пришлём фото букета перед отправкой')}</div></div>
+    <div class="sec"><h3>Наши букеты</h3><small>нажмите «Хочу такой же»</small></div>
+    <div class="tabs">${['Все', ...cats].map((c, i) => `<button type="button" class="${S.tab === i ? 'on' : ''}" data-tab="${i}">${esc(c)}</button>`).join('')}</div>
+    <div class="grid">${list.map(it => `<div class="card">${it.hit ? '<span class="hit">Хит</span>' : ''}
+      <div class="pic" style="background:${(PALS[it.pal] || PALS.tender).bg}">${bouquet(it)}</div>
+      <div class="nm">${esc(it.name)}</div><div class="mt">${esc(it.flower)} · ${esc((SIZES.find(s => s.k === it.size) || SIZES[1]).n)} шт.</div>
+      <div class="pr">${fmt(it.price)}</div>
+      <button type="button" class="want" data-want="${it.id}">Хочу такой же</button></div>`).join('')}</div></div>`;
+}
+function days(){
+  const out = [], start = new Date(), busy = D.busy_days || [1, 3];
+  for (let i = 0; i < 8; i++){ const d = new Date(start); d.setDate(start.getDate() + i);
+    out.push({i, d: d.getDate(), w: i === 0 ? 'сегодня' : WD[d.getDay()], busy: busy.includes(i)}); }
+  return out;
+}
+function cfgHTML(){
+  const c = S.cfg, pal = PALS[c.pal];
+  const ready = S.day >= 0 && S.slot >= 0;
+  return `<div class="view" data-v="cfg">
+    <div class="top"><button type="button" class="back" data-act="back" aria-label="Назад">‹</button><b>${esc(c.title)}</b></div>
+    <div class="stagepic" id="pic" style="background:${pal.bg}">${bouquet(c)}<span class="sum" id="sum">${fmt(priceOf(c))}</span></div>
+    <div class="blk"><h4>Формат</h4><div class="chips">${FORMATS.map(f => `<button type="button" class="chip ${c.format === f.k ? 'on' : ''}" data-set="format:${f.k}">${f.name}</button>`).join('')}</div></div>
+    <div class="blk"><h4>Размер <span>${(SIZES.find(s => s.k === c.size) || SIZES[1]).n} цветков</span></h4><div class="chips">${SIZES.map(s => `<button type="button" class="chip ${c.size === s.k ? 'on' : ''}" data-set="size:${s.k}">${s.name}<small>${s.n} шт.</small></button>`).join('')}</div></div>
+    <div class="blk"><h4>Цветы</h4><div class="chips">${(D.flowers || Object.keys(KIND)).map(f => `<button type="button" class="chip ${c.flower === f ? 'on' : ''}" data-set="flower:${esc(f)}">${esc(f)}</button>`).join('')}</div></div>
+    <div class="blk"><h4>Палитра</h4><div class="pals">${Object.entries(PALS).map(([k, p]) => `<button type="button" class="pal ${c.pal === k ? 'on' : ''}" data-set="pal:${k}"><i>${p.c.slice(0, 3).map(x => `<u style="background:${x};${x === '#FFFFFF' ? 'box-shadow:inset 0 0 0 1px #ddd' : ''}"></u>`).join('')}</i>${p.name}</button>`).join('')}</div></div>
+    <div class="blk"><h4>Открытка <span>бесплатно</span></h4><div class="input ${S.card ? 'on' : ''}" id="cardF" data-act="card">${S.card ? esc(S.card) : 'Например: С днём рождения!'}</div></div>
+    <div class="blk"><h4>Дата</h4><div class="days">${days().map(d => `<button type="button" class="day ${d.busy ? 'busy' : ''} ${S.day === d.i ? 'on' : ''}" ${d.busy ? 'disabled' : ''} data-day="${d.i}"><small>${d.w}</small>${d.d}</button>`).join('')}</div>
+      <div class="hint">Зачёркнутые даты уже заняты.</div>
+      <h4 style="margin-top:12px">Время</h4><div class="chips">${SLOTS.map((s, i) => `<button type="button" class="chip ${S.slot === i ? 'on' : ''} " data-slot="${i}">${s}</button>`).join('')}</div></div>
+    <div style="height:92px"></div></div>`;
+}
+function setMain(){
+  if (S.view === 'home'){ mainbtn.disabled = false; mainbtn.textContent = '💐 Собрать свой букет'; return; }
+  const ready = S.day >= 0 && S.slot >= 0;
+  mainbtn.disabled = !ready;
+  mainbtn.textContent = ready ? `Оформить · ${fmt(priceOf(S.cfg))}` : 'Выберите дату и время';
+}
+function mount(html, dir){
+  const old = views.lastElementChild;
+  views.insertAdjacentHTML('beforeend', html);
+  const nv = views.lastElementChild;
+  if (old && dir){ nv.classList.add(dir === 'fwd' ? 'enter' : 'back-enter'); void nv.offsetWidth;
+    nv.classList.remove('enter', 'back-enter'); old.classList.add(dir === 'fwd' ? 'leave' : 'back-leave');
+    setTimeout(() => old.remove(), 450); } else if (old) old.remove();
+  setMain();
+}
+function rerender(){
+  const cur = views.lastElementChild, top = cur ? cur.scrollTop : 0;
+  const tabs = cur && cur.querySelector('.tabs'), tl = tabs ? tabs.scrollLeft : 0;
+  cur.outerHTML = S.view === 'home' ? homeHTML() : cfgHTML();
+  views.lastElementChild.scrollTop = top;
+  const t2 = views.lastElementChild.querySelector('.tabs'); if (t2) t2.scrollLeft = tl;
+  setMain();
+}
+function updatePic(){
+  const pic = document.getElementById('pic'); if (!pic) return;
+  pic.style.background = PALS[S.cfg.pal].bg;
+  pic.innerHTML = bouquet(S.cfg) + `<span class="sum" id="sum">${fmt(priceOf(S.cfg))}</span>`;
+}
+function openCfg(item){
+  const baseOf = it => ((it.price - (FORMATS.find(f => f.k === it.format) || FORMATS[0]).add) / (SIZES.find(s => s.k === it.size) || SIZES[1]).mul);
+  S.cfg = item ? {title:'Как в канале', format:item.format, size:item.size, flower:item.flower, pal:item.pal, base:baseOf(item), src:item.name}
+               : {title:'Свой букет', format:'bouquet', size:'M', flower:(D.flowers || ['Розы'])[0], pal:'tender', base:D.base_price || 4500, src:null};
+  S.card = ''; S.day = -1; S.slot = -1; S.view = 'cfg';
+  mount(cfgHTML(), 'fwd');
+}
+
+/* ---------- sheets ---------- */
+function openSheet(html){ sheet.innerHTML = '<div class="grab"></div>' + html; scrim.classList.add('on'); sheet.classList.add('on'); }
+function closeSheet(){ scrim.classList.remove('on'); sheet.classList.remove('on'); }
+scrim.addEventListener('click', closeSheet);
+function dayLabel(){ const d = days()[S.day]; return d ? `${d.w === 'сегодня' ? 'сегодня' : d.w}, ${d.d}` : ''; }
+function orderSheet(){
+  const c = S.cfg, del = S.recv === 'delivery' ? (D.delivery_price || 350) : 0;
+  openSheet(`<h3>Ваш заказ</h3><div class="sub">${dayLabel()}, ${SLOTS[S.slot]} · пришлём фото перед отправкой</div>
+    <div class="lines"><div><span>${esc(c.src || 'Свой букет')} · ${c.size} · ${esc(PALS[c.pal].name.toLowerCase())}</span><b>${fmt(priceOf(c))}</b></div>
+      ${S.card ? `<div><span>Открытка «${esc(S.card)}»</span><b>0 ₽</b></div>` : ''}
+      <div><span>${S.recv === 'delivery' ? 'Доставка' : 'Самовывоз'}</span><b>${fmt(del)}</b></div>
+      <div class="tot"><span>Итого</span><span>${fmt(priceOf(c) + del)}</span></div></div>
+    <div class="field"><label>Как получить</label><div class="chips">
+      <button type="button" class="chip ${S.recv === 'delivery' ? 'on' : ''}" data-recv="delivery">Доставка</button>
+      <button type="button" class="chip ${S.recv === 'pickup' ? 'on' : ''}" data-recv="pickup">Самовывоз</button></div></div>
+    <div class="field"><label>Телефон получателя</label><div id="phoneF" style="color:#a8979a">${S.phone ? '+7 912 ••• 12 40' : 'Не указан'}</div></div>
+    ${S.phone ? '' : '<button type="button" class="share" data-act="share">Поделиться номером из Telegram</button>'}
+    <button type="button" class="btn" data-act="pay" id="payBtn" ${S.phone ? '' : 'disabled'}>Оплатить ${fmt(priceOf(c) + del)}</button>`);
+}
+function doneSheet(){
+  const c = S.cfg, del = S.recv === 'delivery' ? (D.delivery_price || 350) : 0;
+  openSheet(`<div class="done"><div class="ring">✓</div><h3>Заказ №48 оплачен</h3>
+    <div class="sub">${dayLabel()}, ${SLOTS[S.slot]}. Перед отправкой пришлём фото букета.</div></div>
+    <div class="mgr"><small>Так это видит ${D.manager ? esc(D.manager) : 'магазин'}</small>
+      <div class="bub"><b>Новый заказ №48 · оплачен</b><br>${esc(c.src || 'Свой букет')}: ${c.size}, ${esc(c.flower.toLowerCase())}, палитра «${esc(PALS[c.pal].name.toLowerCase())}»
+      ${S.card ? `<br>Открытка: «${esc(S.card)}»` : ''}<br>${S.recv === 'delivery' ? 'Доставка' : 'Самовывоз'}: ${dayLabel()}, ${SLOTS[S.slot]}<br>Итого ${fmt(priceOf(c) + del)} · +7 912 ••• 12 40</div></div>
+    <button type="button" class="btn dark" data-act="close">Готово</button>`);
+}
+function showPush(text){
+  push.innerHTML = `<div class="ic">${esc(D.name.slice(0, 1))}</div><p><b>${esc(D.name)}</b><small>сейчас</small><br>${text}</p>`;
+  push.classList.add('on'); setTimeout(() => push.classList.remove('on'), 3600);
+}
+
+/* ---------- events ---------- */
+screen.addEventListener('click', e => {
+  const t = e.target.closest('[data-tab],[data-want],[data-set],[data-day],[data-slot],[data-act],[data-recv]'); if (!t) return;
+  if (t.dataset.tab){ S.tab = +t.dataset.tab; return rerender(); }
+  if (t.dataset.want) return openCfg(ITEMS.find(x => x.id === t.dataset.want));
+  if (t.dataset.set){ const [k, v] = t.dataset.set.split(':'); S.cfg[k] = v;
+    t.parentElement.querySelectorAll('.on').forEach(x => x.classList.remove('on')); t.classList.add('on');
+    if (k === 'size'){ const h = t.closest('.blk').querySelector('h4 span'); if (h) h.textContent = `${SIZES.find(s => s.k === v).n} цветков`; }
+    updatePic(); return setMain(); }
+  if (t.dataset.day){ S.day = +t.dataset.day; t.parentElement.querySelectorAll('.on').forEach(x => x.classList.remove('on')); t.classList.add('on'); return setMain(); }
+  if (t.dataset.slot){ S.slot = +t.dataset.slot; t.parentElement.querySelectorAll('.on').forEach(x => x.classList.remove('on')); t.classList.add('on'); return setMain(); }
+  if (t.dataset.recv){ S.recv = t.dataset.recv; return orderSheet(); }
+  const a = t.dataset.act;
+  if (a === 'main'){ if (S.view === 'home') openCfg(null); else orderSheet(); }
+  else if (a === 'back'){ S.view = 'home'; mount(homeHTML(), 'back'); }
+  else if (a === 'card'){ typeCard(D.card_text || 'С днём рождения, мама!'); }
+  else if (a === 'share'){ S.phone = true; orderSheet(); }
+  else if (a === 'pay'){ doneSheet(); }
+  else if (a === 'close'){ closeSheet(); S.view = 'home'; S.phone = false; mount(homeHTML(), 'back'); }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+async function typeCard(text){
+  const f = document.getElementById('cardF'); if (!f) return;
+  f.classList.add('on'); S.card = '';
+  for (const ch of text){ S.card += ch; f.innerHTML = esc(S.card) + '<span class="cur"></span>'; await sleep(55); }
+  f.innerHTML = esc(S.card);
+}
+
+/* ---------- tour ---------- */
+let touring = false;
+const sleep = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
+function mark(i){ stepsEl.querySelectorAll('li').forEach(li => li.classList.toggle('on', +li.dataset.s === i)); }
+async function tap(sel){
+  const el = typeof sel === 'string' ? screen.querySelector(sel) : sel; if (!el) return;
+  const b = screen.getBoundingClientRect(), v = el.closest('.view'), r = el.getBoundingClientRect();
+  if (v && (r.bottom > b.bottom - 90 || r.top < b.top + 110)){ const vr = v.getBoundingClientRect();
+    v.scrollTo({top: v.scrollTop + (r.top - vr.top) - vr.height / 2 + r.height / 2, behavior: reduce ? 'auto' : 'smooth'}); await sleep(650); }
+  const r2 = el.getBoundingClientRect();
+  tapEl.style.left = (r2.left - b.left + r2.width / 2) + 'px'; tapEl.style.top = (r2.top - b.top + r2.height / 2) + 'px'; tapEl.style.opacity = '1';
+  await sleep(520); tapEl.classList.remove('press'); void tapEl.offsetWidth; tapEl.classList.add('press'); await sleep(200); el.click(); await sleep(250);
+}
+async function scrollTo(y){ views.lastElementChild.scrollTo({top:y, behavior: reduce ? 'auto' : 'smooth'}); await sleep(800); }
+async function tour(){
+  if (touring) return; touring = true; document.getElementById('fab').style.display = 'none';
+  closeSheet(); S.tab = 0; S.view = 'home'; S.phone = false; S.recv = 'delivery'; mount(homeHTML()); await sleep(900);
+  mark(0); await scrollTo(260); await sleep(500); await scrollTo(0); await sleep(300);
+  mark(1); await tap(`[data-want="${ITEMS[0].id}"]`); await sleep(900);
+  await tap('[data-set="size:L"]'); await sleep(500);
+  await tap('[data-set="pal:autumn"]'); await sleep(700);
+  await tap('[data-set="pal:tender"]'); await sleep(600);
+  mark(2); await tap('#cardF'); await sleep(1500);
+  const free = days().find(d => !d.busy && d.i > 0);
+  await tap(`[data-day="${free.i}"]`); await sleep(400);
+  await tap('[data-slot="3"]'); await sleep(600);
+  await tap('#mainbtn'); await sleep(900);
+  await tap('[data-act="share"]'); await sleep(600);
+  await tap('#payBtn');
+  mark(3); await sleep(3600); await tap('[data-act="close"]'); await sleep(500);
+  tapEl.style.opacity = '0';
+  mark(4); showPush('Ваш букет собран 💐 Фото перед отправкой — в чате.'); await sleep(4000);
+  showPush('Курьер выехал, будет в 16:20.'); await sleep(3800);
+  mark(-1); touring = false; document.getElementById('fab').style.display = '';
+}
+
+function start(data){
+  D = data; ITEMS = data.items;
+  document.title = `${D.name}: цветы в Telegram — демо`;
+  document.getElementById('storyTitle').innerHTML = `${esc(D.name)}: цветы прямо в&nbsp;Telegram`;
+  document.getElementById('barTitle').textContent = D.name;
+  if (D.channel) document.getElementById('credit').innerHTML =
+    `Демо-концепт от NOVACODE · <a href="https://new-coder.ru">new-coder.ru</a>. Букеты и цены взяты из канала @${esc(D.channel)} для примера.`;
+  document.getElementById('tourBtn').addEventListener('click', tour);
+  document.getElementById('fab').addEventListener('click', tour);
+  mount(homeHTML()); document.getElementById('loading').classList.add('off');
+  if (!PREVIEW && D.ns) fetch(`https://abacus.jasoncameron.dev/hit/${encodeURIComponent(D.ns)}/${ID}`).catch(() => {});
+  if (location.hash === '#tour') setTimeout(tour, 600);
+}
+if (!ID) location.replace(FALLBACK);
+else fetch(`d/${ID}.json`, {cache: 'no-cache'})
+  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .then(d => { if (!d.items || d.items.length < 4) throw new Error('empty'); start(d); })
+  .catch(() => location.replace(FALLBACK));
+})();
+</script>
+</body>
+</html>

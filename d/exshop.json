@@ -1,0 +1,158 @@
+{
+ "name": "Showroom Nord",
+ "sub": "брендовая одежда · шоурум и доставка",
+ "tagline": "Вещи из канала — с бронью в один тап.",
+ "channel": "",
+ "manager": "@showroom_nord",
+ "ns": "",
+ "items": [
+  {
+   "brand": "Max Mara",
+   "name": "Пальто",
+   "cat": "Одежда",
+   "size": "S",
+   "sizes": [
+    "S",
+    "M"
+   ],
+   "price": 38000,
+   "boutique": null,
+   "tb": "#2B1F1D",
+   "tc": "#F3E6E3",
+   "fs": 17,
+   "sold": false,
+   "id": "i0"
+  },
+  {
+   "brand": "Miu Miu",
+   "name": "Сумка",
+   "cat": "Сумки",
+   "size": "—",
+   "sizes": [],
+   "price": 52000,
+   "boutique": null,
+   "tb": "#9C4E57",
+   "tc": "#FBEDEE",
+   "fs": 22,
+   "sold": false,
+   "id": "i1"
+  },
+  {
+   "brand": "Acne Studios",
+   "name": "Свитер",
+   "cat": "Одежда",
+   "size": "M",
+   "sizes": [
+    "M"
+   ],
+   "price": 14500,
+   "boutique": null,
+   "tb": "#B98A5E",
+   "tc": "#FFF6EC",
+   "fs": 13,
+   "sold": false,
+   "id": "i2"
+  },
+  {
+   "brand": "Loewe",
+   "name": "Кардхолдер",
+   "cat": "Аксессуары",
+   "size": "—",
+   "sizes": [],
+   "price": 18900,
+   "boutique": null,
+   "tb": "#3F5A4C",
+   "tc": "#EAF2EC",
+   "fs": 22,
+   "sold": false,
+   "id": "i3"
+  },
+  {
+   "brand": "Jacquemus",
+   "name": "Платье",
+   "cat": "Одежда",
+   "size": "XS",
+   "sizes": [
+    "XS",
+    "S"
+   ],
+   "price": 21000,
+   "boutique": null,
+   "tb": "#5E4C48",
+   "tc": "#F5ECE9",
+   "fs": 17,
+   "sold": false,
+   "id": "i4"
+  },
+  {
+   "brand": "Prada",
+   "name": "Лоферы",
+   "cat": "Обувь",
+   "size": "38",
+   "sizes": [
+    "38",
+    "39"
+   ],
+   "price": 46000,
+   "boutique": null,
+   "tb": "#7A5C8A",
+   "tc": "#F3ECF7",
+   "fs": 22,
+   "sold": false,
+   "id": "i5"
+  },
+  {
+   "brand": "Ganni",
+   "name": "Юбка",
+   "cat": "Одежда",
+   "size": "S",
+   "sizes": [
+    "S"
+   ],
+   "price": 9800,
+   "boutique": null,
+   "tb": "#2B1F1D",
+   "tc": "#F3E6E3",
+   "fs": 22,
+   "sold": true,
+   "id": "i6"
+  },
+  {
+   "brand": "Celine",
+   "name": "Очки",
+   "cat": "Аксессуары",
+   "size": "—",
+   "sizes": [],
+   "price": 27000,
+   "boutique": null,
+   "tb": "#9C4E57",
+   "tc": "#FBEDEE",
+   "fs": 22,
+   "sold": false,
+   "id": "i7"
+  }
+ ],
+ "brands": [
+  "Max Mara",
+  "Miu Miu",
+  "Acne Studios",
+  "Loewe",
+  "Jacquemus",
+  "Prada",
+  "Ganni",
+  "Celine"
+ ],
+ "sizes": [
+  "XS",
+  "S",
+  "M",
+  "38",
+  "39"
+ ],
+ "cats": [
+  "Одежда",
+  "Сумки",
+  "Обувь",
+  "Аксессуары"
+ ]
+}
