@@ -1,0 +1,76 @@
+{
+ "kind": "booking",
+ "name": "Студия танца «Ритм»",
+ "sub": "танцы и фитнес · запись на пробное",
+ "tagline": "Первое занятие — за полцены.",
+ "channel": "",
+ "manager": "@ritm_dance",
+ "ns": "",
+ "cats": [
+  "Танцы",
+  "Дети",
+  "Фитнес"
+ ],
+ "services": [
+  {
+   "name": "Пробное: Jazz-funk",
+   "price": 500,
+   "from": false,
+   "dur": "1 ч",
+   "cat": "Танцы",
+   "tb": "#2B1F1D",
+   "tc": "#F3E6E3",
+   "id": "s0"
+  },
+  {
+   "name": "Пробное: High heels",
+   "price": 500,
+   "from": false,
+   "dur": "1 ч",
+   "cat": "Танцы",
+   "tb": "#9C4E57",
+   "tc": "#FBEDEE",
+   "id": "s1"
+  },
+  {
+   "name": "Абонемент на 8 занятий",
+   "price": 4200,
+   "from": false,
+   "dur": "1 месяц",
+   "cat": "Танцы",
+   "tb": "#B98A5E",
+   "tc": "#FFF6EC",
+   "id": "s2"
+  },
+  {
+   "name": "Детская группа 6–9 лет",
+   "price": 3800,
+   "from": false,
+   "dur": "8 занятий",
+   "cat": "Дети",
+   "tb": "#3F5A4C",
+   "tc": "#EAF2EC",
+   "id": "s3"
+  },
+  {
+   "name": "Растяжка",
+   "price": 450,
+   "from": false,
+   "dur": "1 ч",
+   "cat": "Фитнес",
+   "tb": "#34465E",
+   "tc": "#E8EEF6",
+   "id": "s4"
+  },
+  {
+   "name": "Пилатес",
+   "price": 450,
+   "from": false,
+   "dur": "55 мин",
+   "cat": "Фитнес",
+   "tb": "#6B4E7A",
+   "tc": "#F2ECF6",
+   "id": "s5"
+  }
+ ]
+}
