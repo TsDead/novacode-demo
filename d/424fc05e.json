@@ -1,0 +1,119 @@
+{
+ "name": "Buyer",
+ "sub": "брендовые кроссовки, куртки, обувь",
+ "tagline": "Вещи из канала — с бронью в один тап.",
+ "channel": "buyerapp",
+ "manager": "@buyersupport",
+ "ns": "novacode-demo-1d9b6a",
+ "items": [
+  {
+   "brand": "NEW BALANCE",
+   "name": "NEW BALANCE 204L",
+   "cat": "Обувь",
+   "size": "—",
+   "sizes": [],
+   "price": 10000,
+   "boutique": null,
+   "tb": "#E07A63",
+   "tc": "#FFF3EE",
+   "fs": 18,
+   "sold": false,
+   "id": "i0"
+  },
+  {
+   "brand": "NIKE",
+   "name": "NIKE LAHAR LOW",
+   "cat": "Обувь",
+   "size": "—",
+   "sizes": [],
+   "price": 7700,
+   "boutique": null,
+   "tb": "#B98A5E",
+   "tc": "#FFF6EC",
+   "fs": 24,
+   "sold": false,
+   "id": "i1"
+  },
+  {
+   "brand": "NEW BALANCE",
+   "name": "NEW BALANCE 1890",
+   "cat": "Обувь",
+   "size": "—",
+   "sizes": [],
+   "price": 26500,
+   "boutique": null,
+   "tb": "#E07A63",
+   "tc": "#FFF3EE",
+   "fs": 18,
+   "sold": false,
+   "id": "i2"
+  },
+  {
+   "brand": "UNIVERSAL",
+   "name": "UNIVERSAL TEMPLATES PUFFER JACKET",
+   "cat": "Одежда",
+   "size": "—",
+   "sizes": [],
+   "price": 7800,
+   "boutique": null,
+   "tb": "#2A2A2A",
+   "tc": "#E9D7A8",
+   "fs": 22,
+   "sold": false,
+   "id": "i3"
+  },
+  {
+   "brand": "SALOMON",
+   "name": "SALOMON XT-6 SHADOW",
+   "cat": "Обувь",
+   "size": "—",
+   "sizes": [],
+   "price": 15000,
+   "boutique": null,
+   "tb": "#3B3F58",
+   "tc": "#F1EEE6",
+   "fs": 22,
+   "sold": false,
+   "id": "i4"
+  },
+  {
+   "brand": "NEW BALANCE",
+   "name": "NEW BALANCE 2010",
+   "cat": "Обувь",
+   "size": "—",
+   "sizes": [],
+   "price": 11800,
+   "boutique": null,
+   "tb": "#E07A63",
+   "tc": "#FFF3EE",
+   "fs": 18,
+   "sold": false,
+   "id": "i5"
+  },
+  {
+   "brand": "NIKE",
+   "name": "NIKE AIR FORCE 1 '07",
+   "cat": "Обувь",
+   "size": "—",
+   "sizes": [],
+   "price": 8000,
+   "boutique": null,
+   "tb": "#B98A5E",
+   "tc": "#FFF6EC",
+   "fs": 24,
+   "sold": false,
+   "id": "i6"
+  }
+ ],
+ "brands": [
+  "NEW BALANCE",
+  "NIKE",
+  "UNIVERSAL",
+  "SALOMON"
+ ],
+ "sizes": [],
+ "cats": [
+  "Обувь",
+  "Одежда"
+ ]
+}
