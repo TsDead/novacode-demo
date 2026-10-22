@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Maafuq: магазин в Telegram — демо</title>
+<link rel="icon" href="data:,">
+<link rel="preload" href="fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Playfair Display";src:url("fonts/playfair-display-cyrillic-wght-normal.woff2") format("woff2");font-weight:400 900;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Playfair Display";src:url("fonts/playfair-display-latin-wght-normal.woff2") format("woff2");font-weight:400 900;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Manrope";src:url("fonts/manrope-cyrillic-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Manrope";src:url("fonts/manrope-latin-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{
+  --bg:#F2EEE7; --paper:#FFFDF9; --ink:#1F1A16; --ink-2:#7A6F64; --line:#E3DCD1;
+  --accent:#6B1E22; --accent-2:#F1E3DF; --gold:#A8854A; --gold-2:#E9DCC2; --ok:#3F6B4E;
+  --stage:#140F0C;
+  --serif:"Playfair Display","Didot","Times New Roman",serif;
+  --sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:radial-gradient(1200px 700px at 20% 10%,#2A1D16 0,var(--stage) 60%);color:#F4ECE2;font:400 15px/1.45 var(--sans);-webkit-font-smoothing:antialiased}
+button,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
+
+.stage{min-height:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(32px,6vw,96px);align-items:center;max-width:1180px;margin:0 auto;padding:40px clamp(20px,5vw,56px)}
+.story .kicker{font:700 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.story h1{font:500 clamp(38px,4.4vw,60px)/1.04 var(--serif);margin:14px 0 18px;color:#FBF5EC}
+.story h1 em{color:#D9B77C}
+.story p.lead{max-width:42ch;color:#CDBFAF;font-size:17px;margin:0 0 28px}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s;max-width:430px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:28px 1fr;gap:12px;padding:12px 0;border-top:1px solid #3C2E25;color:#9A8B7C;transition:color .3s}
+.steps li::before{content:counter(s);font:700 13px/1.6 var(--sans);color:#6A5A4D;transition:color .3s}
+.steps li b{display:block;font-weight:600;color:inherit}
+.steps li.on{color:#FBF5EC}
+.steps li.on::before{color:var(--gold)}
+.tourbtn{margin-top:26px;display:inline-flex;gap:10px;background:#FBF5EC;color:var(--ink);border:0;border-radius:999px;padding:13px 22px;font-weight:700}
+.credit{margin-top:22px;font-size:13px;color:#8A7B6D}
+.credit a{color:#D9C2A0}
+
+.phone{position:relative;width:390px;height:812px;border-radius:52px;padding:12px;background:#0b0807;box-shadow:0 0 0 1px #4a3a30,0 50px 90px -40px rgba(0,0,0,.8)}
+.screen{position:relative;width:100%;height:100%;border-radius:41px;overflow:hidden;background:var(--bg);color:var(--ink)}
+.status{position:absolute;inset:0 0 auto;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font:700 14px/1 var(--sans);z-index:6}
+.status i{font-style:normal;letter-spacing:2px;font-size:11px}
+.tgbar{position:absolute;top:44px;left:0;right:0;height:48px;display:flex;align-items:center;gap:10px;padding:0 16px;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.tgbar__close{font-size:14px;font-weight:600;color:var(--accent);background:none;border:0;padding:6px 0}
+.tgbar__title{flex:1;text-align:center;line-height:1.15}
+.tgbar__title b{display:block;font-size:15px}
+.tgbar__title small{font-size:11.5px;color:var(--ink-2)}
+.tgbar__dots{width:40px;text-align:right;font-weight:800;color:var(--ink-2)}
+.view{position:absolute;top:92px;left:0;right:0;bottom:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+.view::-webkit-scrollbar{display:none}
+
+.hero{margin:14px 14px 0;padding:16px;border-radius:22px;background:linear-gradient(150deg,#2B211B,#120D0A);color:#FBF5EC;position:relative;overflow:hidden;border:1px solid #3D2F25}
+.hero::before{content:"";position:absolute;inset:6px;border:1px solid #A8854A55;border-radius:17px;pointer-events:none}
+.hero .row{display:flex;gap:12px;align-items:center;position:relative;z-index:1}
+.logo{width:54px;height:54px;flex:none;border-radius:50%;background:var(--accent);display:grid;place-items:center;overflow:hidden;box-shadow:0 0 0 2px #A8854A}
+.logo span{font:italic 700 24px/1 var(--serif);color:#F4E3C4}
+.hero h2{margin:0;font:600 25px/1 var(--serif);letter-spacing:.02em}
+.hero p{margin:5px 0 0;font-size:12.5px;color:#D3C3B0}
+.hero .ship{position:relative;z-index:1;display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.hero .ship span{padding:4px 9px;border-radius:999px;background:#ffffff17;font-size:11.5px;font-weight:700}
+.drop{margin:10px 14px 0;padding:11px 12px;border-radius:18px;background:var(--paper);display:flex;align-items:center;gap:10px;border:1.5px dashed var(--gold)}
+.drop .t{flex:1;font-size:12.5px;line-height:1.3;color:var(--ink-2)}
+.drop .t b{display:block;font-size:13.5px;color:var(--accent)}
+.drop button{border:0;border-radius:12px;background:var(--gold-2);color:#6A4F22;font-weight:800;font-size:12px;padding:9px 11px;white-space:nowrap}
+.drop button.on{background:var(--accent);color:#fff}
+.tabs{display:flex;gap:6px;padding:14px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--paper);font-size:13px;font-weight:700}
+.tabs button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.colors{display:flex;gap:6px;padding:6px 14px 0;overflow-x:auto;scrollbar-width:none}
+.colors::-webkit-scrollbar{display:none}
+.colors button{flex:none;display:flex;align-items:center;gap:6px;padding:6px 11px 6px 6px;border-radius:999px;border:1px solid var(--line);background:transparent;font-size:12px;font-weight:700}
+.colors button i,.sw{width:16px;height:16px;border-radius:50%;display:block;box-shadow:inset 0 0 0 1px #0002}
+.colors button.on{border-color:var(--ink);background:var(--paper)}
+.found{display:flex;justify-content:space-between;padding:12px 18px 8px;font-size:12px;color:var(--ink-2)}
+.found button{border:0;background:none;color:var(--accent);font-weight:800;font-size:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px 16px}
+.card{background:var(--paper);border-radius:18px;padding:7px 7px 11px;position:relative;border:0;text-align:left}
+.pic{aspect-ratio:4/5;border-radius:12px;overflow:hidden;position:relative;background:#E8E2D8}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.badge{position:absolute;top:13px;left:13px;padding:3px 8px;border-radius:8px;background:var(--ink);color:#fff;font-size:10.5px;font-weight:800;z-index:2}
+.badge.in{background:var(--ok)}
+.card .dotsw{position:absolute;top:13px;right:13px;display:flex;gap:3px;z-index:2;padding:3px;border-radius:999px;background:#fffd}
+.card .dotsw i{width:11px;height:11px;border-radius:50%;box-shadow:inset 0 0 0 1px #0002}
+.card .nm{margin:9px 4px 0;font:600 14.5px/1.15 var(--serif)}
+.card .by{margin:2px 4px 0;font:italic 400 12px/1.2 var(--serif);color:var(--ink-2)}
+.card .sz{margin:6px 4px 0;font-size:11px;font-weight:700;color:var(--ok)}
+.card .pr{margin:3px 4px 0;font-weight:800;font-size:14.5px}
+.custom{margin:6px 14px 120px;padding:14px;border-radius:20px;background:var(--paper);display:flex;gap:12px;align-items:center;width:calc(100% - 28px);border:0;text-align:left}
+.custom i{font-size:24px;font-style:normal}
+.custom b{display:block;font-size:14px}
+.custom small{color:var(--ink-2);font-size:12px}
+.mainbtn{position:absolute;left:12px;right:12px;bottom:14px;z-index:8;height:54px;border:0;border-radius:16px;background:var(--accent);color:#fff;font-weight:800;font-size:15.5px;box-shadow:0 14px 30px -14px rgba(31,26,22,.7);transition:transform .35s var(--ease)}
+.mainbtn.hide{transform:translateY(150%)}
+
+.scrim{position:absolute;inset:0;z-index:20;background:rgba(31,26,22,.45);opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:21;background:var(--paper);border-radius:26px 26px 0 0;padding:10px 18px 24px;transform:translateY(105%);transition:transform .42s var(--ease);max-height:92%;overflow-y:auto;scrollbar-width:none}
+.sheet::-webkit-scrollbar{display:none}
+.sheet.on{transform:none}
+.grab{width:40px;height:5px;border-radius:3px;background:#E3D8C9;margin:0 auto 12px}
+.sheet h3{margin:0 0 2px;font:700 23px/1.15 var(--serif)}
+.sheet .sub{color:var(--ink-2);font-size:13.5px;margin-bottom:12px}
+.plaque{font:italic 400 14px/1.3 var(--serif);color:var(--ink-2)}
+.gal{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:1/1;background:#ECE6DC;margin-bottom:12px}
+.gal .track{display:flex;height:100%;transition:transform .45s var(--ease)}
+.gal .track > *{flex:none;width:100%;height:100%}
+.gal img{object-fit:cover;width:100%;height:100%;display:block}
+.gal .one{position:absolute;bottom:10px;left:10px;padding:4px 9px;border-radius:999px;background:#1F1A16cc;color:#fff;font-size:11px;font-weight:700}
+.price{font-weight:800;font-size:18px;margin-top:6px}
+.facts{background:var(--bg);border-radius:16px;padding:2px 14px;margin-top:12px}
+.facts div{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.facts div:last-child{border-bottom:0}
+.facts span{color:var(--ink-2)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:13px;font-weight:700;transition:background-color .2s,color .2s,border-color .2s}
+.chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip.na{border:1.5px dashed #BFB3A3;color:var(--ink-2);background:transparent}
+.chip.na.on{border:1.5px dashed var(--accent);background:var(--accent-2);color:var(--accent)}
+.sz-chip{min-width:48px;justify-content:center}
+.lbl{display:flex;justify-content:space-between;margin:14px 0 7px;font-size:12px;font-weight:700;color:var(--ink-2)}
+.lbl em{font-style:normal;font-weight:600}
+.lbl em b{display:inline-block;width:14px;border-top:1.5px dashed #BFB3A3;vertical-align:middle;margin:0 3px}
+.tailor{margin-top:12px;padding:12px 13px;border-radius:14px;background:var(--accent-2);font-size:13px;line-height:1.4;color:#5A1C1F}
+.tailor b{color:var(--accent)}
+.wish{display:block;width:100%;margin-top:8px;min-height:44px;resize:none;padding:11px 12px;border-radius:12px;border:1px solid #E2C9C3;background:#fff;font-size:14px;color:var(--ink)}
+.wish::placeholder{color:#B19C97}
+.btn{width:100%;height:52px;margin-top:14px;border-radius:16px;border:0;background:var(--ink);color:#fff;font-weight:800;font-size:15.5px}
+.btn[disabled]{background:#CFC5B8}
+.btn.red{background:var(--accent)}
+.btn.ghost{background:var(--gold-2);color:#5E451C}
+.line{display:flex;gap:10px;align-items:center;padding:9px;border-radius:14px;background:var(--bg);margin-bottom:6px}
+.line .th{width:52px;height:60px;flex:none;border-radius:10px;overflow:hidden;background:#E8E2D8}
+.line .th img{width:100%;height:100%;object-fit:cover;display:block}
+.line p{margin:0;flex:1;font-size:13px;line-height:1.3}
+.line small{display:block;color:var(--ink-2);font-size:11.5px}
+.line small.mk{color:var(--accent);font-weight:700}
+.tot{background:var(--bg);border-radius:16px;padding:10px 14px;font-size:13.5px;margin-top:8px}
+.tot div{display:flex;justify-content:space-between;padding:3px 0}
+.tot .big{border-top:1px solid var(--line);margin-top:5px;padding-top:8px;font-weight:800;font-size:15px}
+.field{min-height:44px;padding:12px 13px;border-radius:12px;background:var(--bg);font-size:14.5px;color:#A89A8B}
+.field.ok{color:var(--ink)}
+.done{text-align:center;padding:4px 4px 0}
+.ring{width:64px;height:64px;margin:6px auto 12px;border-radius:50%;background:var(--ok);display:grid;place-items:center;color:#fff;font-size:30px;animation:pop .45s var(--ease)}
+@keyframes pop{from{transform:scale(.5);opacity:0}}
+.mgr{margin-top:12px;text-align:left;border-radius:16px;background:#17212B;color:#F5F5F5;padding:12px;font-family:-apple-system,"Segoe UI",Roboto,sans-serif}
+.mgr small{display:block;color:#7F91A4;font-size:11.5px;margin-bottom:6px}
+.mgr .bub{background:#182533;border-radius:12px 12px 12px 4px;padding:9px 11px;font-size:13px;line-height:1.5}
+.mgr .bub b{color:#E9C98F}
+.mgr .bub i{font-style:normal;color:#FF9C8F;font-weight:700}
+.steplist{margin:0;padding:0;list-style:none}
+.steplist li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.steplist li:last-child{border:0}
+.toast{position:absolute;left:50%;top:46%;z-index:35;transform:translate(-50%,-50%) scale(.9);opacity:0;padding:12px 16px;border-radius:14px;background:rgba(31,26,22,.95);color:#fff;font-size:13px;font-weight:700;text-align:center;max-width:260px;transition:opacity .25s,transform .25s var(--ease);pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.push{position:absolute;top:50px;left:10px;right:10px;z-index:30;display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:20px;background:rgba(255,253,249,.98);box-shadow:0 18px 40px -18px rgba(31,26,22,.55);transform:translateY(-150%);transition:transform .5s var(--ease)}
+.push.on{transform:none}
+.push .ic{width:36px;height:36px;flex:none;border-radius:10px;background:var(--accent);color:#F4E3C4;display:grid;place-items:center;font:italic 700 17px/1 var(--serif)}
+.push .ph{width:36px;height:44px;flex:none;border-radius:8px;overflow:hidden}
+.push .ph img{width:100%;height:100%;object-fit:cover}
+.push p{margin:0;flex:1;font-size:13px;line-height:1.35}
+.push small{float:right;color:#9a8e82;font-size:11.5px}
+.tap{position:absolute;z-index:40;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:2px solid var(--accent);background:rgba(107,30,34,.18);opacity:0;pointer-events:none;transition:left .5s var(--ease),top .5s var(--ease),opacity .2s}
+.tap.press{animation:press .3s ease-out}
+@keyframes press{50%{transform:scale(.7);background:rgba(107,30,34,.45)}}
+
+@media (max-width:560px){
+  body{background:var(--bg)}
+  .stage{display:block;padding:0}
+  .story{display:none}
+  .phone{width:100%;height:100svh;border-radius:0;padding:0;background:none;box-shadow:none}
+  .screen{border-radius:0}
+  .status{display:none}
+  .tgbar{top:0}
+  .view{top:48px}
+  .push{top:8px}
+  .fab{position:fixed;right:14px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:50;border:0;border-radius:999px;background:var(--ink);color:#fff;font-weight:800;padding:11px 15px;box-shadow:0 12px 30px -12px rgba(0,0,0,.5)}
+}
+@media (min-width:561px){ .fab{display:none} }
+@media (max-width:980px) and (min-width:561px){ .stage{grid-template-columns:1fr;justify-items:center} }
+@media (prefers-reduced-motion:reduce){ *{transition-duration:0s!important;animation:none!important} }
+</style>
+</head>
+<body>
+<div class="stage">
+  <section class="story" aria-label="Что показывает демо">
+    <div class="kicker">Демо для Maafuq</div>
+    <h1>Худи-картины в&nbsp;<em>галерее</em> прямо в&nbsp;Telegram</h1>
+    <p class="lead">Покупатель листает ваши худи как выставку, переключает цвет, видит, какой размер ещё есть, а если нет — заказывает «сшить под меня». Вам приходит готовая заявка с размером и страной, без «а XL остался?» в личке.</p>
+    <ol class="steps" id="steps">
+      <li data-s="0"><div><b>Галерея по разделам и цвету</b>русская и мировая классика, пейзажи, натюрморты</div></li>
+      <li data-s="1"><div><b>Цвет худи переключает фото</b>«Весна» в розовом и синем</div></li>
+      <li data-s="2"><div><b>Сразу видно свободные размеры</b>без вопросов в личке</div></li>
+      <li data-s="3"><div><b>Нет размера — «Сшить под меня»</b>с пожеланиями к пошиву</div></li>
+      <li data-s="4"><div><b>Доставка по миру</b>заявка сразу приходит вам</div></li>
+      <li data-s="5"><div><b>Новый дроп</b>подписчики получают уведомление</div></li>
+    </ol>
+    <button class="tourbtn" id="tourBtn" type="button">▶ Показать за 40 секунд</button>
+    <p class="credit">Демо-концепт от NOVACODE · <a href="https://new-coder.ru">new-coder.ru</a>. Фото взяты для примера из канала @maafuq, цены и размеры примерные.</p>
+  </section>
+  <div class="phone">
+    <div class="screen" id="screen">
+      <div class="status"><span>12:40</span><i>●●● 5G ▮</i></div>
+      <header class="tgbar">
+        <button class="tgbar__close" type="button">Закрыть</button>
+        <div class="tgbar__title"><b>Maafuq</b><small>мини-приложение</small></div>
+        <span class="tgbar__dots" aria-hidden="true">···</span>
+      </header>
+      <div class="view" id="view"></div>
+      <button class="mainbtn" id="mainbtn" type="button" data-act="cart">Корзина · 0</button>
+      <div class="scrim" id="scrim"></div>
+      <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Окно"></div>
+      <div class="push" id="push" role="status"></div>
+      <span class="tap" id="tap" aria-hidden="true"></span>
+    </div>
+  </div>
+</div>
+<button class="fab" id="fab" type="button">▶ Показ</button>
+<script>
+(() => {
+'use strict';
+/* ====== ДАННЫЕ. Фото в d/maafuq/. Цены и свободные размеры примерные ====== */
+const P = n => 'd/maafuq/' + n + '.jpg';
+const COLORS = {'Чёрный':'#2A2726','Синий':'#4F6A92','Серый':'#A9A6A1','Розовый':'#E0559A','Песочный':'#B08A5E'};
+const SIZES = ['XS','S','M','L','XL','XXL'];
+const ITEMS = [
+  {id:'vesna',cat:'Мировая классика',name:'Весна',by:'по С. Боттичелли',price:15000,v:[{c:'Розовый',img:P('vesna_pink'),sz:['M']},{c:'Синий',img:P('vesna_blue'),sz:['S','L']}]},
+  {id:'bog',cat:'Русская классика',name:'Богатыри',by:'по В. Васнецову',price:15000,v:[{c:'Чёрный',img:P('bog_black'),sz:['L']},{c:'Песочный',img:P('bog_sand'),sz:['XL']}]},
+  {id:'utro',cat:'Русская классика',name:'Утро в сосновом лесу',by:'по И. Шишкину',price:15000,v:[{c:'Чёрный',img:P('utro'),sz:['L','XL']}]},
+  {id:'fregat',cat:'Пейзажи',name:'Фрегат',by:'морской пейзаж',price:14000,v:[{c:'Серый',img:P('fregat'),sz:['XL']}]},
+  {id:'ohot',cat:'Русская классика',name:'Охотники на привале',by:'по В. Перову',price:15000,v:[{c:'Чёрный',img:P('ohotniki'),sz:['M','XL']}]},
+  {id:'vech',cat:'Мировая классика',name:'Тайная вечеря',by:'по Леонардо да Винчи',price:15000,v:[{c:'Синий',img:P('vecherya'),sz:['L']}]},
+  {id:'svechi',cat:'Натюрморты',name:'Свечи',by:'натюрморт',price:14000,v:[{c:'Чёрный',img:P('svechi_black'),sz:['L']},{c:'Серый',img:P('svechi_grey'),sz:['M']}]},
+  {id:'royal',cat:'Натюрморты',name:'Рояль у окна',by:'интерьерный натюрморт',price:14500,v:[{c:'Серый',img:P('royal'),sz:['L']}]},
+  {id:'hram',cat:'Пейзажи',name:'Храм над селом',by:'русский пейзаж',price:14500,v:[{c:'Синий',img:P('hram'),sz:['M','L']}]},
+  {id:'izba',cat:'Пейзажи',name:'Зимняя изба',by:'зимний пейзаж',price:14000,v:[{c:'Синий',img:P('izba'),sz:['XL']}]},
+  {id:'step',cat:'Пейзажи',name:'Степь',by:'юрта в степи',price:14000,v:[{c:'Чёрный',img:P('step'),sz:['L']}]},
+];
+const CATS = ['Всё','Русская классика','Мировая классика','Пейзажи','Натюрморты'];
+const TAILOR = '10–14 дней', MANAGER = '@dafuq_maafuq';
+const SHIP = {'Россия':450,'Беларусь':700,'Казахстан':800,'Другая страна':null};
+
+/* ====== движок ====== */
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => Math.round(n).toLocaleString('ru-RU') + ' ₽';
+const $ = id => document.getElementById(id);
+const view = $('view'), sheet = $('sheet'), scrim = $('scrim'), push = $('push'), tapEl = $('tap'), screen = $('screen'), mainbtn = $('mainbtn');
+const S = {cat:'Всё', color:null, cart:[], drop:false, country:'Россия', where:'', open:null, vi:0, size:null, wish:''};
+const toastEl = document.createElement('div'); toastEl.className = 'toast'; screen.appendChild(toastEl);
+const byId = id => ITEMS.find(x => x.id === id);
+ITEMS.forEach(it => it.v.forEach(v => { new Image().src = v.img; })); // все фото заранее: цвет переключается без пустого кадра
+const img = (src, alt) => `<img src="${esc(src)}" alt="${esc(alt)}">`;
+const colorName = c => ({'Чёрный':'чёрное','Синий':'синее','Серый':'серое','Розовый':'розовое','Песочный':'песочное'})[c] || c.toLowerCase();
+
+const shown = () => ITEMS.filter(it => (S.cat === 'Всё' || it.cat === S.cat) && (!S.color || it.v.some(v => v.c === S.color)));
+function home(){
+  const list = shown();
+  return `<div class="hero"><div class="row"><div class="logo"><span>M</span></div>
+      <div><h2>Maafuq</h2><p>худи ручной работы с живописными принтами · каждое в одном экземпляре</p></div></div>
+      <div class="ship"><span>Россия</span><span>Беларусь</span><span>Казахстан</span><span>🌍 по всему миру</span></div></div>
+    <div class="drop"><div class="t"><b>Скоро новый дроп</b>Новые картины, каждая в одном экземпляре</div>
+      <button type="button" class="${S.drop ? 'on' : ''}" data-act="drop">${S.drop ? '✓ Сообщим' : '🔔 Сообщить'}</button></div>
+    <div class="tabs">${CATS.map(c => `<button type="button" class="${S.cat === c ? 'on' : ''}" data-cat="${c}">${c}</button>`).join('')}</div>
+    <div class="colors" aria-label="Цвет худи">${Object.keys(COLORS).map(c => `<button type="button" class="${S.color === c ? 'on' : ''}" data-color="${esc(c)}"><i style="background:${COLORS[c]}"></i>${esc(c)}</button>`).join('')}</div>
+    <div class="found"><span>Худи: ${list.length}</span>${S.color || S.cat !== 'Всё' ? '<button type="button" data-act="reset">Сбросить</button>' : ''}</div>
+    <div class="grid">${list.map(it => { const v = it.v.find(x => x.c === S.color) || it.v[0]; const inCart = S.cart.some(c => c.id === it.id);
+      return `<button type="button" class="card" data-open="${it.id}" data-vc="${esc(v.c)}">
+      ${inCart ? '<span class="badge in">В корзине</span>' : ''}${it.v.length > 1 ? `<span class="dotsw">${it.v.map(x => `<i style="background:${COLORS[x.c]}"></i>`).join('')}</span>` : ''}
+      <div class="pic">${img(v.img, it.name)}</div>
+      <div class="nm">«${esc(it.name)}»</div><div class="by">${esc(it.by)}</div>
+      <div class="sz">в наличии: ${SIZES.filter(s => it.v.some(x => x.sz.includes(s))).join(', ')}</div>
+      <div class="pr">${fmt(it.price)}</div></button>`; }).join('')}</div>
+    <button type="button" class="custom" data-act="how"><i>🧵</i><div><b>Нет вашего размера? Сошью</b><small>любая модель в вашем размере за ${TAILOR}</small></div></button>`;
+}
+function setMain(){ mainbtn.textContent = `Корзина · ${S.cart.length}`; }
+function render(){ const y = view.scrollTop; view.innerHTML = home(); view.scrollTop = y; setMain(); }
+
+function openSheet(html){ sheet.innerHTML = '<div class="grab"></div>' + html; sheet.scrollTop = 0; scrim.classList.add('on'); sheet.classList.add('on'); mainbtn.classList.add('hide'); }
+function closeSheet(){ scrim.classList.remove('on'); sheet.classList.remove('on'); mainbtn.classList.remove('hide'); }
+scrim.addEventListener('click', closeSheet);
+
+function itemSheet(id, vc){
+  const it = byId(id); S.open = id; S.vi = Math.max(0, it.v.findIndex(v => v.c === vc)); S.size = null; S.wish = '';
+  openSheet(`<div class="gal"><div class="track" id="track" style="transform:translateX(${-100 * S.vi}%)">${it.v.map(v => `<div>${img(v.img, it.name)}</div>`).join('')}</div><span class="one">1 экземпляр</span></div>
+    <h3>«${esc(it.name)}»</h3><div class="plaque">${esc(it.by)} · ручная работа</div>
+    <div class="price">${fmt(it.price)}</div>
+    ${it.v.length > 1 ? `<span class="lbl">Цвет худи</span><div class="chips">${it.v.map((v, i) => `<button type="button" class="chip ${i === S.vi ? 'on' : ''}" data-vi="${i}"><i class="sw" style="background:${COLORS[v.c]}"></i>${esc(v.c)}</button>`).join('')}</div>` : `<span class="lbl">Цвет худи</span><div class="chips"><span class="chip on"><i class="sw" style="background:${COLORS[it.v[0].c]}"></i>${esc(it.v[0].c)}</span></div>`}
+    <div id="sizeBox">${sizeBox()}</div>
+    <div class="facts"><div><span>Принт</span><b>гобелен, вшит вручную</b></div><div><span>Основа</span><b>худи oversize, хлопок</b></div><div><span>Пошив на заказ</span><b>${TAILOR}</b></div></div>`);
+}
+function sizeBox(){
+  const it = byId(S.open), v = it.v[S.vi], avail = s => v.sz.includes(s), custom = S.size && !avail(S.size);
+  let act;
+  if (!S.size) act = `<button type="button" class="btn" disabled>Выберите размер</button>`;
+  else if (custom) act = `<div class="tailor">Размера <b>${S.size}</b> в ${({'Чёрный':'чёрном','Синий':'синем','Серый':'сером','Розовый':'розовом','Песочный':'песочном'})[v.c]} нет, <b>сошью под вас за ${TAILOR}</b>. Напишите, если хотите что-то поменять.</div>
+    <textarea class="wish" id="wish" rows="1" placeholder="Пожелания: длина рукава, посадка…">${esc(S.wish)}</textarea>
+    <button type="button" class="btn red" data-act="add" id="addBtn">🧵 Сшить под меня · ${fmt(byId(S.open).price)}</button>`;
+  else act = `<button type="button" class="btn" data-act="add" id="addBtn">В корзину · ${fmt(it.price)}</button>`;
+  return `<span class="lbl">Размер <em>есть · <b></b> сошью</em></span><div class="chips">${SIZES.map(s => `<button type="button" class="chip sz-chip ${avail(s) ? '' : 'na'} ${S.size === s ? 'on' : ''}" data-size="${s}">${s}</button>`).join('')}</div>${act}`;
+}
+function cartSum(){
+  const goods = S.cart.reduce((a, c) => a + c.price, 0), ship = S.cart.length ? SHIP[S.country] : 0;
+  return {goods, ship};
+}
+function cartSheet(){
+  if (!S.cart.length) return openSheet(`<h3>Корзина</h3><div class="sub">Пока пусто. Откройте худи и выберите размер.</div><button type="button" class="btn" data-act="close">Смотреть галерею</button>`);
+  const t = cartSum(), other = S.country === 'Другая страна';
+  openSheet(`<h3>Корзина</h3><div class="sub">Проверьте заказ и куда отправить</div>
+    ${S.cart.map(c => `<div class="line"><div class="th">${img(c.img, c.name)}</div><p><b>«${esc(c.name)}»</b><small>${colorName(c.color)} · ${c.size}</small>${c.custom ? `<small class="mk">сшить под заказ · ${TAILOR}</small>` : '<small>в наличии</small>'}</p><b>${fmt(c.price)}</b></div>`).join('')}
+    <span class="lbl">Куда отправить</span><div class="chips">${Object.keys(SHIP).map(k => `<button type="button" class="chip ${S.country === k ? 'on' : ''}" data-country="${k}">${k === 'Другая страна' ? '🌍 ' : ''}${k}</button>`).join('')}</div>
+    ${other ? `<span class="lbl">Страна и город</span><div class="field ${S.where ? 'ok' : ''}" id="where">${esc(S.where) || 'Например: Германия, Берлин'}</div>` : ''}
+    <div class="tot"><div><span>Худи</span><b>${fmt(t.goods)}</b></div><div><span>Доставка${other ? '' : ' (' + esc(S.country) + ')'}</span><b>${t.ship == null ? 'рассчитаю и напишу' : fmt(t.ship)}</b></div>
+      <div class="big"><span>Итого</span><span>${fmt(t.goods + (t.ship || 0))}${t.ship == null ? ' + доставка' : ''}</span></div></div>
+    <span class="lbl">Связь</span><div class="field ok">Telegram: @anya_k · из профиля</div>
+    <button type="button" class="btn red" data-act="order" id="orderBtn" ${other && !S.where ? 'disabled' : ''}>Оформить заказ</button>`);
+}
+function doneSheet(){
+  const t = cartSum(), other = S.country === 'Другая страна';
+  openSheet(`<div class="done"><div class="ring">✓</div><h3>Заказ №57 оформлен</h3>
+    <div class="sub">Напишу вам в Telegram про оплату${other ? ' и стоимость доставки' : ' и отправку'}.</div></div>
+    <div class="mgr"><small>Так заказ видит ${MANAGER}</small><div class="bub"><b>Новый заказ №57</b><br>
+      ${S.cart.map(c => `• «${esc(c.name)}», ${colorName(c.color)}, ${c.size}${c.custom ? ` — <i>сшить под заказ</i>${c.wish ? `<br>&nbsp;&nbsp;пожелание: ${esc(c.wish)}` : ''}` : ' — в наличии'}`).join('<br>')}<br>
+      Доставка: ${other ? esc(S.where) + ' · <b>рассчитать</b>' : esc(S.country) + ' · ' + fmt(t.ship)}<br>
+      Сумма: <b>${fmt(t.goods + (t.ship || 0))}</b>${t.ship == null ? ' + доставка' : ''}<br>Покупатель: @anya_k</div></div>
+    <button type="button" class="btn" data-act="finish">Готово</button>`);
+}
+function howSheet(){
+  openSheet(`<h3>Сошью в вашем размере</h3><div class="sub">Любую модель из галереи, если нужного размера нет</div><ul class="steplist">
+    <li>👕<span>Выберите худи и размер, отмеченный пунктиром</span></li><li>✍️<span>Напишите пожелания: длина рукава, посадка</span></li>
+    <li>🧵<span>Сошью за ${TAILOR}, картина подбирается вручную</span></li><li>🌍<span>Отправлю в Россию, Беларусь, Казахстан и по миру</span></li></ul>
+    <button type="button" class="btn" data-act="close">Понятно</button>`);
+}
+let toastT;
+function toast(t){ toastEl.innerHTML = t; toastEl.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('on'), 1900); }
+function showPush(text, photo){
+  push.innerHTML = `<div class="ic">M</div><p><b>Maafuq</b><small>сейчас</small><br>${text}</p>${photo ? `<div class="ph">${img(photo, '')}</div>` : ''}`;
+  push.classList.add('on'); setTimeout(() => push.classList.remove('on'), 4000);
+}
+function setVariant(i){
+  S.vi = i; $('track').style.transform = `translateX(${-100 * i}%)`;
+  sheet.querySelectorAll('[data-vi]').forEach(b => b.classList.toggle('on', +b.dataset.vi === i));
+  $('sizeBox').innerHTML = sizeBox();
+}
+
+screen.addEventListener('click', e => {
+  const t = e.target.closest('[data-cat],[data-color],[data-open],[data-vi],[data-size],[data-country],[data-act]'); if (!t) return;
+  if (t.dataset.cat){ S.cat = t.dataset.cat; return render(); }
+  if (t.dataset.color){ S.color = S.color === t.dataset.color ? null : t.dataset.color; return render(); }
+  if (t.dataset.open) return itemSheet(t.dataset.open, t.dataset.vc);
+  if (t.dataset.vi) return setVariant(+t.dataset.vi);
+  if (t.dataset.size){ S.size = t.dataset.size; $('sizeBox').innerHTML = sizeBox(); return; }
+  if (t.dataset.country){ S.country = t.dataset.country; return cartSheet(); }
+  const a = t.dataset.act;
+  if (a === 'cart') cartSheet();
+  else if (a === 'reset'){ S.cat = 'Всё'; S.color = null; render(); }
+  else if (a === 'drop'){ S.drop = !S.drop; render(); if (S.drop) toast('Сообщим о новом дропе 🔔'); }
+  else if (a === 'add'){ const it = byId(S.open), v = it.v[S.vi], custom = !v.sz.includes(S.size), w = $('wish');
+    S.cart = S.cart.filter(c => c.id !== it.id);
+    S.cart.push({id:it.id, name:it.name, price:it.price, img:v.img, color:v.c, size:S.size, custom, wish: custom && w ? w.value.trim() : ''});
+    closeSheet(); render(); toast(custom ? `Сошью «${esc(it.name)}»<br>в размере ${S.size}` : `В корзине:<br>«${esc(it.name)}», ${S.size}`); }
+  else if (a === 'how') howSheet();
+  else if (a === 'order') doneSheet();
+  else if (a === 'close') closeSheet();
+  else if (a === 'finish'){ closeSheet(); S.cart = []; S.where = ''; S.country = 'Россия'; render(); }
+});
+screen.addEventListener('input', e => { if (e.target.id === 'wish') S.wish = e.target.value; });
+screen.addEventListener('click', e => { // своя страна: в живом демо даём ввести
+  if (e.target.id !== 'where' || touring) return;
+  const v = prompt('Страна и город', S.where || ''); if (v != null){ S.where = v.trim(); cartSheet(); }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+
+/* ====== автопоказ ====== */
+let touring = false;
+const sleep = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
+const mark = i => $('steps').querySelectorAll('li').forEach(li => li.classList.toggle('on', +li.dataset.s === i));
+async function tap(sel){
+  const el = typeof sel === 'string' ? screen.querySelector(sel) : sel; if (!el) return;
+  const b = screen.getBoundingClientRect(), sc = el.closest('.view,.sheet,.tabs'), r = el.getBoundingClientRect();
+  if (sc && sc.classList.contains('tabs') && (r.right > b.right - 10 || r.left < b.left + 10)){
+    sc.scrollTo({left: sc.scrollLeft + r.left - b.left - 40, behavior: reduce ? 'auto' : 'smooth'}); await sleep(600); }
+  const vs = el.closest('.view,.sheet'), r1 = el.getBoundingClientRect();
+  if (vs && (r1.bottom > b.bottom - 80 || r1.top < b.top + 100)){ const vr = vs.getBoundingClientRect();
+    vs.scrollTo({top: vs.scrollTop + (r1.top - vr.top) - vr.height / 2 + r1.height / 2, behavior: reduce ? 'auto' : 'smooth'}); await sleep(650); }
+  const r2 = el.getBoundingClientRect();
+  tapEl.style.left = (r2.left - b.left + r2.width / 2) + 'px'; tapEl.style.top = (r2.top - b.top + r2.height / 2) + 'px'; tapEl.style.opacity = '1';
+  await sleep(520); tapEl.classList.remove('press'); void tapEl.offsetWidth; tapEl.classList.add('press'); await sleep(200); el.click(); await sleep(250);
+}
+async function type(el, text, setter, ms = 55){
+  if (!el) return; el.classList && el.classList.add('ok');
+  for (let i = 1; i <= text.length; i++){ setter(text.slice(0, i)); await sleep(ms); }
+}
+async function tour(){
+  if (touring) return; touring = true; $('fab').style.display = 'none';
+  closeSheet(); Object.assign(S, {cat:'Всё', color:null, cart:[], drop:false, country:'Россия', where:''}); render(); view.scrollTop = 0;
+  view.querySelector('.tabs').scrollLeft = 0; await sleep(900);
+  mark(0); await tap('[data-cat="Русская классика"]'); await sleep(900); await tap('[data-act="reset"]'); await sleep(200); await tap('[data-color="Синий"]'); await sleep(900); await tap('[data-act="reset"]'); await sleep(300);
+  mark(1); await tap('[data-open="vesna"]'); await sleep(700); await tap('[data-vi="1"]'); await sleep(1000);
+  mark(2); await tap('[data-size="S"]'); await sleep(500); await tap('#addBtn'); await sleep(1100);
+  mark(3); await tap('[data-open="bog"]'); await sleep(600); await tap('[data-vi="1"]'); await sleep(700); await tap('[data-size="M"]'); await sleep(800);
+  const w = $('wish'); await tap(w); await type(w, 'рукав подлиннее', s => { w.value = s; S.wish = s; }, 35); await sleep(300); await tap('#addBtn'); await sleep(1100);
+  mark(4); await tap('#mainbtn'); await sleep(700); await tap('[data-country="Другая страна"]'); await sleep(300);
+  await tap('#where'); await type($('where'), 'Германия, Берлин', s => { S.where = s; $('where').textContent = s; }, 35);
+  $('orderBtn').disabled = false; await sleep(300); await tap('#orderBtn'); await sleep(3800); await tap('[data-act="finish"]'); await sleep(300);
+  mark(5); view.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'}); await sleep(500); await tap('[data-act="drop"]'); await sleep(1000);
+  tapEl.style.opacity = '0'; showPush('Новый дроп! «Утро в сосновом лесу» уже в галерее, размеры L и XL', P('utro')); await sleep(3600);
+  mark(-1); touring = false; $('fab').style.display = '';
+}
+$('tourBtn').addEventListener('click', tour); $('fab').addEventListener('click', tour);
+render();
+if (location.hash === '#tour') setTimeout(tour, 600);
+})();
+</script>
+</body>
+</html>
