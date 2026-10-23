@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Депиляция у Марины: запись в Telegram и MAX — демо</title>
+<link rel="icon" href="data:,">
+<link rel="preload" href="fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Playfair Display";src:url("fonts/playfair-display-cyrillic-wght-normal.woff2") format("woff2");font-weight:400 900;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Playfair Display";src:url("fonts/playfair-display-latin-wght-normal.woff2") format("woff2");font-weight:400 900;font-display:swap;unicode-range:U+0000-00FF,U+2000-206F,U+20AC,U+2122,U+2212}
+@font-face{font-family:"Manrope";src:url("fonts/manrope-cyrillic-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Manrope";src:url("fonts/manrope-latin-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0000-00FF,U+2000-206F,U+20AC,U+2122,U+2212}
+:root{
+  --blush:#F4E9E6; --blush-2:#EBD8D3; --paper:#FFFFFF; --cocoa:#2B1F1D; --cocoa-2:#6A5752;
+  --rose:#C27C82; --rose-deep:#9C4E57; --line:#E4D2CE; --ok:#2F6B4F; --gold:#B5813F;
+  --stage:#241C1A;
+  --serif:"Playfair Display", Georgia, "Times New Roman", serif;
+  --sans:"Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--stage);color:#F3E6E3;font:400 15px/1.45 var(--sans);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--rose);outline-offset:2px;border-radius:6px}
+
+/* stage */
+.stage{min-height:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(32px,6vw,96px);align-items:center;max-width:1180px;margin:0 auto;padding:40px clamp(20px,5vw,56px)}
+.story .kicker{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:#B79F99;margin-bottom:14px}
+.story h1{font:500 clamp(36px,4.3vw,60px)/1.04 var(--serif);margin:0 0 18px;color:#FBF3F1}
+.story p.lead{max-width:44ch;color:#CDB9B4;font-size:17px;margin:0 0 26px}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s;max-width:460px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:28px 1fr;gap:12px;padding:11px 0;border-top:1px solid #42352F;color:#9F8B86;transition:color .3s}
+.steps li::before{content:counter(s);font:700 13px/1.6 var(--sans);color:#6E5C57;transition:color .3s}
+.steps li b{display:block;font-weight:600;color:inherit}
+.steps li.on{color:#FBF3F1}
+.steps li.on::before{color:var(--rose)}
+.tourbtn{margin-top:24px;display:inline-flex;align-items:center;gap:10px;background:#FBF3F1;color:var(--cocoa);border:0;border-radius:999px;padding:13px 22px;font-weight:700}
+.tourbtn:hover{background:#fff}
+.credit{margin-top:20px;font-size:13px;color:#8A7671;max-width:52ch}
+.credit a{color:#C9B3AE}
+
+/* phone */
+.phone{position:relative;width:390px;height:812px;border-radius:52px;padding:12px;background:#0d0a09;box-shadow:0 0 0 1px #4a3d38,0 50px 80px -40px rgba(0,0,0,.7)}
+.screen{position:relative;width:100%;height:100%;border-radius:41px;overflow:hidden;background:var(--blush);color:var(--cocoa)}
+.status{position:absolute;inset:0 0 auto;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font:700 14px/1 var(--sans);z-index:6}
+.status i{font-style:normal;letter-spacing:2px;font-size:11px}
+.tgbar{position:absolute;top:44px;left:0;right:0;height:46px;display:flex;align-items:center;gap:10px;padding:0 16px;z-index:5;background:var(--blush);border-bottom:1px solid var(--line)}
+.tgbar__close{font-size:14px;font-weight:600;color:var(--rose-deep);background:none;border:0;padding:6px 0}
+.tgbar__title{flex:1;text-align:center;line-height:1.15}
+.tgbar__title b{display:block;font-size:15px}
+.tgbar__title small{font-size:11.5px;color:var(--cocoa-2)}
+.tgbar__dots{width:44px;text-align:right;font-weight:800;color:var(--cocoa-2)}
+
+.views{position:absolute;top:90px;left:0;right:0;bottom:62px;overflow:hidden}
+.view{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;background:var(--blush);transition:transform .42s var(--ease),opacity .3s}
+.view::-webkit-scrollbar{display:none}
+.view.enter{transform:translateX(100%)}
+.view.leave{transform:translateX(-25%);opacity:.4}
+.view.back-enter{transform:translateX(-25%);opacity:.4}
+.view.back-leave{transform:translateX(100%)}
+
+/* role switch */
+.roles{position:absolute;left:0;right:0;bottom:0;height:62px;z-index:8;display:flex;gap:6px;padding:8px 12px 12px;background:var(--paper);border-top:1px solid var(--line)}
+.roles button{flex:1;border:0;border-radius:14px;background:transparent;font-weight:700;font-size:13.5px;color:var(--cocoa-2)}
+.roles button.on{background:var(--cocoa);color:#fff}
+.roles button small{display:block;font-weight:500;font-size:10.5px;opacity:.75}
+
+/* home */
+.brand{padding:16px 18px 2px}
+.brand h2{margin:0;font:700 28px/1.05 var(--serif)}
+.brand p{margin:6px 0 0;font-size:13px;color:var(--cocoa-2)}
+.promo{margin:14px 14px 4px;border-radius:20px;padding:15px 16px;background:var(--cocoa);color:#FBF3F1;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.promo b{display:block;font:700 17px/1.2 var(--serif)}
+.promo small{color:#D6C3BE;font-size:12.5px}
+.promo .pct{flex:none;font:800 26px/1 var(--sans);color:#F2C9CD}
+.mat{display:flex;gap:6px;margin:14px 14px 4px;padding:4px;background:var(--blush-2);border-radius:14px}
+.mat button{flex:1;border:0;border-radius:11px;padding:9px 0;background:transparent;font-weight:700;font-size:13.5px;color:var(--cocoa-2)}
+.mat button.on{background:var(--paper);color:var(--cocoa);box-shadow:0 2px 8px -4px rgba(43,31,29,.3)}
+.group{padding:0 14px}
+.group h4{margin:16px 4px 8px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--cocoa-2)}
+.zone{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:0;background:var(--paper);border-radius:16px;padding:12px 14px;margin-bottom:7px;color:inherit;transition:box-shadow .2s}
+.zone .ck{width:24px;height:24px;flex:none;border-radius:8px;border:2px solid var(--line);display:grid;place-items:center;color:#fff;font-size:14px;font-weight:800;transition:background-color .2s,border-color .2s}
+.zone.on{box-shadow:inset 0 0 0 2px var(--rose-deep)}
+.zone.on .ck{background:var(--rose-deep);border-color:var(--rose-deep)}
+.zone .nm{flex:1;font-size:14px;line-height:1.3}
+.zone .nm small{display:block;color:var(--cocoa-2);font-size:12px;margin-top:2px}
+.zone .pr{font-weight:800;font-size:14px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.gift{display:inline-block;margin-top:4px;padding:2px 7px;border-radius:6px;background:#F6EBD9;color:var(--gold);font-size:11px;font-weight:800}
+.learn{margin:16px 14px 0;border-radius:18px;padding:14px 16px;background:var(--paper);display:flex;gap:12px;align-items:center;border:1px dashed var(--rose)}
+.learn b{display:block;font-size:14.5px}
+.learn small{color:var(--cocoa-2);font-size:12.5px}
+.learn button{margin-left:auto;flex:none;border:0;border-radius:12px;background:var(--blush);color:var(--rose-deep);font-weight:800;padding:9px 12px;font-size:13px}
+.note{margin:14px 18px 0;font-size:11.5px;color:#9a8783}
+.bar{position:sticky;bottom:0;margin-top:14px;padding:10px 14px 12px;background:linear-gradient(transparent,var(--blush) 26%);z-index:3}
+.btn{width:100%;height:52px;border-radius:16px;border:0;background:var(--cocoa);color:#fff;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn small{font-weight:600;opacity:.8}
+.btn.rose{background:var(--rose-deep)}
+.btn.ghost{background:var(--paper);color:var(--cocoa);height:46px;font-size:14px}
+.btn[disabled]{background:#cdbcb8}
+
+/* slot */
+.pv{padding:14px 16px 20px}
+.back{position:sticky;top:10px;margin:10px 0 0 14px;z-index:3;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.9);font-size:20px;font-weight:700;display:grid;place-items:center}
+.pv h3{margin:6px 0 2px;font:700 24px/1.15 var(--serif)}
+.pv .sub{color:var(--cocoa-2);font-size:13.5px}
+.pv h4{margin:18px 0 8px;font-size:13px;color:var(--cocoa-2)}
+.days{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px 0 4px}.days::-webkit-scrollbar{display:none}
+.day{flex:none;width:56px;padding:8px 0;border-radius:14px;border:1px solid var(--line);background:#fff;text-align:center;font-size:12px;color:var(--cocoa-2)}
+.day b{display:block;font-size:17px;color:var(--cocoa)}
+.day.on{background:var(--cocoa);border-color:var(--cocoa);color:#E9D9D5}.day.on b{color:#fff}
+.day.none{opacity:.4}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.slot{padding:10px 0;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:700;font-size:13.5px;text-align:center;font-variant-numeric:tabular-nums}
+.slot.on{background:var(--rose-deep);border-color:var(--rose-deep);color:#fff}
+.empty{grid-column:1/-1;padding:14px;border-radius:12px;background:#fff;color:var(--cocoa-2);font-size:13px;text-align:center}
+.sum{margin-top:14px;background:var(--paper);border-radius:16px;padding:10px 14px;font-size:13.5px}
+.sum div{display:flex;justify-content:space-between;gap:10px;padding:5px 0}
+.sum span{color:var(--cocoa-2)}
+.sum b{text-align:right}
+.sum .tot{border-top:1px solid #f0e4e1;margin-top:4px;padding-top:9px;font-size:15px}
+.sum s{color:#a7928e;font-weight:500;margin-right:6px}
+
+/* sheets */
+.scrim{position:absolute;inset:0;z-index:20;background:rgba(43,31,29,.35);opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:21;background:var(--paper);border-radius:26px 26px 0 0;padding:10px 18px 24px;transform:translateY(105%);transition:transform .42s var(--ease);max-height:88%;overflow-y:auto}
+.sheet.on{transform:none}
+.grab{width:40px;height:5px;border-radius:3px;background:#e2d3cf;margin:0 auto 14px}
+.sheet h3{margin:0 0 4px;font:700 22px/1.15 var(--serif)}
+.sheet .sub{color:var(--cocoa-2);font-size:13.5px;margin-bottom:12px}
+.sheet .sum{background:var(--blush)}
+.field{margin-top:10px}
+.field label{display:block;font-size:12px;color:var(--cocoa-2);margin-bottom:5px}
+.field div{min-height:44px;padding:12px 13px;border-radius:12px;background:var(--blush);font-size:14.5px}
+.share{margin-top:10px;width:100%;height:44px;border-radius:12px;border:1px dashed var(--rose);background:#fff;color:var(--rose-deep);font-weight:700;font-size:13.5px}
+.sheet .btn{margin-top:16px}
+.done{text-align:center;padding:6px 4px 0}
+.ring{width:62px;height:62px;margin:4px auto 12px;border-radius:50%;background:var(--ok);display:grid;place-items:center;color:#fff;font-size:30px;animation:pop .45s var(--ease)}
+@keyframes pop{from{transform:scale(.5);opacity:0}}
+.where{margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--blush);font-size:13px;text-align:left}
+.where b{display:block;font-size:14px}
+
+/* master side */
+.mhead{padding:16px 18px 6px}
+.mhead h2{margin:0;font:700 25px/1.1 var(--serif)}
+.mhead p{margin:6px 0 0;font-size:13px;color:var(--cocoa-2)}
+.mcard{margin:12px 14px 0;border-radius:18px;background:var(--paper);padding:14px}
+.mcard h4{margin:0 0 8px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--cocoa-2)}
+.tgmsg{border-radius:16px;background:#17212B;color:#F5F5F5;padding:12px;font-family:-apple-system,"Segoe UI",Roboto,sans-serif}
+.tgmsg small{display:block;color:#7F91A4;font-size:11.5px;margin-bottom:6px}
+.tgmsg .bub{background:#182533;border-radius:12px 12px 12px 4px;padding:9px 11px;font-size:13px;line-height:1.45}
+.tgmsg .bub b{color:#E9C2C6}
+.post{white-space:pre-line;font-size:13px;line-height:1.45;background:var(--blush);border-radius:14px;padding:12px 13px}
+.post .gone{color:var(--rose-deep);text-decoration:line-through;font-weight:700}
+.auto{display:flex;gap:8px;align-items:flex-start;margin-top:10px;font-size:12.5px;color:var(--ok);font-weight:600}
+.nets{display:flex;gap:6px;margin-top:12px}
+.net{flex:1;padding:9px 0;border-radius:12px;border:1px solid var(--line);background:#fff;text-align:center;font-weight:800;font-size:13px;transition:background-color .25s,color .25s,border-color .25s}
+.net.on{background:var(--ok);border-color:var(--ok);color:#fff}
+.stat{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat div{background:var(--blush);border-radius:14px;padding:10px 12px;font-size:12px;color:var(--cocoa-2)}
+.stat b{display:block;font-size:19px;color:var(--cocoa);font-variant-numeric:tabular-nums}
+.ret{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid #f0e4e1;font-size:13px}
+.ret:first-of-type{border-top:0}
+.ret span{color:var(--cocoa-2)}
+
+/* push + toast */
+.push{position:absolute;top:46px;left:10px;right:10px;z-index:30;display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:20px;background:rgba(255,255,255,.97);box-shadow:0 18px 40px -18px rgba(43,31,29,.5);transform:translateY(-160%);transition:transform .5s var(--ease)}
+.push.on{transform:none}
+.push .ic{width:36px;height:36px;flex:none;border-radius:10px;background:var(--cocoa);color:#fff;display:grid;place-items:center;font:700 15px/1 var(--serif)}
+.push p{margin:0;font-size:13px;line-height:1.35}
+.push p b{font-size:13.5px}
+.push p small{float:right;color:#9a8783;font-size:11.5px}
+.toast{position:absolute;left:50%;bottom:80px;z-index:31;transform:translate(-50%,20px);opacity:0;background:var(--cocoa);color:#fff;padding:10px 16px;border-radius:12px;font-size:13px;font-weight:700;white-space:nowrap;transition:opacity .3s,transform .3s var(--ease);pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+.tap{position:absolute;z-index:40;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:2px solid var(--rose-deep);background:rgba(194,124,130,.25);opacity:0;pointer-events:none;transition:left .5s var(--ease),top .5s var(--ease),opacity .2s}
+.tap.press{animation:press .3s ease-out}
+@keyframes press{50%{transform:scale(.7);background:rgba(194,124,130,.55)}}
+
+@media (max-width:560px){
+  body{background:var(--blush)}
+  .stage{display:block;padding:0}
+  .story{display:none}
+  .phone{width:100%;height:100svh;border-radius:0;padding:0;background:none;box-shadow:none}
+  .screen{border-radius:0}
+  .status{display:none}
+  .tgbar{top:0}
+  .views{top:46px}
+  .push{top:8px}
+  .fab{position:fixed;right:14px;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:50;border:0;border-radius:999px;background:var(--rose-deep);color:#fff;font-weight:800;padding:11px 15px;box-shadow:0 12px 30px -12px rgba(0,0,0,.5)}
+}
+@media (min-width:561px){ .fab{display:none} }
+@media (max-width:980px) and (min-width:561px){ .stage{grid-template-columns:1fr;justify-items:center} .story{max-width:520px} }
+@media (prefers-reduced-motion:reduce){ *{transition-duration:0s!important;animation:none!important} }
+</style>
+</head>
+<body>
+<div class="stage">
+  <section class="story" aria-label="Что показывает демо">
+    <div class="kicker">Демо для Марины · Симферополь</div>
+    <h1>Клиентки записываются сами. Окошки публикуются сами.</h1>
+    <p class="lead">Бот в Telegram и MAX: клиентка выбирает зоны и свободное время, видит подарки и скидку. А пост «Свободные окошки» для ВК, Telegram и MAX собирается без вас и сам убирает занятое время.</p>
+    <ol class="steps" id="steps">
+      <li data-s="0"><div><b>Зоны, шугаринг или воск</b>клиентка собирает процедуру сама</div></li>
+      <li data-s="1"><div><b>Подарки и −20% считаются сами</b>полоска на животе к бикини, пальчики к рукам и ногам</div></li>
+      <li data-s="2"><div><b>Ваши свободные окошки</b>те же, что вы выкладываете в постах</div></li>
+      <li data-s="3"><div><b>Запись приходит вам</b>зоны, время, телефон, новая ли клиентка</div></li>
+      <li data-s="4"><div><b>Пост с окошками собран сам</b>занятое время пропало, публикация в ВК, Telegram и MAX</div></li>
+      <li data-s="5"><div><b>Напоминания</b>за день до визита и через 4 недели: «пора повторить»</div></li>
+    </ol>
+    <button class="tourbtn" id="tourBtn" type="button">▶ Показать за 40 секунд</button>
+    <p class="credit">Демо от NOVACODE · <a href="https://new-coder.ru">new-coder.ru</a>. Адрес, подарки, скидка и окошки взяты из ваших постов в ВК. Цены здесь для примера, в рабочей версии будут ваши.</p>
+  </section>
+
+  <div class="phone">
+    <div class="screen" id="screen">
+      <div class="status"><span>21:47</span><i>●●● 5G ▮</i></div>
+      <header class="tgbar">
+        <button class="tgbar__close" type="button">Закрыть</button>
+        <div class="tgbar__title"><b id="barTitle">Депиляция у Марины</b><small id="barSub">мини-приложение</small></div>
+        <span class="tgbar__dots" aria-hidden="true">···</span>
+      </header>
+      <div class="views" id="views"></div>
+      <nav class="roles" aria-label="Чей экран">
+        <button type="button" class="on" data-role="client">Клиентка<small>что видят они</small></button>
+        <button type="button" data-role="master">Марина<small>что видите вы</small></button>
+      </nav>
+      <div class="scrim" id="scrim"></div>
+      <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Окно"></div>
+      <div class="push" id="push" role="status"></div>
+      <div class="toast" id="toast" role="status"></div>
+      <span class="tap" id="tap" aria-hidden="true"></span>
+    </div>
+  </div>
+</div>
+<button class="fab" id="fab" type="button">▶ Показ</button>
+
+<script>
+(() => {
+'use strict';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = id => document.getElementById(id);
+const fmt = n => n.toLocaleString('ru-RU') + ' ₽';
+const DOW = ['вс','пн','вт','ср','чт','пт','сб'];
+const MON = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+const ADDR = 'ул Ленина 12, салон «Жасмин» центр города +79785171030 (Макс, тг)';
+
+/* цены — пример; зоны и подарки — из постов */
+const ZONES = [
+  {id:'bdeep', cat:'Бикини', name:'Глубокое бикини', min:40, price:1400, gift:'belly'},
+  {id:'bclass', cat:'Бикини', name:'Классическое бикини', min:30, price:1000, gift:'belly'},
+  {id:'arm', cat:'Руки и подмышки', name:'Подмышки', min:15, price:500},
+  {id:'hand', cat:'Руки и подмышки', name:'Руки полностью', min:30, price:900, gift:'fingers'},
+  {id:'shin', cat:'Ноги', name:'Голени', min:30, price:900, gift:'fingers'},
+  {id:'legs', cat:'Ноги', name:'Ноги полностью', min:50, price:1600, gift:'fingers'},
+  {id:'lip', cat:'Лицо', name:'Верхняя губа', min:10, price:300},
+];
+const GIFTS = {belly:'Полоска на животе — в подарок', fingers:'Пальчики на руках и ногах — в подарок'};
+const CATS = [...new Set(ZONES.map(z => z.cat))];
+
+/* окошки — в том виде, как их выкладывает Марина (по дням недели из постов) */
+const PATTERN = [
+  ['08.00','10.00','13.30','17.00','18.30','19.00','19.30'],
+  ['11.00','12.30','17.00','18.00','19.00','19.30'],
+  ['09.00','15.00','16.00','17.00','18.00','19.00','20.00'],
+  ['17.00','18.30','19.00','19.30'],
+  ['14.00','16.00','18.50','19.30'],
+  [],
+  ['12.00','14.00','18.50','19.00'],
+];
+function days(){ const out = [], now = new Date(); for (let i = 1; i <= 7; i++){ const d = new Date(now); d.setDate(now.getDate() + i); out.push(d); } return out; }
+const freeOf = i => PATTERN[i % PATTERN.length].filter(t => !(state.booked && state.booked.day === i && state.booked.t === t));
+const dayName = i => { const d = days()[i]; return `${d.getDate()} ${MON[d.getMonth()]}`; };
+
+const state = { role:'client', mat:'Шугаринг', sel:new Set(), day:0, slot:null, booked:null, posted:false };
+let stack = [];
+const views = $('views'), sheet = $('sheet'), scrim = $('scrim'), screen = $('screen');
+
+function calc(){
+  const list = ZONES.filter(z => state.sel.has(z.id));
+  const sum = list.reduce((a, z) => a + z.price, 0);
+  const min = list.reduce((a, z) => a + z.min, 0);
+  const gifts = [...new Set(list.map(z => z.gift).filter(Boolean))].map(g => GIFTS[g]);
+  return {list, sum, min, gifts, disc: Math.round(sum * 0.2 / 10) * 10};
+}
+const dur = m => m >= 60 ? `${Math.floor(m / 60)} ч${m % 60 ? ' ' + m % 60 + ' мин' : ''}` : `${m} мин`;
+
+/* ---------- client ---------- */
+function homeHTML(){
+  const c = calc();
+  return `<div class="view" data-v="home">
+    <div class="brand"><h2>Депиляция у Марины</h2><p>Шугаринг и воск · ул. Ленина 12, салон «Жасмин», центр</p></div>
+    <div class="promo"><div><b>Новым клиенткам</b><small>скидка считается сама при записи</small></div><span class="pct">−20%</span></div>
+    <div class="mat" role="group" aria-label="Материал">${['Шугаринг','Воск'].map(m => `<button type="button" data-mat="${m}" class="${state.mat === m ? 'on' : ''}">${m}</button>`).join('')}</div>
+    ${CATS.map(cat => `<div class="group"><h4>${cat}</h4>${ZONES.filter(z => z.cat === cat).map(z => `
+      <button type="button" class="zone ${state.sel.has(z.id) ? 'on' : ''}" data-zone="${z.id}" aria-pressed="${state.sel.has(z.id)}">
+        <span class="ck">${state.sel.has(z.id) ? '✓' : ''}</span>
+        <span class="nm">${z.name}<small>${z.min} мин</small>${z.gift ? `<span class="gift">+ ${z.gift === 'belly' ? 'полоска на животе' : 'пальчики'} в подарок</span>` : ''}</span>
+        <span class="pr">${fmt(z.price)}</span></button>`).join('')}</div>`).join('')}
+    <div class="learn"><div><b>Обучение депиляции</b><small>заявка приходит вам с вопросами ученицы</small></div><button type="button" data-act="learn">Узнать</button></div>
+    <p class="note">Цены в демо — пример. В рабочей версии будут ваши.</p>
+    <div class="bar"><button type="button" class="btn" data-act="toslot" ${c.list.length ? '' : 'disabled'}>${c.list.length
+      ? `Выбрать время <small>${c.list.length} ${c.list.length === 1 ? 'зона' : c.list.length < 5 ? 'зоны' : 'зон'} · ${dur(c.min)}</small>` : 'Отметьте зоны'}</button></div>
+  </div>`;
+}
+function slotHTML(){
+  const c = calc(), ds = days(), free = freeOf(state.day);
+  return `<div class="view" data-v="slot">
+    <button type="button" class="back" data-act="back" aria-label="Назад">‹</button>
+    <div class="pv">
+      <h3>${state.mat}: ${c.list.map(z => z.name.toLowerCase()).join(', ')}</h3>
+      <div class="sub">${dur(c.min)} · ул. Ленина 12</div>
+      <h4>День</h4>
+      <div class="days">${ds.map((d, i) => `<button type="button" class="day ${state.day === i ? 'on' : ''} ${PATTERN[i % 7].length ? '' : 'none'}" data-day="${i}">${DOW[d.getDay()]}<b>${d.getDate()}</b></button>`).join('')}</div>
+      <h4>Свободные окошки</h4>
+      <div class="slots">${free.length ? free.map(t => `<button type="button" class="slot ${state.slot === t ? 'on' : ''}" data-slot="${t}">${t.replace('.', ':')}</button>`).join('')
+        : '<div class="empty">В этот день окошек нет — бот предложит соседние дни</div>'}</div>
+      <div class="sum">
+        ${c.gifts.map(g => `<div><span>Подарок</span><b style="color:var(--gold)">${g.replace(' — в подарок', '')}</b></div>`).join('')}
+        <div><span>Скидка новой клиентке</span><b>−${fmt(c.disc)}</b></div>
+        <div class="tot"><span>Итого</span><b><s>${fmt(c.sum)}</s>${fmt(c.sum - c.disc)}</b></div>
+      </div>
+    </div>
+    <div class="bar"><button type="button" class="btn rose" data-act="confirm" ${state.slot ? '' : 'disabled'}>${state.slot ? `Записаться на ${state.slot.replace('.', ':')}` : 'Выберите время'}</button></div>
+  </div>`;
+}
+
+/* ---------- master ---------- */
+function postText(){
+  const ds = days(), lines = [];
+  for (let i = 0; i < 7; i++){
+    const all = PATTERN[i % 7]; if (!all.length) continue;
+    const ts = all.map(t => state.booked && state.booked.day === i && state.booked.t === t ? `<span class="gone">${t}</span>` : t);
+    lines.push(`${String(ds[i].getDate()).padStart(2, '0')} ${MON[ds[i].getMonth()]} ${ts.join(' ')}`);
+  }
+  return `Приходите на депиляцию\nСвободные окошки:\n\n${lines.join('\n\n')}\n\nМы находимся: ${ADDR}`;
+}
+function masterHTML(){
+  const b = state.booked;
+  return `<div class="view" data-v="master">
+    <div class="mhead"><h2>Это видите вы</h2><p>Бот пишет вам в Telegram или MAX — как удобнее</p></div>
+    <div class="mcard"><h4>Новая запись</h4>
+      <div class="tgmsg"><small>Бот записи · только что</small><div class="bub">${b
+        ? `<b>Новая клиентка, скидка 20%</b><br>${b.mat}: ${b.zones}<br>${dayName(b.day)}, ${b.t.replace('.', ':')} · ${dur(b.min)}<br>${b.gifts ? 'Подарок: ' + b.gifts + '<br>' : ''}Итого ${fmt(b.total)} · Анна, +7 978 ••• 41 07`
+        : '<b>Пока записей нет</b><br>Запишитесь на вкладке «Клиентка» — заявка появится здесь.'}</div></div></div>
+    <div class="mcard"><h4>Пост «Свободные окошки» — собран сам</h4>
+      <div class="post">${postText()}</div>
+      ${b ? `<div class="auto">✓ ${dayName(b.day)} ${b.t} уже занято — убрано из поста автоматически</div>` : ''}
+      <div class="nets">${['ВК','Telegram','MAX'].map(n => `<span class="net ${state.posted ? 'on' : ''}">${state.posted ? '✓ ' : ''}${n}</span>`).join('')}</div>
+      <button type="button" class="btn" style="margin-top:12px" data-act="publish" ${state.posted ? 'disabled' : ''}>${state.posted ? 'Опубликовано в 3 местах' : 'Опубликовать везде одной кнопкой'}</button>
+    </div>
+    <div class="mcard"><h4>Возвращает клиенток сама</h4>
+      <div class="ret"><span>За день до визита</span><b>«Ждём вас завтра в ${b ? b.t.replace('.', ':') : '18:00'}»</b></div>
+      <div class="ret"><span>Через 4 недели</span><b>«Пора обновить гладкость?»</b></div>
+      <div class="ret"><span>Не пришла 2 месяца</span><b>«Скучаем, подарок на визит»</b></div>
+    </div>
+    <div style="height:18px"></div>
+  </div>`;
+}
+
+/* ---------- nav ---------- */
+const render = n => n === 'home' ? homeHTML() : n === 'slot' ? slotHTML() : masterHTML();
+function mount(html, dir){
+  const w = document.createElement('div'); w.innerHTML = html.trim();
+  const v = w.firstElementChild, old = views.lastElementChild;
+  if (old && !reduce && dir){
+    v.classList.add(dir === 'back' ? 'back-enter' : 'enter'); views.appendChild(v); v.getBoundingClientRect();
+    v.classList.remove('enter','back-enter'); old.classList.add(dir === 'back' ? 'back-leave' : 'leave');
+    setTimeout(() => old.remove(), 450);
+  } else { views.innerHTML = ''; views.appendChild(v); }
+}
+function go(n){ stack.push(n); mount(render(n), 'fwd'); }
+function back(){ if (stack.length < 2) return; stack.pop(); mount(render(stack[stack.length - 1]), 'back'); }
+function rerender(){ const cur = views.lastElementChild, top = cur ? cur.scrollTop : 0; mount(render(stack[stack.length - 1])); views.lastElementChild.scrollTop = top; }
+function setRole(r){
+  if (state.role === r) return; state.role = r; closeSheet();
+  screen.querySelectorAll('[data-role]').forEach(b => b.classList.toggle('on', b.dataset.role === r));
+  $('barSub').textContent = r === 'master' ? 'панель мастера' : 'мини-приложение';
+  if (r === 'master'){ stack = ['master']; mount(masterHTML(), 'fwd'); }
+  else { stack = ['home']; mount(homeHTML(), 'back'); }
+}
+
+/* ---------- sheets ---------- */
+function openSheet(html){ sheet.innerHTML = '<div class="grab"></div>' + html; scrim.classList.add('on'); sheet.classList.add('on'); }
+function closeSheet(){ scrim.classList.remove('on'); sheet.classList.remove('on'); }
+scrim.addEventListener('click', closeSheet);
+function confirmSheet(){
+  const c = calc();
+  openSheet(`<h3>Подтвердите запись</h3><div class="sub">Марина получит заявку сразу</div>
+    <div class="sum"><div><span>Процедура</span><b>${state.mat}, ${c.list.map(z => z.name.toLowerCase()).join(', ')}</b></div>
+    <div><span>Когда</span><b>${dayName(state.day)}, ${state.slot.replace('.', ':')}</b></div>
+    ${c.gifts.length ? `<div><span>Подарок</span><b style="color:var(--gold)">${c.gifts.map(g => g.replace(' — в подарок', '')).join(', ')}</b></div>` : ''}
+    <div class="tot"><span>Итого со скидкой</span><b>${fmt(c.sum - c.disc)}</b></div></div>
+    <div class="field"><label>Имя</label><div>Анна</div></div>
+    <div class="field"><label>Телефон</label><div id="phoneF" style="color:#9a8783">Не указан</div></div>
+    <button type="button" class="share" data-act="share">Поделиться номером из Telegram</button>
+    <button type="button" class="btn rose" data-act="book" id="bookBtn" disabled>Записаться</button>`);
+}
+function doneSheet(){
+  const b = state.booked;
+  openSheet(`<div class="done"><div class="ring">✓</div><h3>Вы записаны</h3>
+    <div class="sub">${dayName(b.day)} в ${b.t.replace('.', ':')}. Напомним за день.</div></div>
+    <div class="where"><b>ул. Ленина 12, салон «Жасмин»</b>центр города · вопросы Марине в Telegram или MAX</div>
+    <button type="button" class="btn" data-act="seeMaster">Что увидела Марина →</button>`);
+}
+function learnSheet(){
+  openSheet(`<h3>Обучение депиляции</h3><div class="sub">Бот задаст пару вопросов и пришлёт вам готовую заявку</div>
+    <div class="field"><label>Опыт</label><div>С нуля</div></div>
+    <div class="field"><label>Что интересно</label><div>Шугаринг, глубокое бикини</div></div>
+    <button type="button" class="btn" data-act="close">Отправить заявку</button>`);
+}
+function toast(t){ const el = $('toast'); el.textContent = t; el.classList.add('on'); setTimeout(() => el.classList.remove('on'), 2400); }
+function showPush(title, text, when){
+  const p = $('push');
+  p.innerHTML = `<div class="ic">М</div><p><b>${title}</b><small>${when}</small><br>${text}</p>`;
+  p.classList.add('on'); setTimeout(() => p.classList.remove('on'), 3800);
+}
+
+/* ---------- events ---------- */
+screen.addEventListener('click', e => {
+  const t = e.target.closest('[data-zone],[data-act],[data-day],[data-slot],[data-mat],[data-role]'); if (!t) return;
+  if (t.dataset.role) return setRole(t.dataset.role);
+  if (t.dataset.zone){ const id = t.dataset.zone; state.sel.has(id) ? state.sel.delete(id) : state.sel.add(id); return rerender(); }
+  if (t.dataset.mat){ state.mat = t.dataset.mat; return rerender(); }
+  if (t.dataset.day){ state.day = +t.dataset.day; state.slot = null; return rerender(); }
+  if (t.dataset.slot){ state.slot = t.dataset.slot; return rerender(); }
+  const a = t.dataset.act;
+  if (a === 'back') back();
+  else if (a === 'toslot'){ state.slot = null; go('slot'); }
+  else if (a === 'confirm') confirmSheet();
+  else if (a === 'learn') learnSheet();
+  else if (a === 'share'){ const f = $('phoneF'); f.textContent = '+7 978 ••• 41 07'; f.style.color = ''; t.remove(); $('bookBtn').disabled = false; }
+  else if (a === 'book'){
+    const c = calc();
+    state.booked = {day:state.day, t:state.slot, mat:state.mat, min:c.min, total:c.sum - c.disc,
+      zones:c.list.map(z => z.name.toLowerCase()).join(', '), gifts:c.gifts.map(g => g.replace(' — в подарок', '').toLowerCase()).join(', ')};
+    state.posted = false; doneSheet();
+  }
+  else if (a === 'seeMaster') setRole('master');
+  else if (a === 'publish'){ state.posted = true; rerender(); toast('Пост вышел в ВК, Telegram и MAX'); }
+  else if (a === 'close') closeSheet();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+
+/* ---------- tour ---------- */
+let touring = false;
+const sleep = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
+function mark(i){ $('steps').querySelectorAll('li').forEach(li => li.classList.toggle('on', +li.dataset.s === i)); }
+const tapEl = $('tap');
+async function tap(sel){
+  const el = typeof sel === 'string' ? screen.querySelector(sel) : sel; if (!el) return;
+  const b = screen.getBoundingClientRect(), v = el.closest('.view');
+  let r = el.getBoundingClientRect();
+  if (v && (r.bottom > b.bottom - 140 || r.top < b.top + 100)){ const vr = v.getBoundingClientRect();
+    v.scrollTo({top: v.scrollTop + (r.top - vr.top) - vr.height / 2 + r.height / 2, behavior: reduce ? 'auto' : 'smooth'}); await sleep(650); }
+  r = el.getBoundingClientRect();
+  tapEl.style.left = (r.left - b.left + r.width / 2) + 'px'; tapEl.style.top = (r.top - b.top + r.height / 2) + 'px'; tapEl.style.opacity = '1';
+  await sleep(560); tapEl.classList.remove('press'); void tapEl.offsetWidth; tapEl.classList.add('press'); await sleep(200); el.click(); await sleep(260);
+}
+async function scrollView(y){ const v = views.lastElementChild; v.scrollTo({top:y, behavior: reduce ? 'auto' : 'smooth'}); await sleep(900); }
+function reset(){ closeSheet(); Object.assign(state, {role:'client', mat:'Шугаринг', day:0, slot:null, booked:null, posted:false}); state.sel.clear();
+  screen.querySelectorAll('[data-role]').forEach(b => b.classList.toggle('on', b.dataset.role === 'client')); $('barSub').textContent = 'мини-приложение';
+  stack = ['home']; mount(homeHTML()); }
+async function tour(){
+  if (touring) return; touring = true; $('fab').style.display = 'none';
+  reset(); await sleep(900);
+  mark(0); await tap('[data-zone="bdeep"]'); await sleep(300); await tap('[data-zone="arm"]'); await sleep(300); await tap('[data-zone="shin"]'); await sleep(500);
+  mark(1); await tap('[data-act="toslot"]'); await sleep(900);
+  const di = PATTERN.findIndex((p, i) => i > 0 && p.length >= 5);
+  mark(2); await tap(`[data-day="${di}"]`); await sleep(500);
+  const ts = PATTERN[di].find(t => t >= '17.00') || PATTERN[di][0];
+  await tap(`[data-slot="${ts}"]`); await sleep(1300);
+  await tap('[data-act="confirm"]'); await sleep(900);
+  await tap('[data-act="share"]'); await sleep(400); await tap('#bookBtn'); await sleep(1800);
+  mark(3); await tap('[data-act="seeMaster"]'); await sleep(2600);
+  mark(4); await scrollView(260); await sleep(1500);
+  await tap('[data-act="publish"]'); await sleep(2200);
+  mark(5); await scrollView(9999); await sleep(600);
+  showPush('Депиляция у Марины', `Анна, прошло 4 недели после бикини. Записать вас снова в ${ts.replace('.', ':')}?`, 'через 4 недели');
+  await sleep(4400);
+  tapEl.style.opacity = '0'; mark(-1); touring = false; $('fab').style.display = '';
+}
+$('tourBtn').addEventListener('click', tour); $('fab').addEventListener('click', tour);
+stack = ['home']; mount(homeHTML());
+if (location.hash === '#tour') setTimeout(tour, 700);
+})();
+</script>
+</body>
+</html>
