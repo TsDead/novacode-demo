@@ -1,0 +1,221 @@
+{
+ "name": "ORIGINAL PRODUCT",
+ "sub": "парфюм, диффузоры, наборы ароматов, Москва",
+ "tagline": "Вещи из канала — с бронью в один тап.",
+ "channel": "originalproductnew",
+ "manager": "@OriginalProduct_New",
+ "ns": "novacode-demo-1d9b6a",
+ "items": [
+  {
+   "brand": "Clive Christian",
+   "name": "Blonde Amber",
+   "cat": "Парфюм",
+   "size": "50 мл",
+   "sizes": [
+    "50 мл"
+   ],
+   "price": 44600,
+   "boutique": null,
+   "tb": "#E07A63",
+   "tc": "#FFF3EE",
+   "fs": 15,
+   "sold": false,
+   "id": "i0"
+  },
+  {
+   "brand": "Lattafa",
+   "name": "Art of Arabia III",
+   "cat": "Парфюм",
+   "size": "100 мл",
+   "sizes": [
+    "100 мл"
+   ],
+   "price": 5240,
+   "boutique": null,
+   "tb": "#7A4E2D",
+   "tc": "#FBEFE2",
+   "fs": 22,
+   "sold": false,
+   "id": "i1"
+  },
+  {
+   "brand": "Dr. Vranjes",
+   "name": "Диффузор 250 мл",
+   "cat": "Дом",
+   "size": "250 мл",
+   "sizes": [
+    "250 мл"
+   ],
+   "price": 8740,
+   "boutique": null,
+   "tb": "#5B2A6E",
+   "tc": "#F7E3F2",
+   "fs": 18,
+   "sold": false,
+   "id": "i2"
+  },
+  {
+   "brand": "Dr. Vranjes",
+   "name": "Диффузор 250 мл",
+   "cat": "Дом",
+   "size": "250 мл",
+   "sizes": [
+    "250 мл"
+   ],
+   "price": 10070,
+   "boutique": null,
+   "tb": "#5B2A6E",
+   "tc": "#F7E3F2",
+   "fs": 18,
+   "sold": false,
+   "id": "i3"
+  },
+  {
+   "brand": "Dr. Vranjes",
+   "name": "Диффузор 500 мл",
+   "cat": "Дом",
+   "size": "500 мл",
+   "sizes": [
+    "500 мл"
+   ],
+   "price": 12740,
+   "boutique": null,
+   "tb": "#5B2A6E",
+   "tc": "#F7E3F2",
+   "fs": 18,
+   "sold": false,
+   "id": "i4"
+  },
+  {
+   "brand": "Versace",
+   "name": "Atelier Sample Set",
+   "cat": "Парфюм",
+   "size": "12 × 1, 5 мл",
+   "sizes": [
+    "12 × 1",
+    "5 мл"
+   ],
+   "price": 5540,
+   "boutique": null,
+   "tb": "#C3202F",
+   "tc": "#FFEFEF",
+   "fs": 22,
+   "sold": false,
+   "id": "i5"
+  },
+  {
+   "brand": "Ex Nihilo",
+   "name": "Vesper Glitz",
+   "cat": "Парфюм",
+   "size": "50 мл",
+   "sizes": [
+    "50 мл"
+   ],
+   "price": 12600,
+   "boutique": null,
+   "tb": "#7A4E2D",
+   "tc": "#FBEFE2",
+   "fs": 22,
+   "sold": false,
+   "id": "i6"
+  },
+  {
+   "brand": "Ex Nihilo",
+   "name": "Gold Immortals",
+   "cat": "Парфюм",
+   "size": "50 мл",
+   "sizes": [
+    "50 мл"
+   ],
+   "price": 12740,
+   "boutique": null,
+   "tb": "#7A4E2D",
+   "tc": "#FBEFE2",
+   "fs": 22,
+   "sold": false,
+   "id": "i7"
+  },
+  {
+   "brand": "Ex Nihilo",
+   "name": "Rose Hubris",
+   "cat": "Парфюм",
+   "size": "50 мл",
+   "sizes": [
+    "50 мл"
+   ],
+   "price": 12740,
+   "boutique": null,
+   "tb": "#7A4E2D",
+   "tc": "#FBEFE2",
+   "fs": 22,
+   "sold": false,
+   "id": "i8"
+  },
+  {
+   "brand": "Ex Nihilo",
+   "name": "Oud Vendome",
+   "cat": "Парфюм",
+   "size": "50 мл",
+   "sizes": [
+    "50 мл"
+   ],
+   "price": 12740,
+   "boutique": null,
+   "tb": "#7A4E2D",
+   "tc": "#FBEFE2",
+   "fs": 22,
+   "sold": false,
+   "id": "i9"
+  },
+  {
+   "brand": "Tom Ford",
+   "name": "Black Orchid Reserve",
+   "cat": "Парфюм",
+   "size": "50 мл",
+   "sizes": [
+    "50 мл"
+   ],
+   "price": 12600,
+   "boutique": null,
+   "tb": "#3B3F58",
+   "tc": "#F1EEE6",
+   "fs": 22,
+   "sold": false,
+   "id": "i10"
+  },
+  {
+   "brand": "Tom Ford",
+   "name": "Black Orchid Reserve",
+   "cat": "Парфюм",
+   "size": "—",
+   "sizes": [],
+   "price": 17670,
+   "boutique": null,
+   "tb": "#3B3F58",
+   "tc": "#F1EEE6",
+   "fs": 22,
+   "sold": false,
+   "id": "i11"
+  }
+ ],
+ "brands": [
+  "Clive Christian",
+  "Lattafa",
+  "Dr. Vranjes",
+  "Versace",
+  "Ex Nihilo",
+  "Tom Ford"
+ ],
+ "sizes": [
+  "50 мл",
+  "100 мл",
+  "250 мл",
+  "500 мл",
+  "12 × 1",
+  "5 мл"
+ ],
+ "cats": [
+  "Парфюм",
+  "Дом"
+ ]
+}
