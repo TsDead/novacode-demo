@@ -1,0 +1,84 @@
+{
+ "kind": "booking",
+ "name": "Пляс",
+ "sub": "занятия танцами, абонементы, Самара",
+ "tagline": "Запись на пробное — в два тапа.",
+ "channel": "plyasdance",
+ "manager": "@plyasdancee",
+ "ns": "novacode-demo-1d9b6a",
+ "cats": [
+  "Занятия"
+ ],
+ "services": [
+  {
+   "name": "Абонемент 4 занятия",
+   "price": 1900,
+   "from": false,
+   "dur": "",
+   "cat": "Занятия",
+   "tb": "#111111",
+   "tc": "#EDEDED",
+   "id": "s0"
+  },
+  {
+   "name": "Абонемент 8 занятий",
+   "price": 2900,
+   "from": false,
+   "dur": "",
+   "cat": "Занятия",
+   "tb": "#2A2A2A",
+   "tc": "#E9D7A8",
+   "id": "s1"
+  },
+  {
+   "name": "Абонемент 16 занятий",
+   "price": 4400,
+   "from": false,
+   "dur": "",
+   "cat": "Занятия",
+   "tb": "#B98A5E",
+   "tc": "#FFF6EC",
+   "id": "s2"
+  },
+  {
+   "name": "Абонемент 24 занятия",
+   "price": 5500,
+   "from": false,
+   "dur": "",
+   "cat": "Занятия",
+   "tb": "#B08A4A",
+   "tc": "#FFF8EA",
+   "id": "s3"
+  },
+  {
+   "name": "Абонемент 48 занятий",
+   "price": 9900,
+   "from": false,
+   "dur": "",
+   "cat": "Занятия",
+   "tb": "#141414",
+   "tc": "#F3F3F3",
+   "id": "s4"
+  },
+  {
+   "name": "Абонемент 8 занятий (GIRLY CHOREO)",
+   "price": 2900,
+   "from": false,
+   "dur": "",
+   "cat": "Занятия",
+   "tb": "#B08A4A",
+   "tc": "#FFF8EA",
+   "id": "s5"
+  },
+  {
+   "name": "Пробное занятие (при отсутствии абонемента)",
+   "price": 400,
+   "from": false,
+   "dur": "",
+   "cat": "Занятия",
+   "tb": "#5B2A6E",
+   "tc": "#F7E3F2",
+   "id": "s6"
+  }
+ ]
+}
