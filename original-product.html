@@ -58,7 +58,8 @@ button{cursor:pointer}
 .hero{position:relative;background:var(--ink);color:#F5EFE4;padding:18px 18px 22px;overflow:hidden}
 .hero::after{content:"";position:absolute;right:-60px;top:-80px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,#D7B46E55,transparent 65%)}
 .mono{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
-.mono .lg{width:46px;height:46px;border-radius:50%;border:1px solid var(--gold-2);display:grid;place-items:center;font:600 17px/1 var(--serif);color:var(--gold-2);letter-spacing:.02em}
+.mono .lg{width:46px;height:46px;border-radius:50%;border:1px solid var(--gold-2);overflow:hidden;flex:none;background:#000}
+.mono .lg img{width:100%;height:100%;object-fit:cover;display:block}
 .mono b{display:block;font:600 22px/1.05 var(--serif);letter-spacing:.05em}
 .mono small{font-size:12px;color:#A99F8D}
 .hero p{position:relative;z-index:1;margin:12px 0 0;font-size:13px;color:#D6CCBB;line-height:1.45}
@@ -92,6 +93,7 @@ button{cursor:pointer}
 .card{background:var(--paper);border-radius:18px;padding:6px 6px 11px;position:relative;border:0;text-align:left;animation:in .35s var(--ease) both}
 @keyframes in{from{opacity:0;transform:translateY(6px)}}
 .pic{aspect-ratio:1/1.1;border-radius:13px;overflow:hidden;position:relative;display:grid;place-items:center}
+.pic img,.gal img,.dupe .mini img,.line .th img{width:100%;height:100%;object-fit:cover;display:block}
 .pic svg{width:62%;height:auto;filter:drop-shadow(0 10px 12px rgba(40,30,15,.28))}
 .badge{position:absolute;top:12px;left:12px;padding:3px 8px;border-radius:8px;background:rgba(21,19,15,.88);color:#fff;font-size:10.5px;font-weight:800;z-index:2}
 .badge.new{background:var(--gold)}
@@ -119,6 +121,7 @@ button{cursor:pointer}
 .sheet h3{margin:0 0 4px;font:600 25px/1.1 var(--serif)}
 .sheet .sub{color:var(--ink-2);font-size:13.5px;margin-bottom:12px}
 .gal{position:relative;border-radius:20px;overflow:hidden;height:230px;display:grid;place-items:center;margin-bottom:12px}
+.gal:has(img){height:300px}
 .gal svg{height:78%;width:auto;filter:drop-shadow(0 16px 18px rgba(40,30,15,.3));transition:transform .4s var(--ease)}
 .gal .vol{position:absolute;right:12px;bottom:12px;padding:5px 10px;border-radius:999px;background:rgba(255,253,249,.9);font-size:12px;font-weight:800}
 .br2{font:700 11px/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
@@ -135,7 +138,7 @@ button{cursor:pointer}
 .notes{display:flex;flex-wrap:wrap;gap:6px}
 .notes button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 11px;font-size:12.5px;font-weight:700}
 .dupe{margin-top:14px;display:flex;gap:12px;align-items:center;padding:12px;border-radius:16px;background:#F5ECDA;border:1px solid #E6D3AC;text-align:left;width:100%}
-.dupe .mini{width:46px;height:56px;flex:none;border-radius:10px;display:grid;place-items:center}
+.dupe .mini{width:46px;height:56px;flex:none;border-radius:10px;display:grid;place-items:center;overflow:hidden}
 .dupe .mini svg{height:86%;width:auto}
 .dupe p{margin:0;flex:1;font-size:12.5px;line-height:1.35;color:#5B4A28}
 .dupe p b{display:block;font-size:13.5px;color:var(--ink)}
@@ -148,7 +151,7 @@ button{cursor:pointer}
 .btn{width:100%;height:52px;margin-top:14px;border-radius:16px;border:0;background:var(--ink);color:#fff;font-weight:800;font-size:15.5px}
 .btn[disabled]{background:#C9C1B6}
 .line{display:flex;gap:10px;align-items:center;padding:8px;border-radius:14px;background:var(--bg);margin-bottom:6px}
-.line .th{width:48px;height:56px;flex:none;border-radius:10px;display:grid;place-items:center}
+.line .th{width:48px;height:56px;flex:none;border-radius:10px;display:grid;place-items:center;overflow:hidden}
 .line .th svg{height:84%;width:auto}
 .line p{margin:0;flex:1;font-size:13px;line-height:1.3}
 .line small{display:block;color:var(--ink-2);font-size:11.5px}
@@ -169,10 +172,11 @@ button{cursor:pointer}
 .toast.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
 .push{position:absolute;top:50px;left:10px;right:10px;z-index:30;display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:20px;background:rgba(255,255,255,.97);box-shadow:0 18px 40px -18px rgba(0,0,0,.55);transform:translateY(calc(-100% - 80px));transition:transform .5s var(--ease)}
 .push.on{transform:none}
-.push .ic{width:36px;height:36px;flex:none;border-radius:10px;background:var(--ink);display:grid;place-items:center;color:var(--gold-2);font:600 14px/1 var(--serif)}
+.push .ic{width:36px;height:36px;flex:none;border-radius:10px;background:var(--ink);display:grid;place-items:center;overflow:hidden}
+.push .ic img{width:100%;height:100%;object-fit:cover;display:block}
 .push p{margin:0;font-size:13px;line-height:1.35}
 .push small{float:right;color:#9a8f84;font-size:11.5px}
-.tap{position:absolute;z-index:40;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:2px solid var(--ink);background:rgba(21,19,15,.18);opacity:0;pointer-events:none;transition:left .5s var(--ease),top .5s var(--ease),opacity .2s}
+.tap{position:absolute;z-index:40;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:2px solid var(--ink);background:rgba(21,19,15,.18);opacity:0;pointer-events:none;left:0;top:0;transition:translate .5s cubic-bezier(.45,.05,.55,.95),opacity .2s}
 .tap.press{animation:press .3s ease-out}
 @keyframes press{50%{transform:scale(.7);background:rgba(21,19,15,.4)}}
 
@@ -208,7 +212,7 @@ button{cursor:pointer}
       <li data-s="5"><div><b>Новое поступление</b>подписчики получают уведомление</div></li>
     </ol>
     <button class="tourbtn" id="tourBtn" type="button">▶ Показать за 45 секунд</button>
-    <p class="credit">Демо-концепт от NOVACODE · <a href="https://new-coder.ru">new-coder.ru</a>. Ароматы, ноты и цены взяты из канала @originalproductnew. Флаконы нарисованы условно — в рабочей версии будут ваши фото.</p>
+    <p class="credit">Демо-концепт от NOVACODE · <a href="https://new-coder.ru">new-coder.ru</a>. Ароматы, ноты и цены взяты из канала @originalproductnew. Фото — из постов канала; где фото в канале нет, флакон нарисован условно.</p>
   </section>
   <div class="phone">
     <div class="screen" id="screen">
@@ -244,17 +248,22 @@ const TONE = {
 };
 /* Данные — из постов канала @originalproductnew */
 const ITEMS = [
-  {id:'kurky',brand:'Francis Kurkdjian',name:'Kurky',g:'Женский',tone:'sweet',shape:'round',cap:'gold',isNew:true,notes:['маршмеллоу','мускус','малина','персик'],vols:[['5 мл',3220],['35 мл, тестер',14500],['70 мл',24100]]},
+  {id:'byredo',brand:'Byredo',name:'Future Memories',g:'Унисекс',tone:'set',shape:'square',cap:'black',isNew:'Новинка',notes:['чёрная смородина','имбирь','ирис','ваниль'],vols:[['50 мл',35140],['100 мл, тестер',59000],['100 мл',61670]]},
+  {id:'chance',brand:'Chanel',name:'Chance Eau Splendide',g:'Женский',tone:'sweet',shape:'round',cap:'silver',isNew:'Новинка',notes:['малина','розовая герань','фиалка','белый мускус','кедр'],vols:[['35 мл',12870],['50 мл, тестер',14340],['50 мл',14600],['100 мл, тестер',19940],['100 мл',22870],['150 мл',29670]]},
+  {id:'tfbor',brand:'Tom Ford',name:'Black Orchid Reserve',g:'Женский',tone:'amber',shape:'round',cap:'gold',isNew:'Новинка',notes:['цветы','горький шоколад','пачули'],vols:[['50 мл',12600],['100 мл, тестер',17670],['100 мл',21140]]},
+  {id:'dearlord',brand:'Vilhelm Parfumerie',name:'Dear Lord',g:'Унисекс',tone:'woody',shape:'rect',cap:'black',isNew:'Новинка',notes:['древесный','дымок','ваниль'],vols:[['50 мл',11670],['100 мл',16740]]},
+  {id:'vcacherry',brand:'Van Cleef & Arpels',name:'Moonlight Cherry',g:'Женский',tone:'sweet',shape:'tall',cap:'black',stock:true,notes:['вишня','горький миндаль','ваниль','мускус'],vols:[['75 мл',15670]]},
+  {id:'kurky',brand:'Francis Kurkdjian',name:'Kurky',g:'Женский',tone:'sweet',shape:'round',cap:'gold',isNew:'Новинка 2025',notes:['маршмеллоу','мускус','малина','персик'],vols:[['5 мл',3220],['35 мл, тестер',14500],['70 мл',24100]]},
   {id:'wildblue',brand:'Roberto Cavalli',name:'Just Cavalli Wild Blue',g:'Мужской',tone:'fresh',shape:'tall',cap:'black',stock:true,notes:['свежий','морской'],vols:[['90 мл',4070]]},
-  {id:'tfmand',brand:'Tom Ford',name:'Mandarino di Amalfi',g:'Унисекс',tone:'citrus',shape:'square',cap:'black',notes:['лимон','грейпфрут','цветы апельсина','мята'],vols:[['50 мл',23670]]},
-  {id:'perris',brand:'Perris Monte Carlo',name:'Mandarino di Sicilia',g:'Унисекс',tone:'citrus',shape:'rect',cap:'gold',notes:['цветы апельсина','горький апельсин','мандарин','кедр'],vols:[['50 мл',10740],['100 мл, тестер',12070],['100 мл',21000]]},
-  {id:'bdk',brand:'BDK Parfums',name:'Citrus Riviera',g:'Унисекс',tone:'citrus',shape:'tall',cap:'gold',notes:['итальянский лимон','водные ноты','нероли','мандарин'],vols:[['100 мл',18670]]},
   {id:'cartier',brand:'Cartier',name:'Déclaration EDT',g:'Мужской',tone:'woody',shape:'rect',cap:'silver',notes:['кардамон','горький апельсин','тмин','ветивер','перец'],vols:[['50 мл',7670],['100 мл',10200],['Набор: 100 мл + гель',12470]]},
   {id:'armaf',brand:'Armaf',name:'Club de Nuit Sillage',g:'Мужской',tone:'fresh',shape:'square',cap:'silver',stock:true,notes:['бергамот','лимон','амброксан','мускус'],vols:[['30 мл',3140],['105 мл',3540]],dupeOf:'creed'},
   {id:'creed',brand:'Creed',name:'Silver Mountain Water',g:'Мужской',tone:'fresh',shape:'tall',cap:'silver',notes:['зелёный чай','мускус','чёрная смородина','бергамот'],vols:[['1,7 мл',1140],['50 мл',20200],['100 мл, тестер',26740],['100 мл',29670]],dupe:'armaf'},
   {id:'labolf',brand:'Laboratorio Olfattivo',name:'Mandarino',g:'Унисекс',tone:'citrus',shape:'round',cap:'black',notes:['мандарин','чёрная смородина','мускус'],vols:[['100 мл',14470]]},
   {id:'ados',brand:'Atelier des Ors',name:'Chœur des Anges',g:'Женский',tone:'amber',shape:'square',cap:'gold',notes:['красный апельсин','мёд','османтус','груша'],vols:[['100 мл',11270]]},
   {id:'pomelo',brand:'Atelier Cologne',name:'Pomelo Paradis',g:'Женский',tone:'sweet',shape:'rect',cap:'black',notes:['грейпфрут','мандарин','цветы апельсина','чёрная смородина'],vols:[['4 мл',2600],['30 мл',6870],['200 мл',20200]]},
+  {id:'tfmand',brand:'Tom Ford',name:'Mandarino di Amalfi',g:'Унисекс',tone:'citrus',shape:'square',cap:'black',notes:['лимон','грейпфрут','цветы апельсина','мята'],vols:[['50 мл',23670]]},
+  {id:'perris',brand:'Perris Monte Carlo',name:'Mandarino di Sicilia',g:'Унисекс',tone:'citrus',shape:'rect',cap:'gold',notes:['цветы апельсина','горький апельсин','мандарин','кедр'],vols:[['50 мл',10740],['100 мл, тестер',12070],['100 мл',21000]]},
+  {id:'bdk',brand:'BDK Parfums',name:'Citrus Riviera',g:'Унисекс',tone:'citrus',shape:'tall',cap:'gold',notes:['итальянский лимон','водные ноты','нероли','мандарин'],vols:[['100 мл',18670]]},
   {id:'hbjd',brand:'Hugo Boss',name:'Just Different',g:'Мужской',tone:'green',shape:'tall',cap:'black',tester:true,notes:['мята','яблоко','кашмеран','базилик'],vols:[['75 мл, тестер',2600]]},
   {id:'hbiced',brand:'Hugo Boss',name:'Hugo Iced',g:'Мужской',tone:'fresh',shape:'rect',cap:'silver',tester:true,notes:['мята','горький апельсин','чай'],vols:[['75 мл, тестер',2740]]},
   {id:'hbone',brand:'Hugo Boss',name:'Number One',g:'Мужской',tone:'amber',shape:'square',cap:'gold',tester:true,notes:['мёд','табак','мох','пачули'],vols:[['100 мл, тестер',2870]]},
@@ -308,6 +317,10 @@ function bottle(it){
     <rect x="${60 - 26}" y="${B.y + B.h/2 - 9}" width="52" height="18" rx="2" fill="#FFFDF9" opacity=".92"/>
     <text x="60" y="${B.y + B.h/2 + 3.5}" text-anchor="middle" font-family="Manrope,sans-serif" font-size="${lab.length > 7 ? 6.4 : 7.5}" font-weight="800" letter-spacing="1" fill="#15130F">${lab}</text></svg>`;
 }
+/* Фото из канала; для позиций без фото — нарисованный флакон */
+const NOPHOTO = new Set(['tfmand','perris','bdk']);
+const pic = it => NOPHOTO.has(it.id) ? bottle(it) : `<img src="d/original-product/${it.id}.jpg" alt="${esc(it.brand + ' ' + it.name)}">`;
+const LOGO = '<img src="d/original-product/logo.jpg" alt="Original Product">';
 const bg = it => `background:radial-gradient(120% 90% at 30% 20%,${TONE[it.tone].bg[0]},${TONE[it.tone].bg[1]})`;
 
 const norm = s => s.toLowerCase().replace(/ё/g, 'е');
@@ -325,14 +338,14 @@ function cardsHTML(){
   const list = shown();
   return `<div class="found"><span>${S.q ? `«${esc(S.q)}»: ` : ''}найдено ${list.length}</span>${S.q || S.pr != null || S.cat !== 'Все' ? '<button type="button" data-act="reset">Сбросить</button>' : ''}</div>
     <div class="grid">${list.length ? list.map(it => `<button type="button" class="card" data-open="${it.id}">
-      ${S.cart.some(c => c.id === it.id) ? '<span class="badge cart">В корзине</span>' : it.isNew ? '<span class="badge new">Новинка 2025</span>' : it.stock ? '<span class="badge in">В наличии</span>' : it.tester ? '<span class="badge">Тестер</span>' : ''}
-      <div class="pic" style="${bg(it)}">${bottle(it)}</div>
+      ${S.cart.some(c => c.id === it.id) ? '<span class="badge cart">В корзине</span>' : it.isNew ? `<span class="badge new">${esc(it.isNew)}</span>` : it.stock ? '<span class="badge in">В наличии</span>' : it.tester ? '<span class="badge">Тестер</span>' : ''}
+      <div class="pic" style="${bg(it)}">${pic(it)}</div>
       <div class="br">${esc(it.brand)}</div><div class="nm">${esc(it.name)}</div>
       <div class="nt">${esc(it.notes.join(' · '))}</div>
       <div class="pr">${it.vols.length > 1 ? '<small>от </small>' : ''}${fmt(minP(it))}</div></button>`).join('') : '<div class="empty">Ничего не нашли. Напишите менеджеру — привезём под заказ из Европы.</div>'}</div>`;
 }
 function home(){
-  return `<div class="hero"><div class="mono"><div class="lg">OP</div><div><b>ORIGINAL PRODUCT</b><small>13,2 тыс. подписчиков</small></div></div>
+  return `<div class="hero"><div class="mono"><div class="lg">${LOGO}</div><div><b>ORIGINAL PRODUCT</b><small>13,2 тыс. подписчиков</small></div></div>
       <p>Оригинальная парфюмерия и косметика. В наличии и под заказ — напрямую из Европы.</p>
       <div class="pills"><span>СДЭК по России</span><span>Экспресс по Москве</span><span>Только оригинал</span></div></div>
     <label class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -356,16 +369,16 @@ scrim.addEventListener('click', closeSheet);
 function itemSheet(id){
   const it = byId(id); S.open = id; S.v = it.vols.length > 1 ? it.vols.length - 1 : 0;
   const d = it.dupe && byId(it.dupe), o = it.dupeOf && byId(it.dupeOf);
-  openSheet(`<div class="gal" style="${bg(it)}">${bottle(it)}<span class="vol" id="volTag">${esc(it.vols[S.v][0])}</span></div>
+  openSheet(`<div class="gal" style="${bg(it)}">${pic(it)}<span class="vol" id="volTag">${esc(it.vols[S.v][0])}</span></div>
     <div class="br2">${esc(it.brand)}</div><h3 style="margin-top:3px">${esc(it.name)}</h3>
-    <div class="meta"><span>${esc(it.g === 'Наборы' ? 'Набор' : it.g)}</span>${it.isNew ? '<span>Новинка 2025</span>' : ''}${it.stock ? '<span>В наличии</span>' : ''}<span>Оригинал</span></div>
+    <div class="meta"><span>${esc(it.g === 'Наборы' ? 'Набор' : it.g)}</span>${it.isNew ? `<span>${esc(it.isNew)}</span>` : ''}${it.stock ? '<span>В наличии</span>' : ''}<span>Оригинал</span></div>
     <div class="price" id="priceTxt">${fmt(it.vols[S.v][1])}</div>
     ${it.vols.length > 1 ? `<div class="lbl"><span>Объём</span><span>цена меняется сразу</span></div>
       <div class="chips">${it.vols.map((v, i) => `<button type="button" class="chip ${i === S.v ? 'on' : ''}" data-vol="${i}">${esc(v[0])}<small>${fmt(v[1])}</small></button>`).join('')}</div>` : ''}
     <div class="lbl"><span>Ноты</span><span>нажмите — найдём похожие</span></div>
     <div class="notes">${it.notes.map(n => `<button type="button" data-note="${esc(n)}">${esc(n)}</button>`).join('')}</div>
-    ${d ? `<button type="button" class="dupe" data-open="${d.id}"><div class="mini" style="${bg(d)}">${bottle(d)}</div><p><b>Похожий аромат дешевле</b>${esc(d.brand)} ${esc(d.name)} · 105 мл за ${fmt(d.vols[d.vols.length-1][1])}</p><i>→</i></button>` : ''}
-    ${o ? `<div class="dupe" style="cursor:default"><div class="mini" style="${bg(o)}">${bottle(o)}</div><p><b>Звучит как ${esc(o.brand)} ${esc(o.name)}</b>${esc(o.name)} 100 мл — ${fmt(o.vols[o.vols.length-1][1])}, этот 105 мл — ${fmt(it.vols[it.vols.length-1][1])}</p></div>` : ''}
+    ${d ? `<button type="button" class="dupe" data-open="${d.id}"><div class="mini" style="${bg(d)}">${pic(d)}</div><p><b>Похожий аромат дешевле</b>${esc(d.brand)} ${esc(d.name)} · 105 мл за ${fmt(d.vols[d.vols.length-1][1])}</p><i>→</i></button>` : ''}
+    ${o ? `<div class="dupe" style="cursor:default"><div class="mini" style="${bg(o)}">${pic(o)}</div><p><b>Звучит как ${esc(o.brand)} ${esc(o.name)}</b>${esc(o.name)} 100 мл — ${fmt(o.vols[o.vols.length-1][1])}, этот 105 мл — ${fmt(it.vols[it.vols.length-1][1])}</p></div>` : ''}
     <div class="facts"><div><span>Гарантия</span><b>только оригинал</b></div><div><span>Откуда</span><b>напрямую из Европы</b></div><div><span>Доставка</span><b>СДЭК · экспресс по Москве</b></div></div>
     <button type="button" class="btn" data-act="add" id="addBtn">В корзину · ${fmt(it.vols[S.v][1])}</button>`);
 }
@@ -380,7 +393,7 @@ function cartSheet(){
   if (!S.cart.length) return openSheet(`<h3>Корзина</h3><div class="sub">Пока пусто. Найдите аромат по бренду или ноте.</div><button type="button" class="btn" data-act="close">К ароматам</button>`);
   const sum = S.cart.reduce((a, c) => a + c.price, 0);
   openSheet(`<h3>Корзина</h3><div class="sub">Проверьте заказ и способ доставки</div>
-    ${S.cart.map(c => { const it = byId(c.id); return `<div class="line"><div class="th" style="${bg(it)}">${bottle(it)}</div><p><b>${esc(it.brand)}</b><br>${esc(it.name)}<small>${esc(c.vol)}</small></p><b>${fmt(c.price)}</b></div>`; }).join('')}
+    ${S.cart.map(c => { const it = byId(c.id); return `<div class="line"><div class="th" style="${bg(it)}">${pic(it)}</div><p><b>${esc(it.brand)}</b><br>${esc(it.name)}<small>${esc(c.vol)}</small></p><b>${fmt(c.price)}</b></div>`; }).join('')}
     <div class="lbl"><span>Доставка</span></div><div class="chips">${Object.keys(SHIP).map(k => `<button type="button" class="chip ${S.ship === k ? 'on' : ''}" data-ship="${k}">${k}<small>${SHIP[k]}</small></button>`).join('')}</div>
     <div class="tot"><div><span>Ароматы</span><b>${fmt(sum)}</b></div><div><span>Доставка</span><b>${S.ship === 'СДЭК по России' ? 'посчитает менеджер' : 'уточнит менеджер'}</b></div><div class="big"><span>Итого</span><span>${fmt(sum)}</span></div></div>
     <div class="lbl"><span>Телефон для связи</span></div><div class="field ${S.phone ? 'ok' : ''}">${S.phone ? '+7 916 ••• 47 03' : 'Не указан'}</div>
@@ -397,7 +410,7 @@ function doneSheet(){
 }
 let toastT;
 function toast(t){ toastEl.innerHTML = t; toastEl.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('on'), 1900); }
-function showPush(text){ push.innerHTML = `<div class="ic">OP</div><p><b>Original Product</b><small>сейчас</small><br>${text}</p>`; push.classList.add('on'); setTimeout(() => push.classList.remove('on'), 4200); }
+function showPush(text){ push.innerHTML = `<div class="ic">${LOGO}</div><p><b>Original Product</b><small>сейчас</small><br>${text}</p>`; push.classList.add('on'); setTimeout(() => push.classList.remove('on'), 4200); }
 function setQ(v){ S.q = v; const q = $('q'); if (q) q.value = v; render(); }
 
 screen.addEventListener('click', e => {
@@ -434,8 +447,10 @@ async function tap(sel){
   if (sc && (r.bottom > b.bottom - 80 || r.top < b.top + 100)){ const vr = sc.getBoundingClientRect();
     sc.scrollTo({top: sc.scrollTop + (r.top - vr.top) - vr.height / 3, behavior: reduce ? 'auto' : 'smooth'}); await sleep(650); }
   const r2 = el.getBoundingClientRect();
-  tapEl.style.left = (r2.left - b.left + r2.width / 2) + 'px'; tapEl.style.top = (r2.top - b.top + Math.min(r2.height / 2, 60)) + 'px'; tapEl.style.opacity = '1';
-  await sleep(520); tapEl.classList.remove('press'); void tapEl.offsetWidth; tapEl.classList.add('press'); await sleep(200);
+  const hidden = tapEl.style.opacity !== '1'; if (hidden) tapEl.style.transition = 'none';
+  tapEl.style.translate = `${r2.left - b.left + r2.width / 2}px ${r2.top - b.top + Math.min(r2.height / 2, 60)}px`;
+  if (hidden){ void tapEl.offsetWidth; tapEl.style.transition = ''; } tapEl.style.opacity = '1';
+  await sleep(500); tapEl.classList.remove('press'); void tapEl.offsetWidth; tapEl.classList.add('press'); await sleep(200);
   if (el.tagName === 'INPUT') el.focus(); else el.click(); await sleep(250);
 }
 async function typeQ(text){ const q = $('q'); S.q = ''; for (const ch of text){ S.q += ch; q.value = S.q; renderResults(); await sleep(110); } }
@@ -444,13 +459,13 @@ async function tour(){
   if (touring) return; touring = true; $('fab').style.display = 'none';
   closeSheet(); Object.assign(S, {q:'', cat:'Все', pr:null, cart:[], sub:false, phone:false, ship:'СДЭК по России'}); render(); view.scrollTop = 0; await sleep(900);
   mark(0); await tap('#q'); await typeQ('мандарин'); await sleep(1300);
-  mark(1); await tap('[data-open="perris"]'); await sleep(1000); await tap('[data-vol="0"]'); await sleep(900); await tap('[data-vol="1"]'); await sleep(1000); await tap('#addBtn'); await sleep(1400);
-  mark(2); view.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'}); await sleep(500); await tap('[data-q="Creed"]'); await sleep(900);
+  mark(1); await tap('[data-open="pomelo"]'); await sleep(1000); await tap('[data-vol="0"]'); await sleep(900); await tap('[data-vol="1"]'); await sleep(1000); await tap('#addBtn'); await sleep(1400);
+  mark(2); view.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'}); await sleep(600); await tap('[data-q="Creed"]'); await sleep(900);
   await tap('[data-open="creed"]'); await sleep(1100); await tap('.dupe'); await sleep(1300); await tap('[data-vol="1"]'); await sleep(700); await tap('#addBtn'); await sleep(1400);
   mark(3); await tap('#mainbtn'); await sleep(900); await tap('[data-ship="Экспресс по Москве"]'); await sleep(800); await tap('[data-act="share"]'); await sleep(600);
   mark(4); await tap('#orderBtn'); await sleep(3800); await tap('[data-act="finish"]'); await sleep(500);
-  mark(5); S.q = ''; render(); view.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'}); await sleep(500); await tap('[data-act="sub"]'); await sleep(1500);
-  tapEl.style.opacity = '0'; showPush('Новое поступление: Francis Kurkdjian <b>Kurky</b> — от 3 220 ₽ за 5 мл ✨'); await sleep(4300);
+  mark(5); S.q = ''; render(); view.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'}); await sleep(600); await tap('[data-act="sub"]'); await sleep(1500);
+  tapEl.style.opacity = '0'; showPush('Новое поступление: Byredo <b>Future Memories</b> — от 35 140 ₽ за 50 мл ✨'); await sleep(4300);
   mark(-1); touring = false; $('fab').style.display = '';
 }
 $('tourBtn').addEventListener('click', tour); $('fab').addEventListener('click', tour);
