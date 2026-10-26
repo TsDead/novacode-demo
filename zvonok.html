@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Пропущенный звонок — ИИ-администратор · демо NOVACODE</title>
+<link rel="icon" href="data:,">
+<style>
+@font-face{font-family:"Manrope";src:url("fonts/manrope-cyrillic-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Manrope";src:url("fonts/manrope-latin-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{
+  --stage:#0E1116; --ink:#0F1720; --ink-2:#5B6675; --line:#E3E7EC; --bg:#F2F4F7; --paper:#fff;
+  --acc:#1F6FEB; --acc-2:#5AA0FF; --ok:#1A7F4B; --warn:#C2410C; --red:#D92D20;
+  --sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:radial-gradient(1100px 700px at 15% 10%,#1B2533 0,var(--stage) 60%);color:#E8EDF3;font:400 15px/1.45 var(--sans);-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;color:inherit}
+.stage{min-height:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(32px,6vw,96px);align-items:center;max-width:1180px;margin:0 auto;padding:40px clamp(20px,5vw,56px)}
+.kicker{font:700 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--acc-2)}
+.story h1{font:800 clamp(32px,3.8vw,52px)/1.06 var(--sans);margin:14px 0 16px;color:#fff;letter-spacing:-.01em}
+.story h1 em{font-style:normal;color:var(--acc-2)}
+.story p.lead{max-width:46ch;color:#AEB9C7;font-size:17px;margin:0 0 22px}
+.switch{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:#1A2230;border:1px solid #2A3546;margin-bottom:22px}
+.switch button{border:0;background:none;padding:9px 16px;border-radius:999px;font-weight:700;color:#AEB9C7}
+.switch button.on{background:#fff;color:var(--ink)}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s;max-width:46ch}
+.steps li{counter-increment:s;display:flex;gap:14px;padding:12px 0;border-top:1px solid #222C3A;color:#8C99AA;transition:color .3s}
+.steps li::before{content:counter(s);font:700 13px/1.6 var(--sans);color:#4E5B6D;min-width:18px}
+.steps li b{display:block;color:#C9D3DF;font-weight:700}
+.steps li.on{color:#E8EDF3}.steps li.on b{color:#fff}.steps li.on::before{color:var(--acc-2)}
+.tourbtn{margin-top:24px;display:inline-flex;gap:10px;background:#fff;color:var(--ink);border:0;border-radius:999px;padding:13px 22px;font-weight:800}
+.credit{margin-top:20px;font-size:13px;color:#6F7C8E;max-width:48ch}
+.credit a{color:#AEB9C7}
+
+.phone{position:relative;width:390px;height:812px;border-radius:52px;padding:12px;background:#05070A;box-shadow:0 0 0 1px #2A3546,0 50px 90px -40px rgba(0,0,0,.85)}
+.screen{position:relative;width:100%;height:100%;border-radius:41px;overflow:hidden;background:var(--bg);color:var(--ink)}
+.status{position:absolute;inset:0 0 auto;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font:700 14px/1 var(--sans);z-index:9;color:var(--ink)}
+.status i{font-style:normal;letter-spacing:2px;font-size:11px}
+
+/* экраны */
+.scr{position:absolute;inset:0;padding-top:44px;transition:opacity .35s,transform .45s var(--ease)}
+.scr.off{opacity:0;pointer-events:none;transform:translateX(30px)}
+
+/* 1. входящий звонок */
+.call{background:linear-gradient(180deg,#22303F,#0E1116);color:#fff;display:flex;flex-direction:column;align-items:center;text-align:center;padding:90px 24px 40px}
+.call .who{width:92px;height:92px;border-radius:50%;background:#3A4A5E;display:grid;place-items:center;font:800 30px/1 var(--sans);margin-bottom:18px}
+.call h2{margin:0;font:700 28px/1.15 var(--sans)}
+.call p{margin:6px 0 0;color:#AEB9C7}
+.call .ring{margin-top:14px;font-size:13px;color:#8C99AA}
+.call .btns{margin-top:auto;display:flex;gap:60px}
+.call .btns span{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;font-size:26px}
+.call .btns .no{background:var(--red)}.call .btns .yes{background:#22C55E}
+.call .missed{position:absolute;left:16px;right:16px;bottom:150px;padding:14px;border-radius:18px;background:rgba(217,45,32,.15);border:1px solid rgba(217,45,32,.5);color:#FFD9D5;font-weight:700;opacity:0;transform:translateY(10px);transition:all .4s var(--ease)}
+.call .missed.on{opacity:1;transform:none}
+.call .missed small{display:block;font-weight:500;color:#F4B7B0;margin-top:2px}
+
+/* 2. чат клиента */
+.chat{background:#E6EBF0;display:flex;flex-direction:column}
+.chat header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;border-bottom:1px solid var(--line)}
+.chat header .av{width:38px;height:38px;border-radius:50%;background:var(--acc);color:#fff;display:grid;place-items:center;font-weight:800}
+.chat header b{display:block;font-size:15px}
+.chat header small{color:var(--ok);font-size:12px;font-weight:700}
+.msgs{flex:1;overflow-y:auto;padding:14px 12px 10px;display:flex;flex-direction:column;gap:8px;scrollbar-width:none}
+.msgs::-webkit-scrollbar{display:none}
+.m{max-width:84%;padding:9px 12px;border-radius:16px;font-size:14.5px;line-height:1.38;box-shadow:0 1px 1px rgba(0,0,0,.06);animation:pop .3s var(--ease) both}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}}
+.m.bot{align-self:flex-start;background:#fff;border-bottom-left-radius:5px}
+.m.me{align-self:flex-end;background:#D7ECFF;border-bottom-right-radius:5px}
+.m small{display:block;color:var(--ink-2);font-size:11px;margin-top:3px;text-align:right}
+.m.sys{align-self:center;background:rgba(15,23,32,.07);box-shadow:none;font-size:12px;color:var(--ink-2);border-radius:999px;padding:5px 12px}
+.typing{align-self:flex-start;background:#fff;border-radius:16px;padding:10px 14px;display:none}
+.typing.on{display:flex;gap:4px}
+.typing i{width:6px;height:6px;border-radius:50%;background:#9AA6B4;animation:tp 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes tp{50%{opacity:.3;transform:translateY(-2px)}}
+.quick{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px 14px;min-height:60px}
+.quick button{border:1px solid #BFD6F2;background:#fff;color:var(--acc);border-radius:999px;padding:9px 13px;font-weight:700;font-size:13.5px}
+.quick button:active{background:#EAF3FF}
+
+/* 3. экран мастера */
+.boss{background:var(--bg);overflow-y:auto;scrollbar-width:none}
+.boss::-webkit-scrollbar{display:none}
+.boss .top{padding:14px 18px 10px}
+.boss .top small{color:var(--ink-2);font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.boss .top h3{margin:4px 0 0;font:800 22px/1.2 var(--sans)}
+.card{margin:8px 14px;padding:14px;border-radius:18px;background:var(--paper);border:1px solid var(--line)}
+.card.new{border-color:#9CC3F5;box-shadow:0 10px 24px -16px rgba(31,111,235,.6)}
+.card .tag{display:inline-block;font-size:11px;font-weight:800;padding:3px 8px;border-radius:7px;background:#E8F1FD;color:var(--acc)}
+.card .tag.ok{background:#E3F4EA;color:var(--ok)}
+.card h4{margin:8px 0 6px;font:800 17px/1.25 var(--sans)}
+.card .row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-top:1px solid #EEF1F4;font-size:14px}
+.card .row span{color:var(--ink-2)}
+.card .row b{text-align:right}
+.card .acts{display:flex;gap:8px;margin-top:10px}
+.card .acts button{flex:1;height:42px;border-radius:12px;border:0;font-weight:800;font-size:14px}
+.card .acts .p{background:var(--ink);color:#fff}.card .acts .s{background:#EEF1F4;color:var(--ink)}
+.sum{margin:8px 14px 18px;padding:14px;border-radius:18px;background:var(--ink);color:#fff}
+.sum small{color:#9FB0C3;font-weight:700;font-size:12px}
+.sum .big{font:800 30px/1.1 var(--sans);margin:4px 0 2px}
+.sum p{margin:0;color:#C9D3DF;font-size:13.5px}
+.sum .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.sum .grid div{background:#1B2533;border-radius:12px;padding:9px;text-align:center}
+.sum .grid b{display:block;font-size:18px}.sum .grid span{font-size:11px;color:#9FB0C3}
+
+.push{position:absolute;top:50px;left:10px;right:10px;z-index:20;display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:20px;background:rgba(255,255,255,.97);box-shadow:0 18px 40px -18px rgba(0,0,0,.55);transform:translateY(calc(-100% - 80px));transition:transform .5s var(--ease)}
+.push.on{transform:none}
+.push .ic{width:36px;height:36px;flex:none;border-radius:10px;background:var(--acc);display:grid;place-items:center;color:#fff;font-weight:800}
+.push p{margin:0;font-size:13px;line-height:1.35;color:var(--ink)}
+.push small{float:right;color:#8C99AA;font-size:11.5px}
+.tap{position:absolute;z-index:40;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:2px solid var(--ink);background:rgba(15,23,32,.18);opacity:0;pointer-events:none;left:0;top:0;transition:translate .5s cubic-bezier(.45,.05,.55,.95),opacity .2s}
+.tap.press{animation:press .3s ease-out}
+@keyframes press{50%{transform:scale(.7);background:rgba(15,23,32,.4)}}
+.tabs{position:absolute;left:0;right:0;bottom:0;z-index:8;display:flex;background:#fff;border-top:1px solid var(--line);padding:6px 10px calc(8px + env(safe-area-inset-bottom,0px))}
+.tabs button{flex:1;border:0;background:none;padding:8px 4px;border-radius:12px;font-weight:800;font-size:12.5px;color:var(--ink-2)}
+.tabs button.on{background:#EAF3FF;color:var(--acc)}
+.scr.chat,.scr.boss{bottom:58px}
+
+@media (max-width:560px){
+  .stage{display:block;padding:0}
+  .story{display:none}
+  .phone{width:100%;height:100svh;border-radius:0;padding:0;background:none;box-shadow:none}
+  .screen{border-radius:0}
+  .status{display:none}
+  .scr{padding-top:0}
+  .push{top:8px}
+  .fab{position:fixed;right:14px;bottom:calc(74px + env(safe-area-inset-bottom,0px));z-index:50;border:0;border-radius:999px;background:var(--ink);color:#fff;font-weight:800;padding:11px 15px;box-shadow:0 12px 30px -12px rgba(0,0,0,.5)}
+}
+@media (min-width:561px){ .fab{display:none} }
+@media (max-width:980px) and (min-width:561px){ .stage{grid-template-columns:1fr;justify-items:center} }
+@media (prefers-reduced-motion:reduce){ *{transition-duration:0s!important;animation:none!important} }
+</style>
+</head>
+<body>
+<div class="stage">
+  <section class="story" aria-label="Что показывает демо">
+    <div class="kicker">Демо для <span id="kName">вашего сервиса</span></div>
+    <h1>Мастер не взял трубку — <em>клиент всё равно записан</em></h1>
+    <p class="lead">Пока мастер на выезде или под машиной, звонки остаются без ответа, и клиент звонит следующему. ИИ-администратор сразу пишет ему, записывает на время и отдаёт мастеру готовую заявку.</p>
+    <div class="switch" role="tablist" aria-label="Тип бизнеса">
+      <button type="button" data-kind="auto">Автосервис</button>
+      <button type="button" data-kind="ac">Кондиционеры</button>
+    </div>
+    <ol class="steps" id="steps">
+      <li data-s="0"><div><b>Звонок пропущен</b>мастер занят — так бывает каждый день</div></li>
+      <li data-s="1"><div><b>Через 10 секунд — SMS со ссылкой</b>клиент нажимает и попадает в чат с ИИ-администратором (Telegram, MAX или сайт)</div></li>
+      <li data-s="2"><div><b>Запись за минуту</b>что случилось, когда удобно, примерная цена</div></li>
+      <li data-s="3"><div><b>Мастеру — готовая заявка</b>имя, телефон, задача, время</div></li>
+      <li data-s="4"><div><b>Вечером — сводка</b>сколько клиентов вернули и на какую сумму</div></li>
+    </ol>
+    <button class="tourbtn" id="tourBtn" type="button">▶ Показать за 40 секунд</button>
+    <p class="credit">Демо-концепт от NOVACODE · <a href="https://new-coder.ru">new-coder.ru</a> · Telegram @n0vacode. Имена, цены и время — пример: в рабочей версии бот знает ваш прайс и свободные окна.</p>
+  </section>
+  <div class="phone">
+    <div class="screen" id="screen">
+      <div class="status"><span id="clock">14:12</span><i>●●● 4G ▮</i></div>
+
+      <section class="scr call" id="sCall">
+        <div class="who" id="callAv">А</div>
+        <h2 id="callName">Андрей</h2>
+        <p id="callNum">+7 920 ••• 18 44</p>
+        <div class="ring" id="callRing">звонит в «<span class="nm">ваш сервис</span>»…</div>
+        <div class="missed" id="missed">Пропущенный вызов<small>мастер под подъёмником — не может ответить</small></div>
+        <div class="btns"><span class="no">✕</span><span class="yes">✆</span></div>
+      </section>
+
+      <section class="scr chat off" id="sChat">
+        <header><div class="av" id="chatAv">С</div><div><b id="chatTitle">Сервис</b><small>онлайн · ИИ-администратор</small></div></header>
+        <div class="msgs" id="msgs"></div>
+        <div class="quick" id="quick"></div>
+      </section>
+
+      <section class="scr boss off" id="sBoss">
+        <div class="top"><small>Для мастера</small><h3>Заявки сегодня</h3></div>
+        <div id="cards"></div>
+        <div class="sum" id="sum"></div>
+      </section>
+
+      <nav class="tabs" id="tabs" hidden>
+        <button type="button" data-tab="sChat" class="on">Клиент</button>
+        <button type="button" data-tab="sBoss">Мастер</button>
+      </nav>
+      <div class="push" id="push" role="status"></div>
+      <span class="tap" id="tap" aria-hidden="true"></span>
+    </div>
+  </div>
+</div>
+<button class="fab" id="fab" type="button">▶ Показ</button>
+
+<script>
+(() => {
+'use strict';
+const qs = new URLSearchParams(location.search);
+const K = {
+  auto: {
+    name: qs.get('name') || 'Автосервис', av: 'А', caller: 'Андрей', callerAv: 'А',
+    ringHint: 'мастер под подъёмником — не может ответить',
+    hello: n => `Здравствуйте, Андрей! Это «${n}». Не смогли ответить — мастер сейчас в работе 🔧 Запишу вас за минуту. Что с машиной?`,
+    q1: ['ТО и масло', 'Диагностика / стук', 'Шиномонтаж', 'Другое'], pick1: 1,
+    a1: 'Стук спереди справа на кочках',
+    q2text: 'Понял. Какая машина и год?', q2: ['Kia Rio 2017', 'Lada Vesta', 'Другая'], pick2: 0,
+    price: 'Диагностика подвески — 800 ₽, по итогам мастер скажет точную цену ремонта.',
+    q3text: 'Когда удобно приехать?', q3: ['Сегодня 17:30', 'Завтра 10:00', 'Завтра 14:00'], pick3: 1,
+    done: (n, t) => `Готово ✅ Записал вас на ${t.toLowerCase()} в «${n}». Адрес и как заехать пришлю за час до визита. Если планы поменяются — просто напишите сюда.`,
+    task: 'Стук в подвеске спереди справа', car: 'Kia Rio 2017', job: 'Диагностика подвески',
+    sumMoney: '≈ 21 000 ₽', sumText: 'Бот вернул 4 пропущенных звонка — средний чек ремонта ~5 200 ₽',
+    others: [['Ирина', 'Шиномонтаж, R16', 'сегодня 17:30'], ['Сергей', 'ТО, Ford Focus', 'завтра 9:00']],
+  },
+  ac: {
+    name: qs.get('name') || 'Климат-сервис', av: 'К', caller: 'Марина', callerAv: 'М',
+    ringHint: 'монтажник на высоте — не может ответить',
+    hello: n => `Здравствуйте, Марина! Это «${n}». Не смогли ответить — мастер сейчас на монтаже 🛠 Помогу записаться за минуту. Что нужно?`,
+    q1: ['Чистка / заправка', 'Установка', 'Не охлаждает / течёт', 'Другое'], pick1: 0,
+    a1: 'Почистить два кондиционера в квартире',
+    q2text: 'Хорошо. Сколько блоков и какой район?', q2: ['2 блока, Октябрьский', '1 блок', 'Другое'], pick2: 0,
+    price: 'Чистка — 2 500 ₽ за блок, за два — 4 500 ₽. Выезд по городу бесплатный.',
+    q3text: 'Когда удобно, чтобы мастер приехал?', q3: ['Завтра 10:00', 'Завтра 15:00', 'Суббота 12:00'], pick3: 1,
+    done: (n, t) => `Готово ✅ Мастер «${n}» приедет ${t.toLowerCase()}. Накануне вечером напомню. Если что-то изменится — напишите сюда.`,
+    task: 'Чистка 2 сплит-систем', car: '2 блока, Октябрьский р-н', job: 'Чистка — 4 500 ₽',
+    sumMoney: '≈ 16 500 ₽', sumText: 'Бот вернул 5 пропущенных звонков — заказы на чистку и одну установку',
+    others: [['Олег', 'Не охлаждает, 1 блок', 'сегодня 18:00'], ['Анна', 'Установка, 9000 BTU', 'пятница 11:00']],
+  },
+};
+let kind = qs.get('type') === 'ac' ? 'ac' : 'auto';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const screen = $('screen'), msgs = $('msgs'), quick = $('quick'), tapEl = $('tap'), push = $('push');
+const sleep = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
+const C = () => K[kind];
+let step = 0, chosenTime = '', touring = false;
+
+function show(id){
+  ['sCall','sChat','sBoss'].forEach(s => $(s).classList.toggle('off', s !== id));
+  $('tabs').hidden = id === 'sCall';
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === id));
+}
+function setKind(k){
+  kind = k;
+  document.querySelectorAll('.switch button').forEach(b => b.classList.toggle('on', b.dataset.kind === k));
+  const c = C();
+  $('kName').textContent = qs.get('name') ? `«${c.name}»` : (k === 'auto' ? 'автосервиса' : 'климат-сервиса');
+  document.querySelectorAll('.nm').forEach(e => e.textContent = c.name);
+  $('callName').textContent = c.caller; $('callAv').textContent = c.callerAv;
+  $('missed').innerHTML = `Пропущенный вызов<small>${esc(c.ringHint)}</small>`;
+  $('chatTitle').textContent = c.name; $('chatAv').textContent = c.name.trim()[0].toUpperCase();
+  reset();
+}
+function reset(){
+  step = 0; chosenTime = '';
+  msgs.innerHTML = '<div class="typing" id="typing"><i></i><i></i><i></i></div>'; quick.innerHTML = '';
+  $('missed').classList.remove('on'); $('callRing').style.opacity = '1';
+  $('cards').innerHTML = cardsHTML(false); $('sum').innerHTML = sumHTML(false);
+  show('sCall');
+}
+function now(){ return $('clock').textContent; }
+function add(text, who){
+  const t = $('typing');
+  const d = document.createElement('div'); d.className = 'm ' + who; d.innerHTML = esc(text) + (who !== 'sys' ? `<small>${now()}</small>` : '');
+  msgs.insertBefore(d, t); msgs.scrollTo({top: msgs.scrollHeight, behavior: reduce ? 'auto' : 'smooth'});
+}
+async function botSay(text, wait = 900){
+  const t = $('typing'); t.classList.add('on'); msgs.scrollTo({top: msgs.scrollHeight, behavior: reduce ? 'auto' : 'smooth'});
+  await sleep(wait); t.classList.remove('on'); add(text, 'bot');
+}
+function ask(opts){ quick.innerHTML = opts.map((o, i) => `<button type="button" data-a="${i}">${esc(o)}</button>`).join(''); }
+
+async function missCall(){
+  show('sCall'); $('callRing').style.opacity = '1';
+  await sleep(1600); $('callRing').style.opacity = '.3'; $('missed').classList.add('on');
+}
+async function startChat(){
+  show('sChat'); add('Пропущенный звонок → SMS со ссылкой · ' + now(), 'sys');
+  await botSay(C().hello(C().name), 1100); ask(C().q1); step = 1;
+}
+async function answer(i){
+  const c = C(); quick.innerHTML = '';
+  if (step === 1){ add(i === c.pick1 ? c.a1 : c.q1[i], 'me'); step = 2; await botSay(c.q2text); ask(c.q2); }
+  else if (step === 2){ add(c.q2[i], 'me'); step = 3; await botSay(c.price, 1000); await botSay(c.q3text, 700); ask(c.q3); }
+  else if (step === 3){ chosenTime = c.q3[i]; add(chosenTime, 'me'); step = 4; await botSay(c.done(c.name, chosenTime), 1100);
+    $('cards').innerHTML = cardsHTML(true); $('sum').innerHTML = sumHTML(true);
+    showPush(`<b>Новая запись</b> · ${esc(c.caller)}, ${esc(chosenTime.toLowerCase())}<br>${esc(c.task)}`); }
+}
+function cardsHTML(withNew){
+  const c = C();
+  const main = withNew ? `<div class="card new"><span class="tag">Новая · вернул бот</span><h4>${esc(c.caller)} · ${esc(c.task)}</h4>
+    <div class="row"><span>${kind === 'auto' ? 'Машина' : 'Объект'}</span><b>${esc(c.car)}</b></div>
+    <div class="row"><span>Работа</span><b>${esc(c.job)}</b></div>
+    <div class="row"><span>Время</span><b>${esc(chosenTime)}</b></div>
+    <div class="row"><span>Телефон</span><b>+7 920 ••• 18 44</b></div>
+    <div class="acts"><button type="button" class="p">Подтвердить</button><button type="button" class="s">Позвонить</button></div></div>` : '';
+  return main + c.others.map(o => `<div class="card"><span class="tag ok">Записан</span><h4>${esc(o[0])} · ${esc(o[1])}</h4><div class="row"><span>Время</span><b>${esc(o[2])}</b></div></div>`).join('');
+}
+function sumHTML(full){
+  const c = C();
+  return `<small>Сводка за день · 20:00</small><div class="big">${full ? c.sumMoney : '…'}</div><p>${full ? esc(c.sumText) : 'Считаю вернувшиеся звонки…'}</p>
+    <div class="grid"><div><b>${full ? 7 : 6}</b><span>пропущено</span></div><div><b>${full ? (kind === 'auto' ? 4 : 5) : 3}</b><span>записал бот</span></div><div><b>0</b><span>потеряно молча</span></div></div>`;
+}
+let pushT;
+function showPush(html){ push.innerHTML = `<div class="ic">✓</div><p><b>${esc(C().name)}</b><small>сейчас</small><br>${html}</p>`; push.classList.add('on'); clearTimeout(pushT); pushT = setTimeout(() => push.classList.remove('on'), 3800); }
+
+screen.addEventListener('click', e => {
+  const a = e.target.closest('[data-a]'); if (a && !touring) return answer(+a.dataset.a);
+  const t = e.target.closest('[data-tab]'); if (t) return show(t.dataset.tab);
+  if (!touring && !$('sCall').classList.contains('off')) { missCall().then(startChat); }
+});
+document.querySelectorAll('.switch button').forEach(b => b.addEventListener('click', () => { if (!touring) setKind(b.dataset.kind); }));
+
+/* автопоказ */
+const mark = i => $('steps').querySelectorAll('li').forEach(li => li.classList.toggle('on', +li.dataset.s === i));
+async function tap(sel){
+  const el = typeof sel === 'string' ? screen.querySelector(sel) : sel; if (!el) return;
+  const b = screen.getBoundingClientRect(), r = el.getBoundingClientRect();
+  const hidden = tapEl.style.opacity !== '1'; if (hidden) tapEl.style.transition = 'none';
+  tapEl.style.translate = `${r.left - b.left + r.width / 2}px ${r.top - b.top + r.height / 2}px`;
+  if (hidden){ void tapEl.offsetWidth; tapEl.style.transition = ''; } tapEl.style.opacity = '1';
+  await sleep(500); tapEl.classList.remove('press'); void tapEl.offsetWidth; tapEl.classList.add('press'); await sleep(220);
+  el.click(); await sleep(200);
+}
+async function tour(){
+  if (touring) return; touring = true; $('fab').style.display = 'none';
+  setKind(kind); $('clock').textContent = '14:12'; await sleep(700);
+  mark(0); await missCall(); await sleep(1400);
+  mark(1); $('clock').textContent = '14:13'; await startChat(); await sleep(900);
+  mark(2); touring = false;
+  await tap(`[data-a="${C().pick1}"]`); await sleep(1600);
+  await tap(`[data-a="${C().pick2}"]`); await sleep(2600);
+  await tap(`[data-a="${C().pick3}"]`); await sleep(4200);
+  touring = true;
+  mark(3); await tap('[data-tab="sBoss"]'); await sleep(2600);
+  mark(4); $('sBoss').scrollTo({top: $('sBoss').scrollHeight, behavior: reduce ? 'auto' : 'smooth'}); await sleep(3200);
+  tapEl.style.opacity = '0'; mark(-1); touring = false; $('fab').style.display = '';
+}
+$('tourBtn').addEventListener('click', tour); $('fab').addEventListener('click', tour);
+setKind(kind);
+if (location.hash === '#tour') setTimeout(tour, 600);
+})();
+</script>
+</body>
+</html>
