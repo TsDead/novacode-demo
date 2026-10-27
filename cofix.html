@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Cofix bakery: бот в MAX, ВКонтакте и Telegram — демо</title>
+<link rel="icon" href="data:,">
+<link rel="preload" href="fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Manrope";src:url("fonts/manrope-cyrillic-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Manrope";src:url("fonts/manrope-latin-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{
+  --bg:#F4F2FB; --paper:#FFFFFF; --ink:#1B1830; --ink-2:#6D6985; --line:#E4E0F2;
+  --brand:#6C5CE7; --brand-2:#8F82F2; --brand-soft:#ECE9FD; --ok:#22A06B;
+  --stage:#110F1F;
+  --sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  /* платформа */
+  --pf:#6C5CE7;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:radial-gradient(1100px 700px at 15% 10%,#2A2350 0,var(--stage) 60%);color:#EEEBFA;font:400 15px/1.45 var(--sans);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--brand-2);outline-offset:2px;border-radius:6px}
+
+.stage{min-height:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(32px,6vw,96px);align-items:center;max-width:1180px;margin:0 auto;padding:40px clamp(20px,5vw,56px)}
+.kicker{font:800 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--brand-2)}
+.story h1{font:800 clamp(34px,4vw,54px)/1.05 var(--sans);letter-spacing:-.02em;margin:14px 0 18px;color:#fff}
+.story h1 em{font-style:normal;color:var(--brand-2)}
+.story p.lead{max-width:44ch;color:#BDB6DA;font-size:17px;margin:0 0 22px}
+.pfs{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:#ffffff12;margin-bottom:22px}
+.pfs button{border:0;background:none;color:#BDB6DA;font-weight:800;font-size:14px;padding:9px 16px;border-radius:999px;display:flex;align-items:center;gap:8px}
+.pfs button i{width:10px;height:10px;border-radius:50%}
+.pfs button.on{background:#fff;color:var(--ink)}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s;max-width:440px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:28px 1fr;gap:12px;padding:11px 0;border-top:1px solid #322B55;color:#8C85AD;transition:color .3s}
+.steps li::before{content:counter(s);font:800 13px/1.6 var(--sans);color:#5D567F;transition:color .3s}
+.steps li b{display:block;font-weight:700;color:inherit}
+.steps li.on{color:#fff}
+.steps li.on::before{color:var(--brand-2)}
+.tourbtn{margin-top:24px;display:inline-flex;gap:10px;background:#fff;color:var(--ink);border:0;border-radius:999px;padding:13px 22px;font-weight:800}
+.credit{margin-top:20px;font-size:13px;color:#7F78A3;max-width:48ch}
+.credit a{color:#C9C2EA}
+
+.phone{position:relative;width:390px;height:812px;border-radius:52px;padding:12px;background:#0b0a12;box-shadow:0 0 0 1px #3B3463,0 50px 90px -40px rgba(0,0,0,.8)}
+.screen{position:relative;width:100%;height:100%;border-radius:41px;overflow:hidden;background:var(--bg);color:var(--ink)}
+.status{position:absolute;inset:0 0 auto;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font:800 14px/1 var(--sans);z-index:7;background:var(--paper)}
+.status i{font-style:normal;letter-spacing:2px;font-size:11px}
+
+/* шапка платформы */
+.bar{position:absolute;top:44px;left:0;right:0;height:52px;display:flex;align-items:center;gap:10px;padding:0 14px;z-index:6;background:var(--paper);border-bottom:1px solid var(--line);transition:background-color .3s}
+.bar .l{min-width:64px;font-size:14px;font-weight:700;color:var(--pf);background:none;border:0;padding:6px 0;text-align:left}
+.bar .t{flex:1;text-align:center;line-height:1.15;min-width:0}
+.bar .t b{display:block;font-size:15px}
+.bar .t small{font-size:11.5px;color:var(--ink-2)}
+.bar .r{min-width:64px;display:flex;justify-content:flex-end}
+.bar .caps{display:flex;align-items:center;border:1px solid var(--line);border-radius:999px;height:30px;padding:0 4px}
+.bar .caps span{width:30px;text-align:center;font-weight:800;color:var(--ink-2);font-size:13px}
+.bar .caps span+span{border-left:1px solid var(--line)}
+.bar .pfbadge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;color:#fff;background:var(--pf);border-radius:6px;padding:2px 6px;margin-left:6px;vertical-align:1px;transition:background-color .3s}
+.screen[data-pf="vk"] .bar .t{text-align:left;padding-left:4px}
+.screen[data-pf="vk"] .bar .l{min-width:24px;font-size:20px;color:var(--ink)}
+
+.views{position:absolute;top:96px;left:0;right:0;bottom:0;overflow:hidden}
+.view{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;transition:transform .45s var(--ease)}
+.view::-webkit-scrollbar{display:none}
+#chat{background:linear-gradient(180deg,#EEEBFA,#F6F4FC)}
+#app{background:var(--bg);transform:translateX(100%)}
+.screen.app #app{transform:none}
+.screen.app #chat{transform:translateX(-30%)}
+
+/* чат-бот */
+.msgs{padding:14px 12px 20px;display:flex;flex-direction:column;gap:8px}
+.day{align-self:center;font-size:11.5px;font-weight:700;color:var(--ink-2);background:#ffffffaa;border-radius:999px;padding:3px 10px;margin-bottom:4px}
+.m{max-width:84%;padding:9px 12px;border-radius:16px;font-size:14px;line-height:1.4;animation:msg .35s var(--ease) both}
+@keyframes msg{from{opacity:0;transform:translateY(8px)}}
+.m.bot{align-self:flex-start;background:var(--paper);border-bottom-left-radius:5px;box-shadow:0 1px 0 #0000000d}
+.m.me{align-self:flex-end;background:var(--pf);color:#fff;border-bottom-right-radius:5px;transition:background-color .3s}
+.m small{display:block;font-size:11px;color:var(--ink-2);margin-top:3px;text-align:right}
+.m.me small{color:#ffffffb3}
+.m .who{display:flex;align-items:center;gap:7px;font-weight:800;font-size:12.5px;margin-bottom:3px;color:var(--brand)}
+.ava{width:22px;height:22px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:9px;font-weight:800;letter-spacing:-.02em;flex:none}
+.kb{display:grid;gap:6px;padding:0 12px 16px}
+.kb button{border:0;border-radius:12px;background:var(--paper);height:44px;font-weight:700;font-size:14px;box-shadow:0 1px 0 #0000000f}
+.kb button.main{background:var(--pf);color:#fff;transition:background-color .3s}
+.typing{align-self:flex-start;background:var(--paper);border-radius:16px;padding:12px 14px;display:flex;gap:4px}
+.typing i{width:6px;height:6px;border-radius:50%;background:#B7B1D3;animation:dot 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes dot{50%{transform:translateY(-3px);background:var(--brand)}}
+
+/* мини-приложение */
+.hero{margin:12px 12px 0;border-radius:22px;padding:16px;background:linear-gradient(135deg,var(--brand),#4A3BC9);color:#fff;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-40px;bottom:-60px;width:180px;height:180px;border-radius:50%;background:#ffffff1f}
+.hero .wm{font-weight:800;font-size:24px;letter-spacing:-.03em}
+.hero .wm span{font-size:12px;font-weight:700;opacity:.85;margin-left:4px}
+.hero p{margin:6px 0 0;font-size:13px;opacity:.9;max-width:26ch}
+.hero .pickup{position:relative;z-index:1;margin-top:12px;display:flex;align-items:center;gap:8px;background:#ffffff26;border-radius:12px;padding:8px 10px;font-size:12.5px;font-weight:700}
+.tabs{display:flex;gap:6px;padding:12px 12px 2px;overflow-x:auto;scrollbar-width:none;position:sticky;top:0;background:var(--bg);z-index:2}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;padding:9px 14px;border-radius:999px;border:0;background:var(--paper);font-size:13px;font-weight:800;color:var(--ink-2)}
+.tabs button.on{background:var(--ink);color:#fff}
+.sec{padding:12px 16px 6px;font-weight:800;font-size:17px}
+.list{display:flex;flex-direction:column;gap:8px;padding:0 12px}
+.item{display:flex;gap:12px;align-items:center;background:var(--paper);border-radius:18px;padding:8px;border:0;text-align:left;width:100%}
+.tile{width:76px;height:76px;flex:none;border-radius:14px;display:grid;place-items:center;font-size:34px;position:relative;overflow:hidden}
+.tile::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 25%,#ffffff70,transparent 55%)}
+.item .tx{flex:1;min-width:0}
+.item b{display:block;font-size:14px;line-height:1.25}
+.item small{display:block;color:var(--ink-2);font-size:12px;margin-top:3px}
+.item .pr{display:flex;align-items:center;justify-content:space-between;margin-top:6px;font-weight:800;font-size:14px}
+.item .plus{width:30px;height:30px;border-radius:10px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font-weight:800;font-size:18px}
+.item .plus.in{background:var(--brand);color:#fff;font-size:12px;width:auto;padding:0 9px}
+.note{margin:14px 12px 120px;padding:14px;border-radius:18px;background:var(--paper);font-size:12.5px;color:var(--ink-2)}
+.note b{color:var(--ink);font-size:13.5px;display:block;margin-bottom:3px}
+.mainbtn{position:absolute;left:12px;right:12px;bottom:14px;z-index:8;height:54px;border:0;border-radius:16px;background:var(--pf);color:#fff;font-weight:800;font-size:15.5px;box-shadow:0 14px 30px -14px rgba(40,30,120,.7);transition:transform .35s var(--ease),background-color .3s;transform:translateY(160%)}
+.screen.app .mainbtn.show{transform:none}
+
+.scrim{position:absolute;inset:0;z-index:20;background:rgba(20,16,45,.45);opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:21;background:var(--paper);border-radius:26px 26px 0 0;padding:10px 18px 22px;transform:translateY(105%);transition:transform .42s var(--ease);max-height:92%;overflow-y:auto;scrollbar-width:none}
+.sheet::-webkit-scrollbar{display:none}
+.sheet.on{transform:none}
+.grab{width:40px;height:5px;border-radius:3px;background:#E2DEF0;margin:0 auto 12px}
+.big{height:170px;border-radius:20px;display:grid;place-items:center;font-size:78px;margin-bottom:12px;position:relative;overflow:hidden}
+.big::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 25%,#ffffff80,transparent 55%)}
+.sheet h3{margin:0;font-size:22px;line-height:1.15;font-weight:800;letter-spacing:-.01em}
+.sheet .sub{color:var(--ink-2);font-size:13px;margin-top:4px}
+.price{font-weight:800;font-size:20px;margin-top:8px;transition:color .3s}
+.price.flash{color:var(--brand)}
+.lbl{display:flex;justify-content:space-between;margin:14px 0 7px;font-size:12px;font-weight:800;color:var(--ink-2)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:9px 12px;border-radius:12px;border:1.5px solid var(--line);background:#fff;font-size:13px;font-weight:800;text-align:left;transition:all .2s}
+.chip small{display:block;font-size:11px;font-weight:700;color:var(--ink-2)}
+.chip.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand)}
+.chip.on small{color:var(--brand)}
+.btn{width:100%;height:52px;margin-top:16px;border-radius:16px;border:0;background:var(--pf);color:#fff;font-weight:800;font-size:15.5px;transition:background-color .3s}
+.btn[disabled]{background:#CBC6E0}
+.line{display:flex;gap:10px;align-items:center;padding:8px;border-radius:14px;background:var(--bg);margin-bottom:6px}
+.line .tile{width:44px;height:44px;font-size:22px;border-radius:10px}
+.line p{margin:0;flex:1;font-size:13px;line-height:1.3}
+.line small{display:block;color:var(--ink-2);font-size:11.5px}
+.tot{background:var(--bg);border-radius:16px;padding:10px 14px;font-size:13.5px;margin-top:8px}
+.tot div{display:flex;justify-content:space-between;padding:3px 0}
+.tot .bg{border-top:1px solid var(--line);margin-top:5px;padding-top:8px;font-weight:800;font-size:15px}
+.done{text-align:center}
+.ring{width:64px;height:64px;margin:6px auto 12px;border-radius:50%;background:var(--ok);display:grid;place-items:center;color:#fff;font-size:30px;animation:pop .45s var(--ease)}
+@keyframes pop{from{transform:scale(.5);opacity:0}}
+.code{display:inline-block;margin-top:10px;font-weight:800;font-size:28px;letter-spacing:.12em;background:var(--brand-soft);color:var(--brand);border-radius:14px;padding:6px 16px}
+.ticket{margin-top:14px;text-align:left;border-radius:16px;background:#1B1830;color:#EDEBF7;padding:12px 14px;font-size:13px;line-height:1.55}
+.ticket small{display:block;color:#8D87B0;font-size:11.5px;margin-bottom:4px}
+.ticket b{color:#B9AFFF}
+.toast{position:absolute;left:50%;top:46%;z-index:35;transform:translate(-50%,-50%) scale(.9);opacity:0;padding:12px 16px;border-radius:14px;background:rgba(27,24,48,.95);color:#fff;font-size:13px;font-weight:700;text-align:center;max-width:260px;transition:opacity .25s,transform .25s var(--ease);pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.tap{position:absolute;z-index:40;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:2px solid var(--ink);background:rgba(27,24,48,.16);opacity:0;pointer-events:none;transition:left .5s var(--ease),top .5s var(--ease),opacity .2s}
+.tap.press{animation:press .3s ease-out}
+@keyframes press{50%{transform:scale(.7);background:rgba(27,24,48,.4)}}
+.pfswitch{position:absolute;left:50%;top:44%;z-index:36;transform:translate(-50%,-50%) scale(.92);opacity:0;pointer-events:none;background:#fff;border-radius:20px;padding:16px 22px;text-align:center;box-shadow:0 30px 60px -20px rgba(20,16,45,.5);transition:all .3s var(--ease)}
+.pfswitch.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.pfswitch b{display:block;font-size:20px;color:var(--pf)}
+.pfswitch small{color:var(--ink-2);font-size:12.5px}
+
+@media (max-width:560px){
+  body{background:var(--bg)}
+  .stage{display:block;padding:0}
+  .story{display:none}
+  .phone{width:100%;height:100svh;border-radius:0;padding:0;background:none;box-shadow:none}
+  .screen{border-radius:0}
+  .status{display:none}
+  .bar{top:0}
+  .views{top:52px}
+  .fab{position:fixed;right:14px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:50;border:0;border-radius:999px;background:var(--ink);color:#fff;font-weight:800;padding:11px 15px;box-shadow:0 12px 30px -12px rgba(0,0,0,.5)}
+}
+@media (min-width:561px){ .fab{display:none} }
+@media (max-width:980px) and (min-width:561px){ .stage{grid-template-columns:1fr;justify-items:center} }
+@media (prefers-reduced-motion:reduce){ *{transition-duration:0s!important;animation:none!important} }
+</style>
+</head>
+<body>
+<div class="stage">
+  <section class="story" aria-label="Что показывает демо">
+    <div class="kicker">Демо для Cofix bakery</div>
+    <h1>Ваш бот из ВКонтакте — <em>теперь и в MAX</em></h1>
+    <p class="lead">Те же кнопки и ответы, что у вашего бота во ВКонтакте, плюс меню с предзаказом. Один бот работает в MAX, ВКонтакте и Telegram, а заказы из всех трёх приходят в одно место.</p>
+    <div class="pfs" id="pfs" role="tablist" aria-label="Платформа">
+      <button type="button" data-pf="max" class="on"><i style="background:#6C5CE7"></i>MAX</button>
+      <button type="button" data-pf="vk"><i style="background:#0077FF"></i>ВКонтакте</button>
+      <button type="button" data-pf="tg"><i style="background:#2AABEE"></i>Telegram</button>
+    </div>
+    <ol class="steps" id="steps">
+      <li data-s="0"><div><b>Привычные кнопки бота</b>«Как оформить заказ?», «Доставка», «Оплата»</div></li>
+      <li data-s="1"><div><b>Меню внутри мессенджера</b>напитки, завтраки, десерты, без перехода на сайт</div></li>
+      <li data-s="2"><div><b>Объём и молоко</b>цена пересчитывается сразу</div></li>
+      <li data-s="3"><div><b>Предзаказ к времени</b>гость забирает без очереди</div></li>
+      <li data-s="4"><div><b>Заказ сразу в кофейню</b>с кодом выдачи</div></li>
+      <li data-s="5"><div><b>MAX, ВКонтакте, Telegram</b>один бот, одна база, одна админка</div></li>
+    </ol>
+    <button class="tourbtn" id="tourBtn" type="button">▶ Показать за 40 секунд</button>
+    <p class="credit">Демо-концепт от NOVACODE · <a href="https://new-coder.ru">new-coder.ru</a>. Блюда и цены завтраков и десертов взяты из вашей группы, цены напитков условные. В рабочей версии будут ваши фото, меню и точки.</p>
+  </section>
+  <div class="phone">
+    <div class="screen" id="screen" data-pf="max">
+      <div class="status"><span>8:42</span><i>●●● 5G ▮</i></div>
+      <header class="bar" id="bar"></header>
+      <div class="views">
+        <div class="view" id="chat"></div>
+        <div class="view" id="app"></div>
+      </div>
+      <button class="mainbtn" id="mainbtn" type="button" data-act="cart">Корзина</button>
+      <div class="scrim" id="scrim"></div>
+      <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Окно"></div>
+      <div class="pfswitch" id="pfswitch" role="status"></div>
+      <span class="tap" id="tap" aria-hidden="true"></span>
+    </div>
+  </div>
+</div>
+<button class="fab" id="fab" type="button">▶ Показ</button>
+
+<script>
+(() => {
+'use strict';
+const PF = {
+  max:{name:'MAX', color:'#6C5CE7'},
+  vk:{name:'ВКонтакте', color:'#0077FF'},
+  tg:{name:'Telegram', color:'#2AABEE'},
+};
+const CATS = ['Напитки','Завтраки','Десерты'];
+const SIZES = [['S',120],['M',180],['L',240],['XL',300]];
+const MILK = ['Обычное','Овсяное','Кокосовое','Без молока'];
+const ITEMS = [
+  {id:'cap',cat:'Напитки',name:'Капучино',sub:'двойной эспрессо и молочная пена',e:'☕',bg:'#EADBC8',drink:true},
+  {id:'raf',cat:'Напитки',name:'Раф ванильный',sub:'сливки, ваниль',e:'🥛',bg:'#F1E6D6',drink:true},
+  {id:'mat',cat:'Напитки',name:'Матча латте',sub:'японский чай матча',e:'🍵',bg:'#DDEBCF',drink:true},
+  {id:'d2',cat:'Завтраки',name:'Смузи-боул с клубникой, протеином и кокосом',sub:'завтрак',e:'🍓',bg:'#F7D6DA',price:480},
+  {id:'d3',cat:'Завтраки',name:'Смузи-боул с голубикой, черникой и миндалём',sub:'завтрак',e:'🫐',bg:'#DAD6F3',price:480},
+  {id:'d4',cat:'Завтраки',name:'Йогурт с гранолой, малиной и жжёным бананом',sub:'завтрак',e:'🥣',bg:'#F4E4CF',price:450},
+  {id:'d5',cat:'Завтраки',name:'Творог с заварным кремом и ягодами',sub:'завтрак',e:'🍮',bg:'#F6ECD3',price:490},
+  {id:'d0',cat:'Десерты',name:'Наполеон с клубникой и варёной сгущёнкой',sub:'десерт',e:'🍰',bg:'#F8DCD8',price:350},
+  {id:'d1',cat:'Десерты',name:'Панакотта с малиной',sub:'десерт',e:'🍧',bg:'#FBE3E6',price:350},
+];
+const POINT = 'ул. Александры Монаховой, 92к2';
+const TIMES = ['Через 10 мин','Через 20 мин','К 9:30'];
+
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => Math.round(n).toLocaleString('ru-RU') + ' ₽';
+const $ = id => document.getElementById(id);
+const screen = $('screen'), bar = $('bar'), chat = $('chat'), app = $('app'), sheet = $('sheet'), scrim = $('scrim'), tapEl = $('tap'), mainbtn = $('mainbtn');
+const S = {pf:'max', cat:'Напитки', cart:[], open:null, size:1, milk:0, time:0, msgs:[]};
+const sleep = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
+const toastEl = document.createElement('div'); toastEl.className = 'toast'; screen.appendChild(toastEl);
+const byId = id => ITEMS.find(x => x.id === id);
+const priceOf = (it, size) => it.drink ? SIZES[size][1] : it.price;
+
+/* шапка под платформу */
+function renderBar(){
+  const p = PF[S.pf], inApp = screen.classList.contains('app');
+  screen.dataset.pf = S.pf; screen.style.setProperty('--pf', p.color);
+  const title = inApp ? 'Cofix bakery' : 'Cofix bakery', sub = inApp ? 'мини-приложение' : 'бот';
+  if (S.pf === 'tg') bar.innerHTML = `<button class="l" type="button" data-act="back">${inApp ? 'Закрыть' : '‹ Чаты'}</button><div class="t"><b>${title}<span class="pfbadge">${p.name}</span></b><small>${sub}</small></div><div class="r"><span style="font-weight:800;color:var(--ink-2)">···</span></div>`;
+  else if (S.pf === 'vk') bar.innerHTML = `<button class="l" type="button" data-act="back">‹</button><div class="t"><b>${title}<span class="pfbadge">${p.name}</span></b><small>${inApp ? 'мини-приложение' : 'сообщество'}</small></div><div class="r"><div class="caps"><span>···</span><span>✕</span></div></div>`;
+  else bar.innerHTML = `<button class="l" type="button" data-act="back">${inApp ? '✕' : '‹ Назад'}</button><div class="t"><b>${title}<span class="pfbadge">${p.name}</span></b><small>${sub}</small></div><div class="r"><span style="font-weight:800;color:var(--ink-2)">⋯</span></div>`;
+  document.querySelectorAll('#pfs button').forEach(b => b.classList.toggle('on', b.dataset.pf === S.pf));
+}
+/* чат */
+const ANS = {
+  how:'Нажмите «Открыть меню» ниже: выберите напиток и завтрак, укажите время — заберёте без очереди.',
+  ship:'Самовывоз к нужному времени — прямо в меню. Остальные ответы переносим из вашего бота ВКонтакте слово в слово.',
+  pay:'Здесь будет ответ из вашего бота ВКонтакте — тексты и кнопки переносятся без изменений.',
+};
+const Q = {how:'Как оформить заказ?', ship:'Какие способы доставки?', pay:'Как оплатить?'};
+function renderChat(){
+  chat.innerHTML = `<div class="msgs" id="msgs"><span class="day">Сегодня</span>
+    <div class="m bot"><div class="who"><span class="ava">cofix</span>Cofix bakery</div>Здравствуйте! Это бот Cofix bakery ☕ Помогу с заказом, доставкой и оплатой.<small>8:41</small></div>
+    ${S.msgs.map(m => m.me ? `<div class="m me">${esc(m.t)}<small>8:42</small></div>` : `<div class="m bot">${esc(m.t)}<small>8:42</small></div>`).join('')}</div>
+    <div class="kb">${Object.keys(Q).map(k => `<button type="button" data-q="${k}">${Q[k]}</button>`).join('')}<button type="button" class="main" data-act="openapp">☕ Открыть меню</button></div>`;
+  chat.scrollTop = chat.scrollHeight;
+}
+async function ask(k){
+  S.msgs.push({me:true, t:Q[k]}); renderChat();
+  const box = $('msgs'), ty = document.createElement('div'); ty.className = 'typing'; ty.innerHTML = '<i></i><i></i><i></i>'; box.appendChild(ty); chat.scrollTop = chat.scrollHeight;
+  await sleep(900); S.msgs.push({me:false, t:ANS[k]}); renderChat();
+}
+/* приложение */
+function renderApp(){
+  const list = ITEMS.filter(i => i.cat === S.cat);
+  const y = app.scrollTop;
+  app.innerHTML = `<div class="hero"><div class="wm">cofix<span>bakery</span></div><p>Закажите заранее — заберите без очереди.</p>
+      <div class="pickup">📍 ${esc(POINT)}</div></div>
+    <div class="tabs">${CATS.map(c => `<button type="button" class="${S.cat === c ? 'on' : ''}" data-cat="${c}">${c}</button>`).join('')}</div>
+    <div class="sec">${S.cat}</div>
+    <div class="list">${list.map(it => { const n = S.cart.filter(c => c.id === it.id).length; return `<button type="button" class="item" data-open="${it.id}">
+      <div class="tile" style="background:${it.bg}">${it.e}</div>
+      <div class="tx"><b>${esc(it.name)}</b><small>${esc(it.sub)}</small>
+      <div class="pr"><span>${it.drink ? 'от ' : ''}${fmt(it.drink ? SIZES[0][1] : it.price)}</span><span class="plus ${n ? 'in' : ''}">${n ? '× ' + n : '+'}</span></div></div></button>`; }).join('')}</div>
+    <div class="note"><b>Ваше меню целиком</b>Здесь будут все позиции, фото и стоп-лист. Обновляются из одной админки сразу в MAX, ВКонтакте и Telegram.</div>`;
+  app.scrollTop = y; setMain();
+}
+function setMain(){ const n = S.cart.length, s = S.cart.reduce((a, c) => a + c.price, 0); mainbtn.classList.toggle('show', n > 0); mainbtn.textContent = `Корзина · ${n} · ${fmt(s)}`; }
+function openSheet(html){ sheet.innerHTML = '<div class="grab"></div>' + html; sheet.scrollTop = 0; scrim.classList.add('on'); sheet.classList.add('on'); mainbtn.classList.remove('show'); }
+function closeSheet(){ scrim.classList.remove('on'); sheet.classList.remove('on'); setMain(); }
+scrim.addEventListener('click', closeSheet);
+function itemSheet(id){
+  const it = byId(id); S.open = id; S.size = 1; S.milk = 0;
+  openSheet(`<div class="big" style="background:${it.bg}">${it.e}</div><h3>${esc(it.name)}</h3><div class="sub">${esc(it.sub)}</div>
+    <div class="price" id="pr">${fmt(priceOf(it, S.size))}</div>
+    ${it.drink ? `<div class="lbl"><span>Размер</span><span>цена меняется сразу</span></div>
+      <div class="chips">${SIZES.map((z, i) => `<button type="button" class="chip ${i === S.size ? 'on' : ''}" data-size="${i}">${z[0]}<small>${fmt(z[1])}</small></button>`).join('')}</div>
+      <div class="lbl"><span>Молоко</span></div>
+      <div class="chips">${MILK.map((m, i) => `<button type="button" class="chip ${i === S.milk ? 'on' : ''}" data-milk="${i}">${m}</button>`).join('')}</div>` : ''}
+    <button type="button" class="btn" id="addBtn" data-act="add">Добавить · ${fmt(priceOf(it, S.size))}</button>`);
+}
+function cartSheet(){
+  const sum = S.cart.reduce((a, c) => a + c.price, 0);
+  openSheet(`<h3>Ваш заказ</h3><div class="sub">Самовывоз · ${esc(POINT)}</div><div style="height:10px"></div>
+    ${S.cart.map(c => { const it = byId(c.id); return `<div class="line"><div class="tile" style="background:${it.bg}">${it.e}</div><p><b>${esc(it.name)}</b><small>${esc(c.opt)}</small></p><b>${fmt(c.price)}</b></div>`; }).join('')}
+    <div class="lbl"><span>Когда заберёте</span></div>
+    <div class="chips">${TIMES.map((t, i) => `<button type="button" class="chip ${i === S.time ? 'on' : ''}" data-time="${i}">${t}</button>`).join('')}</div>
+    <div class="tot"><div><span>Позиции</span><b>${S.cart.length}</b></div><div class="bg"><span>Итого</span><span>${fmt(sum)}</span></div></div>
+    <button type="button" class="btn" id="payBtn" data-act="order">Оформить заказ · ${fmt(sum)}</button>`);
+}
+function doneSheet(){
+  const sum = S.cart.reduce((a, c) => a + c.price, 0);
+  openSheet(`<div class="done"><div class="ring">✓</div><h3>Заказ принят</h3><div class="sub">${esc(TIMES[S.time])} · ${esc(POINT)}</div><div class="code">C-247</div><div class="sub">Назовите код бариста</div></div>
+    <div class="ticket"><small>Так заказ видит кофейня</small><b>Предзаказ C-247 · ${esc(PF[S.pf].name)}</b><br>
+      ${S.cart.map(c => `• ${esc(byId(c.id).name)}${c.opt ? ', ' + esc(c.opt) : ''}`).join('<br>')}<br>Забрать: ${esc(TIMES[S.time].toLowerCase())}<br>Сумма: <b>${fmt(sum)}</b></div>
+    <button type="button" class="btn" data-act="finish">Готово</button>`);
+}
+let toastT;
+function toast(t){ toastEl.innerHTML = t; toastEl.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('on'), 1700); }
+function setPf(pf){ S.pf = pf; renderBar(); }
+function openApp(){ screen.classList.add('app'); renderBar(); renderApp(); }
+function backToChat(){ closeSheet(); screen.classList.remove('app'); mainbtn.classList.remove('show'); renderBar(); }
+
+screen.addEventListener('click', e => {
+  const t = e.target.closest('[data-q],[data-cat],[data-open],[data-size],[data-milk],[data-time],[data-act]'); if (!t) return;
+  if (t.dataset.q) return ask(t.dataset.q);
+  if (t.dataset.cat){ S.cat = t.dataset.cat; return renderApp(); }
+  if (t.dataset.open) return itemSheet(t.dataset.open);
+  if (t.dataset.size){ S.size = +t.dataset.size; const it = byId(S.open), p = priceOf(it, S.size);
+    sheet.querySelectorAll('[data-size]').forEach(b => b.classList.toggle('on', +b.dataset.size === S.size));
+    const pr = $('pr'); pr.textContent = fmt(p); pr.classList.add('flash'); setTimeout(() => pr.classList.remove('flash'), 450); $('addBtn').textContent = `Добавить · ${fmt(p)}`; return; }
+  if (t.dataset.milk){ S.milk = +t.dataset.milk; sheet.querySelectorAll('[data-milk]').forEach(b => b.classList.toggle('on', +b.dataset.milk === S.milk)); return; }
+  if (t.dataset.time){ S.time = +t.dataset.time; sheet.querySelectorAll('[data-time]').forEach(b => b.classList.toggle('on', +b.dataset.time === S.time)); return; }
+  const a = t.dataset.act;
+  if (a === 'openapp') openApp();
+  else if (a === 'back'){ if (screen.classList.contains('app')) backToChat(); }
+  else if (a === 'cart') cartSheet();
+  else if (a === 'add'){ const it = byId(S.open), opt = it.drink ? `${SIZES[S.size][0]}, ${MILK[S.milk].toLowerCase()} молоко`.replace('без молока молоко', 'без молока') : '';
+    S.cart.push({id:it.id, price:priceOf(it, S.size), opt}); closeSheet(); renderApp(); toast(`Добавлено:<br>${esc(it.name)}`); }
+  else if (a === 'order') doneSheet();
+  else if (a === 'finish'){ S.cart = []; closeSheet(); renderApp(); }
+});
+$('pfs').addEventListener('click', e => { const b = e.target.closest('[data-pf]'); if (b) setPf(b.dataset.pf); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+
+/* автопоказ */
+let touring = false;
+const mark = i => $('steps').querySelectorAll('li').forEach(li => li.classList.toggle('on', +li.dataset.s === i));
+async function tap(sel){
+  const el = typeof sel === 'string' ? screen.querySelector(sel) : sel; if (!el) return;
+  const b = screen.getBoundingClientRect(), sc = el.closest('.view,.sheet'), r = el.getBoundingClientRect();
+  if (sc && (r.bottom > b.bottom - 80 || r.top < b.top + 110)){ const vr = sc.getBoundingClientRect();
+    sc.scrollTo({top: sc.scrollTop + (r.top - vr.top) - vr.height / 3, behavior: reduce ? 'auto' : 'smooth'}); await sleep(650); }
+  const r2 = el.getBoundingClientRect();
+  tapEl.style.left = (r2.left - b.left + r2.width / 2) + 'px'; tapEl.style.top = (r2.top - b.top + Math.min(r2.height / 2, 60)) + 'px'; tapEl.style.opacity = '1';
+  await sleep(520); tapEl.classList.remove('press'); void tapEl.offsetWidth; tapEl.classList.add('press'); await sleep(200); el.click(); await sleep(250);
+}
+async function flashPf(pf){
+  setPf(pf); const box = $('pfswitch'); box.innerHTML = `<b>${PF[pf].name}</b><small>тот же бот, те же заказы</small>`; box.classList.add('on'); await sleep(1300); box.classList.remove('on');
+}
+async function tour(){
+  if (touring) return; touring = true; $('fab').style.display = 'none';
+  closeSheet(); Object.assign(S, {pf:'max', cat:'Напитки', cart:[], msgs:[], time:0}); screen.classList.remove('app'); renderBar(); renderChat(); await sleep(900);
+  mark(0); await tap('[data-q="how"]'); await sleep(2000);
+  mark(1); await tap('[data-act="openapp"]'); await sleep(1000);
+  mark(2); await tap('[data-open="cap"]'); await sleep(900); await tap('[data-size="2"]'); await sleep(800); await tap('[data-milk="1"]'); await sleep(800); await tap('#addBtn'); await sleep(1300);
+  await tap('[data-cat="Завтраки"]'); await sleep(800); await tap('[data-open="d3"]'); await sleep(1000); await tap('#addBtn'); await sleep(1300);
+  mark(3); await tap('#mainbtn'); await sleep(900); await tap('[data-time="1"]'); await sleep(900);
+  mark(4); await tap('#payBtn'); await sleep(3600); await tap('[data-act="finish"]'); await sleep(600);
+  mark(5); tapEl.style.opacity = '0'; await flashPf('vk'); await sleep(900); await flashPf('tg'); await sleep(900); await flashPf('max'); await sleep(800);
+  mark(-1); touring = false; $('fab').style.display = '';
+}
+$('tourBtn').addEventListener('click', tour); $('fab').addEventListener('click', tour);
+const qp = new URLSearchParams(location.search).get('pf'); if (PF[qp]) S.pf = qp;
+renderBar(); renderChat(); renderApp();
+if (location.hash === '#tour') setTimeout(tour, 600);
+})();
+</script>
+</body>
+</html>
