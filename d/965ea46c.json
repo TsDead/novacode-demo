@@ -1,0 +1,122 @@
+{
+ "name": "origzy",
+ "sub": "оригинальная одежда и аксессуары",
+ "tagline": "Вещи из канала — с бронью в один тап.",
+ "channel": "origzy",
+ "manager": "@origzy_manager",
+ "ns": "novacode-demo-1d9b6a",
+ "items": [
+  {
+   "brand": "Chrome Hearts",
+   "name": "Horseshoe Logo Hoodie Black",
+   "cat": "Одежда",
+   "size": "L",
+   "sizes": [
+    "L"
+   ],
+   "price": 58000,
+   "boutique": null,
+   "tb": "#2A2A2A",
+   "tc": "#E9D7A8",
+   "fs": 15,
+   "sold": false,
+   "id": "i0"
+  },
+  {
+   "brand": "Balenciaga",
+   "name": "FW22 Lost Tape Flared Black Denim",
+   "cat": "Одежда",
+   "size": "XS",
+   "sizes": [
+    "XS"
+   ],
+   "price": 16500,
+   "boutique": null,
+   "tb": "#111111",
+   "tc": "#EDEDED",
+   "fs": 18,
+   "sold": false,
+   "id": "i1"
+  },
+  {
+   "brand": "Acne Studios",
+   "name": "Stockholm 1996 Long Sleeve Black",
+   "cat": "Одежда",
+   "size": "S",
+   "sizes": [
+    "S"
+   ],
+   "price": 12500,
+   "boutique": null,
+   "tb": "#141414",
+   "tc": "#F3F3F3",
+   "fs": 18,
+   "sold": false,
+   "id": "i2"
+  },
+  {
+   "brand": "Balenciaga",
+   "name": "Human Being Zip-Up Hoodie",
+   "cat": "Одежда",
+   "size": "XS",
+   "sizes": [
+    "XS"
+   ],
+   "price": 28000,
+   "boutique": null,
+   "tb": "#111111",
+   "tc": "#EDEDED",
+   "fs": 18,
+   "sold": false,
+   "id": "i3"
+  },
+  {
+   "brand": "Maison Margiela",
+   "name": "Replica Black/Gum",
+   "cat": "Обувь",
+   "size": "42 EU",
+   "sizes": [
+    "42 EU"
+   ],
+   "price": 28000,
+   "boutique": null,
+   "tb": "#E8DCC6",
+   "tc": "#3A2F23",
+   "fs": 15,
+   "sold": false,
+   "id": "i4"
+  },
+  {
+   "brand": "Prada",
+   "name": "Re-Nylon and Saffiano Leather Shoulder Bag",
+   "cat": "Сумки",
+   "size": "—",
+   "sizes": [],
+   "price": 38000,
+   "boutique": null,
+   "tb": "#7A4E2D",
+   "tc": "#FBEFE2",
+   "fs": 24,
+   "sold": false,
+   "id": "i5"
+  }
+ ],
+ "brands": [
+  "Chrome Hearts",
+  "Balenciaga",
+  "Acne Studios",
+  "Maison Margiela",
+  "Prada"
+ ],
+ "sizes": [
+  "L",
+  "XS",
+  "S",
+  "42 EU"
+ ],
+ "cats": [
+  "Одежда",
+  "Обувь",
+  "Сумки"
+ ]
+}
