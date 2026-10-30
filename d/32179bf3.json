@@ -1,0 +1,139 @@
+{
+ "name": "ресейл",
+ "sub": "вторичная продажа брендовой одежды",
+ "tagline": "Вещи из канала — с бронью в один тап.",
+ "channel": "resaletransactions",
+ "manager": "@belovadary",
+ "ns": "novacode-demo-1d9b6a",
+ "items": [
+  {
+   "brand": "Adidas",
+   "name": "Вельветовые брюки Adidas",
+   "cat": "Одежда",
+   "size": "XS",
+   "sizes": [
+    "XS"
+   ],
+   "price": 14000,
+   "boutique": null,
+   "tb": "#5B2A6E",
+   "tc": "#F7E3F2",
+   "fs": 24,
+   "sold": false,
+   "id": "i0"
+  },
+  {
+   "brand": "Rick Owens",
+   "name": "Платье Rick Owens",
+   "cat": "Одежда",
+   "size": "XS",
+   "sizes": [
+    "XS"
+   ],
+   "price": 45000,
+   "boutique": null,
+   "tb": "#C3202F",
+   "tc": "#FFEFEF",
+   "fs": 18,
+   "sold": false,
+   "id": "i1"
+  },
+  {
+   "brand": "Винтажная",
+   "name": "Вещь дубленка",
+   "cat": "Одежда",
+   "size": "S-M",
+   "sizes": [
+    "S-M"
+   ],
+   "price": 19000,
+   "boutique": null,
+   "tb": "#C3202F",
+   "tc": "#FFEFEF",
+   "fs": 22,
+   "sold": false,
+   "id": "i2"
+  },
+  {
+   "brand": "Rejo",
+   "name": "Платье экокожа Rejo",
+   "cat": "Одежда",
+   "size": "XS",
+   "sizes": [
+    "XS"
+   ],
+   "price": 5000,
+   "boutique": null,
+   "tb": "#E07A63",
+   "tc": "#FFF3EE",
+   "fs": 24,
+   "sold": false,
+   "id": "i3"
+  },
+  {
+   "brand": "Studio 29",
+   "name": "Рабочая куртка Studio 29",
+   "cat": "Одежда",
+   "size": "One Size",
+   "sizes": [
+    "One Size"
+   ],
+   "price": 6000,
+   "boutique": null,
+   "tb": "#5B2A6E",
+   "tc": "#F7E3F2",
+   "fs": 22,
+   "sold": false,
+   "id": "i4"
+  },
+  {
+   "brand": "HAVE2",
+   "name": "Лонг HAVE2",
+   "cat": "Одежда",
+   "size": "XS",
+   "sizes": [
+    "XS"
+   ],
+   "price": 2000,
+   "boutique": null,
+   "tb": "#D9C2A5",
+   "tc": "#4A3826",
+   "fs": 24,
+   "sold": false,
+   "id": "i5"
+  },
+  {
+   "brand": "Роберто Кавалли",
+   "name": "Лонг Роберто Кавалли",
+   "cat": "Одежда",
+   "size": "S",
+   "sizes": [
+    "S"
+   ],
+   "price": 12000,
+   "boutique": null,
+   "tb": "#111111",
+   "tc": "#EDEDED",
+   "fs": 15,
+   "sold": false,
+   "id": "i6"
+  }
+ ],
+ "brands": [
+  "Adidas",
+  "Rick Owens",
+  "Rejo",
+  "Studio 29",
+  "HAVE2",
+  "Роберто Кавалли"
+ ],
+ "sizes": [
+  "XS",
+  "S-M",
+  "One Size",
+  "S"
+ ],
+ "cats": [
+  "Одежда"
+ ]
+}
