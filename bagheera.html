@@ -5,483 +5,804 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Bagheera — запись на пробное в Telegram и MAX</title>
-<link rel="icon" href="data:,">
+<meta property="og:title" content="Bagheera — бот записи на пробное">
+<meta property="og:description" content="Демо для студии танца Bagheera: подбор направления, запись в два тапа, напоминания и абонемент после пробного.">
+<meta property="og:image" content="bagheera/i/frame_b.jpg">
 <link rel="preload" href="fonts/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-/* шрифты лежат на сайте, без запросов к Google */
 @font-face{font-family:"Playfair Display";src:url("fonts/playfair-display-cyrillic-wght-normal.woff2") format("woff2");font-weight:400 900;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
-@font-face{font-family:"Playfair Display";src:url("fonts/playfair-display-latin-wght-normal.woff2") format("woff2");font-weight:400 900;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Playfair Display";src:url("fonts/playfair-display-latin-wght-normal.woff2") format("woff2");font-weight:400 900;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+2000-206F}
 @font-face{font-family:"Manrope";src:url("fonts/manrope-cyrillic-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
-@font-face{font-family:"Manrope";src:url("fonts/manrope-latin-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:"Manrope";src:url("fonts/manrope-latin-ext-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
-:root{
-  --blush:#F3E6E3; --blush-2:#EAD5D1; --paper:#FFFFFF; --cocoa:#2B1F1D; --cocoa-2:#5E4C48;
-  --rose:#C27C82; --rose-deep:#9C4E57; --line:#E2CFCB; --ok:#2F6B4F;
-  --stage:#2A2220;
-  --serif:"Playfair Display", "Didot", "Times New Roman", serif;
-  --sans:"Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --ease:cubic-bezier(.2,.8,.2,1);
-}
-*{box-sizing:border-box}
+@font-face{font-family:"Manrope";src:url("fonts/manrope-latin-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+2000-206F}
+:root{--bg:#0d0716;--bg2:#140b20;--card:#1b1029;--card2:#251636;--line:#382551;--txt:#f6efff;--mut:#b6a4cc;--dim:#85739c;
+--neon:#d35bff;--pink:#ff4fa7;--vio:#8b5cff;--ok:#45e0a0;--warn:#ffc061;--tg:#2aabee;
+--serif:"Playfair Display",Georgia,serif;--sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
-body{margin:0;background:var(--stage);color:#F3E6E3;font:400 15px/1.45 var(--sans);-webkit-font-smoothing:antialiased}
-:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-button{font:inherit;color:inherit;cursor:pointer}
-:focus-visible{outline:2px solid var(--rose);outline-offset:2px;border-radius:6px}
-
-/* ---------- stage (desktop) ---------- */
-.stage{min-height:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(32px,6vw,96px);align-items:center;max-width:1180px;margin:0 auto;padding:40px clamp(20px,5vw,56px)}
-.story h1{font:500 clamp(38px,4.6vw,64px)/1.02 var(--serif);letter-spacing:-.01em;margin:0 0 18px;color:#FBF3F1}
-.story p.lead{max-width:40ch;color:#CDB9B4;font-size:17px;margin:0 0 30px}
-.steps{list-style:none;margin:0;padding:0;counter-reset:s;max-width:420px}
-.steps li{counter-increment:s;display:grid;grid-template-columns:28px 1fr;gap:12px;padding:12px 0;border-top:1px solid #43372F;color:#9F8B86;transition:color .3s}
-.steps li::before{content:counter(s);font:700 13px/1.6 var(--sans);color:#6E5C57;transition:color .3s}
-.steps li b{display:block;font-weight:600;color:inherit}
-.steps li.on{color:#FBF3F1}
-.steps li.on::before{color:var(--rose)}
-.tourbtn{margin-top:26px;display:inline-flex;align-items:center;gap:10px;background:#FBF3F1;color:var(--cocoa);border:0;border-radius:999px;padding:13px 22px;font-weight:700}
-.tourbtn:hover{background:#fff}
-.credit{margin-top:22px;font-size:13px;color:#7D6A65}
-.credit a{color:#B9A39E}
-
-/* ---------- phone ---------- */
-.phone{position:relative;width:390px;height:812px;border-radius:52px;padding:12px;background:#0d0a09;box-shadow:0 0 0 1px #4a3d38,0 50px 80px -40px rgba(0,0,0,.7)}
-.screen{position:relative;width:100%;height:100%;border-radius:41px;overflow:hidden;background:var(--blush);color:var(--cocoa)}
-.status{position:absolute;inset:0 0 auto;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font:700 14px/1 var(--sans);z-index:6;color:var(--cocoa)}
-.status i{font-style:normal;letter-spacing:2px;font-size:11px}
-.tgbar{position:absolute;top:44px;left:0;right:0;height:46px;display:flex;align-items:center;gap:10px;padding:0 16px;z-index:5;background:var(--blush);border-bottom:1px solid var(--line)}
-.tgbar__close{font-size:14px;font-weight:600;color:var(--rose-deep);background:none;border:0;padding:6px 0}
-.tgbar__title{flex:1;text-align:center;line-height:1.15}
-.tgbar__title b{display:block;font-size:15px}
-.tgbar__title small{font-size:11.5px;color:var(--cocoa-2)}
-.tgbar__dots{width:28px;text-align:right;font-weight:800;color:var(--cocoa-2)}
-
-.views{position:absolute;top:90px;left:0;right:0;bottom:0;overflow:hidden}
-.view{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;background:var(--blush);transition:transform .42s var(--ease),opacity .3s}
-.view::-webkit-scrollbar{display:none}
-.view.enter{transform:translateX(100%)}
-.view.leave{transform:translateX(-25%);opacity:.4}
-.view.back-enter{transform:translateX(-25%);opacity:.4}
-.view.back-leave{transform:translateX(100%)}
-
-/* home */
-.brand{padding:18px 18px 4px;display:flex;align-items:flex-end;justify-content:space-between}
-.brand h2{margin:0;font:700 34px/1 var(--serif);letter-spacing:.02em}
-.brand span{font-size:12.5px;color:var(--cocoa-2);padding-bottom:4px}
-.tagline{padding:4px 18px 14px;color:var(--cocoa-2);font-size:13.5px}
-.tools{display:flex;gap:8px;padding:0 18px 12px;position:sticky;top:0;background:var(--blush);z-index:2;padding-top:6px}
-.search{flex:1;display:flex;align-items:center;gap:8px;height:42px;padding:0 14px;border-radius:14px;background:var(--paper);color:#9a8783;font-size:14px}
-.fbtn{height:42px;padding:0 14px;border-radius:14px;border:0;background:var(--cocoa);color:#fff;font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:6px}
-.fbtn em{font-style:normal;min-width:18px;height:18px;border-radius:9px;background:var(--rose);font-size:11px;line-height:18px;text-align:center;padding:0 5px}
-.cats{display:flex;gap:6px;padding:0 18px 14px;overflow-x:auto;scrollbar-width:none}
-.cats::-webkit-scrollbar{display:none}
-.cats span{flex:none;padding:7px 12px;border-radius:20px;border:1px solid var(--line);font-size:12.5px;font-weight:600;background:transparent}
-.cats .on{background:var(--paper);border-color:var(--paper)}
-.active-f{display:none;padding:0 18px 12px;gap:6px;flex-wrap:wrap}
-.active-f.show{display:flex}
-.active-f span{padding:5px 10px;border-radius:20px;background:var(--rose);color:#fff;font-size:12px;font-weight:700}
-.active-f button{border:0;background:none;color:var(--rose-deep);font-weight:700;font-size:12px;padding:5px 4px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px 28px}
-.card{position:relative;background:var(--paper);border-radius:18px;padding:8px 8px 11px;border:0;text-align:left;color:inherit}
-.card.sold .tag{filter:grayscale(1) opacity(.55)}
-.card .meta{padding:9px 4px 0}
-.card .nm{font-size:12.5px;line-height:1.3;height:33px;overflow:hidden}
-.card .pr{margin-top:5px;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
-.card .pr b{font-size:14.5px;font-weight:800;font-variant-numeric:tabular-nums}
-.card .pr s{font-size:11.5px;color:#a7928e}
-.card .sz{font-size:11.5px;color:var(--cocoa-2);margin-top:2px}
-.badge{position:absolute;top:14px;left:14px;z-index:2;padding:3px 7px;border-radius:7px;background:var(--cocoa);color:#fff;font-size:11px;font-weight:800}
-.badge.soldb{background:#8f817e}
-.badge.res{background:var(--ok)}
-
-/* the hang tag — the one bold element */
-.tag{position:relative;aspect-ratio:4/5;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;color:var(--tc,#fff);background:var(--tb,#2B1F1D);transition:filter .3s}
-.tag::before{content:"";position:absolute;top:12px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:var(--blush);box-shadow:inset 0 1px 2px rgba(0,0,0,.25)}
-.tag::after{content:"";position:absolute;top:-30px;left:50%;width:1.5px;height:44px;background:rgba(255,255,255,.35);transform:rotate(18deg);transform-origin:bottom}
-.tag .bn{font:700 var(--fs,22px)/1 var(--serif);letter-spacing:.06em;text-align:center;padding:0 10px;text-transform:none}
-.tag .it{margin-top:8px;font-size:11px;opacity:.75;letter-spacing:.02em}
-.tag.big{aspect-ratio:1/1.02;border-radius:22px}
-.tag.big .bn{font-size:calc(var(--fs,22px)*1.9)}
-.tag.big .it{font-size:14px;margin-top:12px}
-.tag.big::before{top:20px;width:18px;height:18px;margin-left:-9px}
-
-/* product */
-.pv{padding:14px 16px 120px}
-.pv .tag{margin-bottom:16px}
-.pv .brandline{font:700 24px/1.1 var(--serif);letter-spacing:.02em}
-.pv .title{margin-top:4px;font-size:15px;color:var(--cocoa-2)}
-.pv .prices{display:flex;align-items:baseline;gap:10px;margin-top:14px}
-.pv .prices b{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
-.pv .prices s{color:#a7928e;font-size:14px}
-.pv .save{display:inline-block;margin-top:8px;padding:4px 9px;border-radius:8px;background:var(--blush-2);color:var(--rose-deep);font-size:12.5px;font-weight:800}
-.facts{margin-top:16px;background:var(--paper);border-radius:16px;padding:4px 14px}
-.facts div{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid #f0e4e1;font-size:13.5px}
-.facts div:last-child{border-bottom:0}
-.facts span{color:var(--cocoa-2)}
-.facts b{font-weight:600;text-align:right}
-.back{position:absolute;top:24px;left:26px;z-index:3;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.85);font-size:18px;font-weight:700;display:grid;place-items:center}
-.cta{position:absolute;left:0;right:0;bottom:0;padding:12px 16px 22px;background:linear-gradient(transparent,var(--blush) 30%);display:flex;flex-direction:column;gap:8px;z-index:4}
-.btn{height:52px;border-radius:16px;border:0;background:var(--cocoa);color:#fff;font-weight:800;font-size:15.5px}
-.btn.ghost{background:var(--paper);color:var(--cocoa);font-weight:700;height:46px;font-size:14.5px}
-.btn.rose{background:var(--rose-deep)}
-.btn[disabled]{background:#cdbcb8}
-.soldnote{margin-top:14px;padding:12px 14px;border-radius:14px;background:var(--paper);font-size:13.5px;color:var(--cocoa-2)}
-.soldnote b{color:var(--cocoa)}
-
-/* sheets */
-.scrim{position:absolute;inset:0;z-index:20;background:rgba(43,31,29,.35);opacity:0;pointer-events:none;transition:opacity .3s}
-.scrim.on{opacity:1;pointer-events:auto}
-.sheet{position:absolute;left:0;right:0;bottom:0;z-index:21;background:var(--paper);border-radius:26px 26px 0 0;padding:10px 18px 26px;transform:translateY(105%);transition:transform .42s var(--ease);max-height:86%;overflow-y:auto}
+body{background:var(--bg);color:var(--txt);font:15px/1.45 var(--sans);overflow:hidden}
+body:before{content:"";position:fixed;inset:0;background:radial-gradient(60% 50% at 80% 10%,rgba(211,91,255,.18),transparent 70%),radial-gradient(50% 40% at 10% 90%,rgba(255,79,167,.14),transparent 70%);pointer-events:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img,video{display:block}
+.wrap{position:relative;height:100%;display:flex;align-items:center;justify-content:center;gap:56px;padding:24px}
+/* ---------- левая колонка (десктоп) ---------- */
+.story{width:400px;flex:none}
+.story .for{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--neon);font-weight:800}
+.story h1{font:700 34px/1.12 var(--serif);margin:10px 0 12px}
+.story h1 i{color:var(--pink)}
+.story .lead{color:var(--mut);font-size:15px;margin-bottom:18px}
+.steps{list-style:none;counter-reset:s;display:grid;gap:4px}
+.steps li{counter-increment:s;display:flex;gap:12px;align-items:flex-start;padding:8px 10px;border-radius:12px;color:var(--mut);cursor:pointer;transition:.25s}
+.steps li:before{content:counter(s);flex:none;width:24px;height:24px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:12px;font-weight:800}
+.steps li b{display:block;color:var(--txt);font-size:14px}
+.steps li small{font-size:12.5px}
+.steps li.on{background:var(--card);color:var(--txt)}
+.steps li.on:before{background:linear-gradient(135deg,var(--neon),var(--pink));border-color:transparent;color:#fff}
+.story .acts{display:flex;gap:10px;margin-top:18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border-radius:14px;font-weight:800;font-size:14.5px}
+.btn.main{background:linear-gradient(135deg,var(--neon),var(--pink));color:#fff;box-shadow:0 8px 30px -8px rgba(255,79,167,.6)}
+.btn.ghost{border:1px solid var(--line);color:var(--txt);background:rgba(13,7,22,.35);backdrop-filter:blur(6px)}
+.story .by{margin-top:22px;font-size:12px;color:var(--dim)}
+.story .by a{color:var(--mut)}
+/* ---------- телефон ---------- */
+.phone{position:relative;width:390px;height:min(820px,calc(100vh - 48px));flex:none;border-radius:44px;padding:10px;background:#05030a;box-shadow:0 0 0 1px #2a1d3d,0 40px 120px -30px rgba(211,91,255,.45)}
+.app{position:relative;height:100%;border-radius:35px;overflow:hidden;background:var(--bg);display:flex;flex-direction:column}
+.tgbar{flex:none;display:flex;align-items:center;gap:10px;padding:12px 12px 10px;background:rgba(20,11,32,.92);backdrop-filter:blur(12px);border-bottom:1px solid #22163a;z-index:5}
+.tgbar .back{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:var(--mut);font-size:24px;line-height:1}
+.tgbar .ava{width:38px;height:38px;border-radius:50%;object-fit:cover;object-position:50% 35%;border:1px solid #3d2a57}
+.tgbar .tt{flex:1;min-width:0}
+.tgbar b{display:block;font-size:15px}
+.tgbar small{color:var(--mut);font-size:12px}
+.tgbar .adm{font-size:11.5px;font-weight:800;padding:7px 10px;border-radius:10px;border:1px solid var(--line);color:var(--mut);white-space:nowrap}
+.tgbar .adm.on{background:var(--txt);color:var(--bg);border-color:var(--txt)}
+.mstrip{display:none}
+.scr{flex:1;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;scrollbar-width:none}
+.scr::-webkit-scrollbar{display:none}
+.tabs{flex:none;display:grid;grid-template-columns:repeat(4,1fr);padding:6px 6px calc(8px + env(safe-area-inset-bottom));background:rgba(20,11,32,.96);border-top:1px solid #22163a;z-index:5}
+.tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:11px;font-weight:700;color:var(--dim);border-radius:12px}
+.tabs button span{font-size:19px;line-height:1;filter:grayscale(1) brightness(1.6);opacity:.7}
+.tabs button.on{color:var(--txt)}
+.tabs button.on span{filter:none;opacity:1}
+/* ---------- общие блоки ---------- */
+.sec{padding:20px 16px 4px}
+.h2{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px}
+.h2 h3{font:700 21px/1.15 var(--serif)}
+.h2 button{font-size:13px;color:var(--neon);font-weight:700}
+.muted{color:var(--mut)}
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:800;padding:4px 9px;border-radius:999px;background:rgba(211,91,255,.14);color:#e6b6ff;white-space:nowrap}
+.tag.ok{background:rgba(69,224,160,.13);color:var(--ok)}
+.tag.warn{background:rgba(255,192,97,.14);color:var(--warn)}
+.card{background:var(--card);border:1px solid #2a1b3e;border-radius:18px}
+/* hero */
+.hero{position:relative;height:450px;overflow:hidden}
+.hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,7,22,.25) 0%,rgba(13,7,22,.05) 35%,rgba(13,7,22,.85) 76%,var(--bg) 100%)}
+.hero .in{position:absolute;left:0;right:0;bottom:0;padding:0 18px 16px;z-index:1}
+.hero .wm{width:210px;mix-blend-mode:screen;margin:0 0 4px -14px}
+.hero p{color:#e3d6f3;font-size:13.5px;margin-bottom:12px}
+.hero .row{display:flex;gap:8px}
+.hero .row .btn{flex:1;padding:13px 10px;font-size:14px}
+.hero .badge{position:absolute;top:14px;left:14px;z-index:1;background:rgba(13,7,22,.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12);color:#fff}
+/* занятия */
+.cls{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px}
+.cls .tm{flex:none;width:58px;text-align:center}
+.cls .tm b{display:block;font-size:17px}
+.cls .tm small{font-size:11px;color:var(--dim)}
+.cls .nm{flex:1;min-width:0}
+.cls .nm b{display:block;font-size:15px}
+.cls .nm small{display:block;font-size:12px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cls .go{flex:none;padding:9px 12px;border-radius:12px;background:var(--card2);font-weight:800;font-size:12.5px;color:#f1d3ff;border:1px solid #3c2858}
+.seats{display:block;font-size:11px;font-weight:800;color:var(--warn)}
+/* направления */
+.hs{display:flex;gap:10px;overflow-x:auto;padding:0 16px 6px;margin:0 -16px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.hs::-webkit-scrollbar{display:none}
+.dcard{position:relative;flex:none;width:150px;height:220px;border-radius:18px;overflow:hidden;scroll-snap-align:start;background:var(--card2);text-align:left}
+.dcard img,.dcard video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.dcard:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(13,7,22,.92))}
+.dcard .t{position:absolute;left:10px;right:10px;bottom:10px;z-index:1}
+.dcard .t b{display:block;font-size:15px;line-height:1.15}
+.dcard .t small{font-size:11.5px;color:#d8c8ec}
+.dcard .play{position:absolute;top:8px;right:8px;z-index:1;font-size:10px;font-weight:800;padding:3px 7px;border-radius:8px;background:rgba(0,0,0,.45)}
+/* клипы */
+.clipbox{padding:14px;overflow:hidden;background:linear-gradient(135deg,#2a1240,#1b1029 60%)}
+.clipbox p{font-size:13.5px;color:var(--mut);margin:4px 0 12px}
+.reels{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.reels::-webkit-scrollbar{display:none}
+.reel{position:relative;flex:none;width:92px;height:150px;border-radius:14px;overflow:hidden;border:2px solid transparent;background:linear-gradient(var(--card2),var(--card2)) padding-box,linear-gradient(135deg,var(--neon),var(--pink)) border-box}
+.reel img{width:100%;height:100%;object-fit:cover}
+.reel span{position:absolute;left:6px;right:4px;bottom:6px;font-size:10.5px;font-weight:800;text-shadow:0 1px 4px #000;text-align:left}
+/* отзывы */
+.rev{flex:none;width:250px;padding:14px;scroll-snap-align:start;font-size:13.5px;color:#e7dcf5}
+.rev .who{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12px;color:var(--mut)}
+.rev .who i{font-style:normal;color:var(--warn)}
+/* абонементы */
+.prices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.price{padding:12px 6px;text-align:center}
+.price small{display:block;font-size:11.5px;color:var(--mut)}
+.price b{display:block;font:700 18px/1.2 var(--serif);margin-top:2px;white-space:nowrap}
+.price.hot{border-color:var(--neon);background:linear-gradient(180deg,#2c1544,var(--card))}
+.note{font-size:12px;color:var(--dim);margin-top:10px}
+.promo{display:flex;gap:12px;align-items:center;padding:14px;margin-top:10px;background:linear-gradient(135deg,rgba(255,79,167,.16),rgba(139,92,255,.14));border:1px solid #4a2a63}
+.promo .em{font-size:28px}
+.promo b{display:block;font-size:14.5px}
+.promo small{color:var(--mut);font-size:12.5px}
+.addr{display:flex;gap:12px;padding:14px;align-items:flex-start}
+.addr .em{font-size:22px}
+.addr b{display:block}
+.addr small{display:block;color:var(--mut);font-size:12.5px;margin-top:2px}
+.foot{padding:22px 16px 30px;text-align:center;font-size:11.5px;color:var(--dim)}
+/* экран направления */
+.dhero{position:relative;height:400px;overflow:hidden}
+.dhero video,.dhero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.dhero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,var(--bg))}
+.dhero .in{position:absolute;left:16px;right:16px;bottom:10px;z-index:1}
+.dhero h2{font:700 34px/1.05 var(--serif);margin-top:8px}
+.dhero p{color:#e2d4f2;font-size:14px;margin-top:4px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 8px}
+.trn{display:flex;gap:10px;align-items:center;padding:10px 12px;margin-top:6px}
+.trn .av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:linear-gradient(135deg,var(--vio),var(--pink));flex:none}
+.trn b{display:block;font-size:14.5px}
+.trn small{color:var(--mut);font-size:12.5px}
+.slots{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.slot{padding:12px;text-align:left;border-radius:14px;background:var(--card);border:1px solid #2f2045}
+.slot b{display:block;font-size:14.5px}
+.slot small{display:block;font-size:12px;color:var(--mut)}
+.slot.on{border-color:var(--neon);background:#2a1640;box-shadow:0 0 0 1px var(--neon) inset}
+.sticky{position:sticky;bottom:0;padding:14px 16px 14px;background:linear-gradient(180deg,transparent,var(--bg) 35%);z-index:2}
+.sticky .btn{width:100%}
+/* расписание */
+.days{display:flex;gap:6px;overflow-x:auto;padding:14px 16px 10px;scrollbar-width:none;position:sticky;top:0;background:var(--bg);z-index:2}
+.days::-webkit-scrollbar{display:none}
+.day{flex:none;width:52px;padding:8px 0;border-radius:14px;text-align:center;background:var(--card);border:1px solid #2a1b3e}
+.day small{display:block;font-size:11px;color:var(--mut);text-transform:uppercase}
+.day b{font-size:17px}
+.day.on{background:linear-gradient(135deg,var(--neon),var(--pink));border-color:transparent}
+.day.on small{color:#fff}
+/* шторка */
+.sheetbg{position:absolute;inset:0;background:rgba(5,2,10,.6);opacity:0;pointer-events:none;transition:.25s;z-index:20}
+.sheetbg.on{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:0;right:0;bottom:0;max-height:88%;overflow-y:auto;background:var(--bg2);border-radius:24px 24px 0 0;border-top:1px solid var(--line);transform:translateY(105%);transition:transform .35s cubic-bezier(.2,.8,.2,1);z-index:21;padding:8px 16px 18px;scrollbar-width:none}
 .sheet.on{transform:none}
-.grab{width:40px;height:5px;border-radius:3px;background:#e2d3cf;margin:0 auto 14px}
-.sheet h3{margin:0 0 4px;font:700 22px/1.15 var(--serif)}
-.sheet .sub{color:var(--cocoa-2);font-size:13.5px;margin-bottom:14px}
-.sheet h4{margin:16px 0 8px;font-size:13px;color:var(--cocoa-2);font-weight:700}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{padding:9px 13px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:13.5px;font-weight:600;transition:background-color .2s,color .2s,border-color .2s}
-.chip.on{background:var(--cocoa);border-color:var(--cocoa);color:#fff}
-.sheet .btn{width:100%;margin-top:20px}
-.mini{display:flex;gap:12px;align-items:center;padding:10px;border-radius:16px;background:var(--blush)}
-.mini .tag{width:62px;flex:none;border-radius:10px}
-.mini .tag .bn{font-size:11px;letter-spacing:.03em}
-.mini .tag::before{top:6px;width:7px;height:7px;margin-left:-3.5px}
-.mini .tag::after,.mini .tag .it{display:none}
-.mini p{margin:0;font-size:13.5px;line-height:1.35}
-.mini p b{display:block;font-size:15px}
-.field{margin-top:12px}
-.field label{display:block;font-size:12px;color:var(--cocoa-2);margin-bottom:5px}
-.field div{min-height:44px;padding:12px 13px;border-radius:12px;background:var(--blush);font-size:14.5px}
-.share{margin-top:10px;width:100%;height:44px;border-radius:12px;border:1px dashed var(--rose);background:#fff;color:var(--rose-deep);font-weight:700;font-size:13.5px}
-.terms{margin-top:12px;font-size:12.5px;color:var(--cocoa-2)}
-.done{text-align:center;padding:10px 4px 0}
-.done .ring{width:64px;height:64px;margin:6px auto 14px;border-radius:50%;background:var(--ok);display:grid;place-items:center;color:#fff;font-size:30px;animation:pop .45s var(--ease)}
-@keyframes pop{from{transform:scale(.5);opacity:0}}
-.done h3{text-align:center}
-.done .sub{text-align:center}
-.mgr{margin-top:16px;text-align:left;border-radius:16px;background:#17212B;color:#F5F5F5;padding:12px;font-family:-apple-system,"Segoe UI",Roboto,sans-serif}
-.mgr small{display:block;color:#7F91A4;font-size:11.5px;margin-bottom:6px}
-.mgr .bub{background:#182533;border-radius:12px 12px 12px 4px;padding:9px 11px;font-size:13px;line-height:1.4}
-.mgr .bub b{color:#E9C2C6}
-
-/* push */
-.push{position:absolute;top:46px;left:10px;right:10px;z-index:30;display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:20px;background:rgba(255,255,255,.96);box-shadow:0 18px 40px -18px rgba(43,31,29,.5);transform:translateY(-140%);transition:transform .5s var(--ease)}
-.push.on{transform:none}
-.push .ic{width:36px;height:36px;flex:none;border-radius:10px;background:var(--cocoa);color:#fff;display:grid;place-items:center;font:700 15px/1 var(--serif)}
-.push p{margin:0;font-size:13px;line-height:1.35}
-.push p b{font-size:13.5px}
-.push p small{float:right;color:#9a8783;font-size:11.5px}
-
-/* tap indicator for the tour */
-.tap{position:absolute;z-index:40;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:2px solid var(--rose-deep);background:rgba(194,124,130,.25);opacity:0;pointer-events:none;transition:left .5s var(--ease),top .5s var(--ease),opacity .2s}
-.tap.press{animation:press .3s ease-out}
-@keyframes press{50%{transform:scale(.7);background:rgba(194,124,130,.55)}}
-.empty{grid-column:1/-1;padding:30px 10px;text-align:center;color:var(--cocoa-2)}
-
-/* mobile: the app fills the screen */
-@media (max-width:560px){
-  body{background:var(--blush)}
-  .stage{display:block;padding:0}
+.sheet .grab{width:40px;height:4px;border-radius:4px;background:#3b2a52;margin:4px auto 14px}
+.sheet h3{font:700 22px/1.15 var(--serif);margin-bottom:4px}
+.sheet .sub{color:var(--mut);font-size:13.5px;margin-bottom:14px}
+.opts{display:grid;gap:8px}
+.opt{display:flex;align-items:center;gap:12px;padding:14px;border-radius:16px;background:var(--card);border:1px solid #2f2045;text-align:left;font-weight:700}
+.opt span{font-size:22px}
+.opt small{display:block;font-weight:500;color:var(--mut);font-size:12.5px}
+.opt.on{border-color:var(--neon);background:#2a1640}
+.prog{display:flex;gap:5px;margin-bottom:14px}
+.prog i{flex:1;height:4px;border-radius:4px;background:#2f2045}
+.prog i.on{background:linear-gradient(90deg,var(--neon),var(--pink))}
+.res{display:flex;gap:12px;padding:10px;margin-bottom:8px;text-align:left;width:100%}
+.res img{width:70px;height:90px;border-radius:12px;object-fit:cover;flex:none}
+.res b{display:block;font-size:15.5px}
+.res small{display:block;color:var(--mut);font-size:12.5px}
+.res .why{color:#e6b6ff;font-size:12px;margin-top:4px}
+.sum{display:flex;gap:12px;padding:12px;margin-bottom:12px}
+.sum img{width:64px;height:80px;border-radius:12px;object-fit:cover;flex:none}
+.sum b{display:block;font-size:16px}
+.sum small{display:block;color:var(--mut);font-size:13px}
+.fld{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:14px;background:var(--card);border:1px solid #2f2045;margin-bottom:8px;font-size:14.5px}
+.fld small{color:var(--dim);font-size:11.5px;display:block}
+.fld .src{font-size:11px;font-weight:800;color:var(--tg)}
+.chk{display:flex;gap:10px;align-items:center;font-size:13px;color:var(--mut);margin:6px 2px 14px}
+.chk i{width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,var(--neon),var(--pink));display:grid;place-items:center;font-style:normal;font-size:12px;color:#fff}
+/* готово */
+.done{padding:26px 16px 6px;text-align:center}
+.done .ok{width:74px;height:74px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;font-size:34px;background:linear-gradient(135deg,var(--neon),var(--pink));box-shadow:0 0 60px -6px rgba(255,79,167,.7);animation:pop .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{from{transform:scale(.3);opacity:0}}
+.done h2{font:700 26px/1.15 var(--serif)}
+.done p{color:var(--mut);margin-top:6px;font-size:14px}
+.ticket{margin:14px 16px 0;padding:6px 14px}
+.ticket .r{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px dashed #33244a;font-size:14px}
+.ticket .r:last-child{border:0}
+.ticket .r span{color:var(--mut);flex:none}
+.ticket .r b{text-align:right}
+.sec .ticket{margin:0 0 4px}
+.tl{padding:0 16px}
+.tl .it{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid #22163a;opacity:.3;transition:opacity .5s}
+.tl .it.on{opacity:1}
+.tl .it .em{width:36px;height:36px;border-radius:12px;background:var(--card2);display:grid;place-items:center;flex:none}
+.tl .it b{display:block;font-size:14px}
+.tl .it small{color:var(--mut);font-size:12.5px}
+/* чат */
+.chat{padding:14px 12px 8px;display:flex;flex-direction:column;gap:8px;min-height:100%}
+.dsep{align-self:center;font-size:11.5px;font-weight:700;color:var(--mut);background:rgba(37,22,54,.85);padding:3px 10px;border-radius:10px;margin:6px 0}
+.msg{max-width:86%;padding:9px 12px 7px;border-radius:16px;font-size:14px;line-height:1.4;position:relative;animation:min .25s ease}
+@keyframes min{from{opacity:0;transform:translateY(6px)}}
+.msg.bot{align-self:flex-start;background:var(--card2);border-bottom-left-radius:5px}
+.msg.me{align-self:flex-end;background:linear-gradient(135deg,#7c3cd6,#b13fb8);border-bottom-right-radius:5px}
+.msg .lbl{display:block;font-size:11px;font-weight:800;color:var(--neon);margin-bottom:3px}
+.msg .tme{display:block;text-align:right;font-size:10.5px;color:rgba(255,255,255,.45);margin-top:2px}
+.msg .kb{display:flex;gap:6px;margin-top:8px}
+.msg .kb span{flex:1;text-align:center;padding:8px 6px;border-radius:10px;background:rgba(255,255,255,.08);font-weight:800;font-size:12.5px}
+.msg .kb span.m{background:linear-gradient(135deg,var(--neon),var(--pink))}
+.msg img{width:100%;border-radius:10px;margin:2px 0 6px;max-height:170px;object-fit:cover}
+.typing{align-self:flex-start;background:var(--card2);padding:12px 14px;border-radius:16px;display:flex;gap:4px}
+.typing i{width:6px;height:6px;border-radius:50%;background:var(--mut);animation:tp 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes tp{50%{opacity:.3;transform:translateY(-3px)}}
+.chatwrap{display:flex;flex-direction:column;height:100%}
+.chatwrap .scr2{flex:1;overflow-y:auto;scrollbar-width:none}
+.chatwrap .scr2::-webkit-scrollbar{display:none}
+.qr{display:flex;gap:6px;overflow-x:auto;padding:8px 12px 4px;scrollbar-width:none;flex:none}
+.qr::-webkit-scrollbar{display:none}
+.qr button{flex:none;padding:8px 12px;border-radius:999px;border:1px solid #4a3166;color:#ecd7ff;font-size:12.5px;font-weight:700}
+.inp{display:flex;gap:8px;padding:6px 12px 10px;flex:none}
+.inp input{flex:1;min-width:0;background:var(--card);border:1px solid #2f2045;border-radius:20px;padding:10px 14px;color:var(--txt);font:inherit;font-size:16px;outline:none}
+.inp button{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--neon),var(--pink));font-size:16px;flex:none}
+.ainote{font-size:11.5px;color:var(--dim);text-align:center;padding:4px 16px 0;flex:none}
+/* кабинет */
+.admin{padding:16px}
+.admin .hi{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.admin .hi img{width:52px;height:52px;border-radius:50%;object-fit:cover;object-position:50% 20%}
+.admin .hi b{display:block;font-size:17px}
+.admin .hi small{color:var(--mut);font-size:12.5px}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+.kpi div{padding:12px 6px;text-align:center}
+.kpi b{display:block;font:700 26px/1.1 var(--serif)}
+.kpi span{font-size:11.5px;color:var(--mut)}
+.funnel{padding:12px 14px;font-size:13px;color:var(--mut);margin-bottom:16px}
+.funnel b{color:var(--ok)}
+.rec{display:flex;align-items:center;gap:10px;padding:11px 12px;margin-bottom:7px;font-size:13px}
+.rec .nm{flex:1;min-width:0}
+.rec .nm b{display:block;font-size:14px}
+.rec .nm small{color:var(--mut)}
+.bar{margin-bottom:9px;font-size:12.5px}
+.bar div{display:flex;justify-content:space-between;margin-bottom:4px}
+.bar i{display:block;height:7px;border-radius:5px;background:#2a1b3e;overflow:hidden}
+.bar i:after{content:"";display:block;height:100%;width:var(--w);background:linear-gradient(90deg,var(--vio),var(--pink));border-radius:5px}
+.auto{padding:2px 14px}
+.auto div{padding:11px 0;border-bottom:1px solid #2a1b3e;font-size:12.5px;color:var(--mut)}
+.auto div:last-child{border:0}
+.auto b{display:block;color:var(--txt);font-size:13.5px}
+.bc{padding:14px;margin-top:10px}
+.bc p{font-size:13.5px;margin:6px 0 12px;color:#e7dcf5}
+/* уведомления */
+.toasts{position:absolute;top:62px;left:8px;right:8px;z-index:30;display:grid;gap:8px;pointer-events:none}
+.toast{pointer-events:auto;background:rgba(32,22,46,.97);backdrop-filter:blur(14px);border:1px solid #3e2b5a;border-radius:18px;padding:11px 13px;font-size:13px;box-shadow:0 18px 40px -12px rgba(0,0,0,.7);animation:tin .45s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes tin{from{opacity:0;transform:translateY(-20px) scale(.96)}}
+.toast .hd{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:11.5px;color:var(--mut)}
+.toast .hd img{width:20px;height:20px;border-radius:50%}
+.toast .hd b{color:var(--txt);font-size:12.5px}
+.toast .kb{display:flex;gap:6px;margin-top:8px}
+.toast .kb span{flex:1;text-align:center;padding:7px 0;border-radius:10px;background:#3a2a52;font-weight:800;font-size:12px}
+.toast .kb span.m{background:var(--tg)}
+/* полноэкранный клип */
+.viewer{position:absolute;inset:0;z-index:40;background:#000;display:none}
+.viewer.on{display:block}
+.viewer video{width:100%;height:100%;object-fit:cover}
+.viewer:after{content:"";position:absolute;inset:50% 0 0;background:linear-gradient(transparent,rgba(0,0,0,.85));pointer-events:none}
+.viewer .bars{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:4px;z-index:2}
+.viewer .bars i{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.3);overflow:hidden}
+.viewer .bars i.on:after{content:"";display:block;height:100%;background:#fff;animation:fill 8s linear forwards}
+.viewer .bars i.past{background:#fff}
+@keyframes fill{from{width:0}to{width:100%}}
+.viewer .cap{position:absolute;left:14px;right:14px;bottom:20px;z-index:2}
+.viewer .cap b{font:700 26px var(--serif)}
+.viewer .cap p{font-size:13px;color:#e8dcf6;margin:4px 0 12px}
+.viewer .x{position:absolute;top:22px;right:12px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.4);font-size:16px;z-index:3}
+.viewer .nav{position:absolute;top:70px;bottom:150px;width:40%;z-index:1}
+/* показ */
+.tourbar{position:absolute;left:10px;right:10px;bottom:72px;z-index:35;padding:10px 12px;border-radius:14px;background:rgba(13,7,22,.9);border:1px solid #4a3166;font-size:12.5px;display:none;align-items:center;gap:10px;backdrop-filter:blur(10px)}
+.tourbar.on{display:flex}
+.tourbar b{flex:1}
+.tourbar button{font-weight:800;color:var(--neon);font-size:12px}
+.tap{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:rgba(255,255,255,.35);border:2px solid #fff;z-index:50;pointer-events:none;opacity:0;transition:left .45s,top .45s,opacity .2s}
+.tap.on{opacity:1}
+.tap.click{animation:click .35s}
+@keyframes click{50%{transform:scale(.7)}}
+/* ---------- мобильный ---------- */
+@media (max-width:860px){
+  .wrap{padding:0;gap:0}
   .story{display:none}
-  .phone{width:100%;height:100svh;border-radius:0;padding:0;background:none;box-shadow:none}
-  .screen{border-radius:0}
-  .status{display:none}
-  .tgbar{top:0}
-  .views{top:46px}
-  .back{top:12px}
-  .push{top:8px}
-  .fab{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:50;border:0;border-radius:999px;background:var(--cocoa);color:#fff;font-weight:800;padding:12px 16px;box-shadow:0 12px 30px -12px rgba(0,0,0,.5)}
+  .phone{width:100%;height:100%;border-radius:0;padding:0;box-shadow:none;background:var(--bg)}
+  .app{border-radius:0}
+  .mstrip{display:flex;align-items:center;gap:8px;flex:none;padding:7px 12px;font-size:11.5px;color:var(--mut);background:#1a0f27;border-bottom:1px solid #2a1b3e}
+  .mstrip span{flex:1}
+  .mstrip button{font-weight:800;color:#fff;font-size:11.5px;padding:5px 10px;border-radius:9px;background:linear-gradient(135deg,var(--neon),var(--pink))}
+  .toasts{top:100px}
 }
-@media (min-width:561px){ .fab{display:none} }
-@media (max-width:980px) and (min-width:561px){ .stage{grid-template-columns:1fr;justify-items:center} .story{text-align:left;max-width:520px} }
-@media (prefers-reduced-motion:reduce){ *{transition-duration:0s!important;animation:none!important} }
-</style>
-<style>
-.loading{position:fixed;inset:0;display:grid;place-items:center;background:var(--stage);color:#CDB9B4;font:500 15px/1.4 var(--sans);z-index:99;transition:opacity .3s}
-.loading.off{opacity:0;pointer-events:none}
-.brand{flex-wrap:wrap;gap:4px 12px}.brand h2{white-space:nowrap}.brand h2.mid{font-size:27px}.brand h2.long{font-size:22px}
-.notice{margin-top:10px;font-size:12px;color:#6E5C57}
-.hero{margin:4px 14px 14px;border-radius:20px;padding:16px;background:var(--cocoa);color:#FBF3F1;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.hero b{display:block;font:700 16px/1.2 var(--serif);white-space:nowrap}.hero small{color:#CDB9B4;font-size:12.5px}
-.hero button{border:0;border-radius:12px;background:#FBF3F1;color:var(--cocoa);font-weight:800;padding:10px 14px;flex:none}
-.group{padding:0 14px 6px}
-.group h4{margin:10px 4px 8px;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--cocoa-2)}
-.svc{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:0;background:var(--paper);border-radius:16px;padding:13px 14px;margin-bottom:8px;color:inherit}
-.svc .dot{width:40px;height:40px;flex:none;border-radius:12px;display:grid;place-items:center;font:700 16px/1 var(--serif);color:var(--tc);background:var(--tb)}
-.svc .nm{flex:1;font-size:14px;line-height:1.3}.svc .nm small{display:block;color:var(--cocoa-2);font-size:12px;margin-top:2px}
-.svc .pr{font-weight:800;font-size:14px;white-space:nowrap;font-variant-numeric:tabular-nums}
-.svc.on{outline:2px solid var(--rose-deep)}
-.days{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px 0 4px}.days::-webkit-scrollbar{display:none}
-.day{flex:none;width:54px;padding:8px 0;border-radius:14px;border:1px solid var(--line);background:#fff;text-align:center;font-size:12px;color:var(--cocoa-2)}
-.day b{display:block;font-size:17px;color:var(--cocoa)}.day.on{background:var(--cocoa);border-color:var(--cocoa);color:#E9D9D5}.day.on b{color:#fff}
-.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.slot{padding:10px 0;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:700;font-size:13.5px;text-align:center}
-.slot.busy{color:#cbbab6;text-decoration:line-through;background:transparent}.slot.on{background:var(--rose-deep);border-color:var(--rose-deep);color:#fff}
-.sum{margin-top:14px;background:var(--blush);border-radius:16px;padding:12px 14px;font-size:13.5px}
-.sum div{display:flex;justify-content:space-between;padding:4px 0}.sum span{color:var(--cocoa-2)}
-.slots{grid-template-columns:repeat(2,1fr)}
-.slot small{display:block;font-weight:600;font-size:11px;color:var(--cocoa-2);margin-top:2px}
-.slot.on small{color:#F3D9DC}
-.hint{margin:10px 0 0;font-size:12.5px;color:var(--cocoa-2)}
-.adminlink{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:6px 14px 0;width:calc(100% - 28px);padding:14px 16px;border-radius:16px;border:1px dashed var(--rose);background:transparent;color:var(--rose-deep);font-weight:800;font-size:14px;text-align:left}
-.adminlink small{display:block;font-weight:600;color:var(--cocoa-2);font-size:12px}
-.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 4px}
-.kpi div{background:var(--paper);border-radius:14px;padding:10px 8px;text-align:center}
-.kpi b{display:block;font:700 22px/1.1 var(--serif)}.kpi span{font-size:11.5px;color:var(--cocoa-2)}
-.rec{display:flex;justify-content:space-between;gap:10px;background:var(--paper);border-radius:14px;padding:11px 13px;margin-bottom:7px;font-size:13px}
-.rec b{display:block;font-size:14px}.rec span{color:var(--cocoa-2)}
-.st{flex:none;align-self:center;font-size:11.5px;font-weight:800;padding:4px 8px;border-radius:8px;background:#E4F0E9;color:var(--ok)!important}
-.st.wait{background:#F6ECD9;color:#8A5A12!important}.st.buy{background:var(--cocoa);color:#fff!important}
-.auto{background:var(--paper);border-radius:14px;padding:4px 13px;font-size:13px;color:var(--cocoa-2)}
-.auto div{padding:10px 0;border-bottom:1px solid #f0e4e1}.auto div:last-child{border:0}.auto b{display:block;font-size:13.5px;color:var(--cocoa)}
-.push .btns{display:flex;gap:6px;margin-top:8px}.push .btns span{flex:1;text-align:center;padding:7px 0;border-radius:10px;background:var(--blush);font-weight:800;font-size:12px;color:var(--cocoa)}
-.push .btns span.main{background:var(--cocoa);color:#fff}
-.mgr .acts{display:flex;gap:6px;margin-top:6px}.mgr .acts span{flex:1;text-align:center;padding:6px 0;border-radius:8px;background:#2B5278;font-size:12px;font-weight:700}
-.note{margin:14px 2px 0;font-size:11.5px;color:#9a8783}
-body.inner .fab{display:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<div class="loading" id="loading">Открываю запись…</div>
-<div class="stage">
-  <section class="story" aria-label="Что показывает демо">
-    <h1 id="storyTitle">Bagheera: запись на&nbsp;пробное без переписки</h1>
-    <p class="lead">Девушка видит все направления и настоящее расписание, записывается на бесплатное пробное в два тапа, а Ольге приходит готовая заявка. После пробного бот сам спрашивает «как вам?» и предлагает абонемент.</p>
+<div class="wrap">
+  <aside class="story">
+    <div class="for">Демо для студии танца Bagheera · Омск</div>
+    <h1>Девушка записывается на пробное <i>сама</i>, а&nbsp;Ольге приходит готовая заявка</h1>
+    <p class="lead">Собрано на ваших видео, фото, расписании и прайсе из канала. Потыкайте телефон справа или нажмите «Показ» — это около минуты.</p>
     <ol class="steps" id="steps">
-      <li data-s="0"><div><b>Направления и расписание из вашего канала</b>всё на одном экране, без «а когда группа?»</div></li>
-      <li data-s="1"><div><b>Только реальные дни и время</b>и сколько мест осталось в группе</div></li>
-      <li data-s="2"><div><b>Запись в два тапа</b>даже ночью, пока директ молчит</div></li>
-      <li data-s="3"><div><b>Ольга получает заявку</b>с именем, телефоном и группой</div></li>
-      <li data-s="4"><div><b>Напоминание накануне</b>с адресом и подъездом — меньше «не дошла»</div></li>
-      <li data-s="5"><div><b>После пробного — абонемент</b>бот сам спрашивает «как вам?» и предлагает оформить</div></li>
-      <li data-s="6"><div><b>Кабинет администратора</b>кто записан, кто подтвердил, кто купил</div></li>
+      <li data-s="0"><div><b>Ваши клипы на первом экране</b><small>то, что продаёт студию лучше любого текста</small></div></li>
+      <li data-s="1"><div><b>Подбор направления за 3 вопроса</b><small>«не знаю, что выбрать» → готовое пробное</small></div></li>
+      <li data-s="2"><div><b>Направление: видео, тренер, расписание</b><small>все 13 направлений и 33 группы в неделю</small></div></li>
+      <li data-s="3"><div><b>Запись в два тапа</b><small>имя и телефон подставляются из Telegram</small></div></li>
+      <li data-s="4"><div><b>Ольге — заявка с кнопками</b><small>без «а когда группа?» в директе</small></div></li>
+      <li data-s="5"><div><b>Бот доводит до абонемента</b><small>напоминание с офисом 506 → «как вам?» → абонемент</small></div></li>
+      <li data-s="6"><div><b>Отвечает на вопросы 24/7</b><small>цены, заморозка, что взять; сложное — Ольге</small></div></li>
+      <li data-s="7"><div><b>Кабинет Ольги</b><small>кто записан, кто пришёл, кто купил</small></div></li>
     </ol>
-    <button class="tourbtn" id="tourBtn" type="button">▶ Показать за 30 секунд</button>
-    <p class="credit" id="credit">Демо-концепт от NOVACODE · <a href="https://new-coder.ru">new-coder.ru</a></p>
-    <p class="notice">Это демо-страница. Она считает только число открытий ссылки — без cookie и личных данных.</p>
-  </section>
-
-  <div class="phone">
-    <div class="screen" id="screen">
-      <div class="status"><span>23:38</span><i>●●● 5G ▮</i></div>
-      <header class="tgbar">
-        <button class="tgbar__close" type="button">Закрыть</button>
-        <div class="tgbar__title"><b id="barTitle">Запись</b><small>мини-приложение · Telegram и MAX</small></div>
-        <span class="tgbar__dots" aria-hidden="true">···</span>
-      </header>
-      <div class="views" id="views"></div>
-      <div class="scrim" id="scrim"></div>
-      <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Окно"></div>
-      <div class="push" id="push" role="status"></div>
-      <span class="tap" id="tap" aria-hidden="true"></span>
+    <div class="acts">
+      <button class="btn main" id="tourBtn">▶ Показ</button>
+      <button class="btn ghost" data-go="admin">Как видит Ольга</button>
     </div>
-  </div>
+    <p class="by">Работает в Telegram и MAX · сделал Степан, <a href="https://new-coder.ru" target="_blank" rel="noopener">NOVACODE</a><br>Видео и фото — из канала @bagheeradance, только для этого демо.</p>
+  </aside>
+
+  <div class="phone"><div class="app" id="app">
+    <div class="mstrip"><span>Демо для Bagheera · NOVACODE</span><button id="tourBtnM">▶ Показ</button></div>
+    <header class="tgbar">
+      <button class="back" id="backBtn" aria-label="Назад">‹</button>
+      <img class="ava" src="bagheera/i/logo.jpg" alt="">
+      <div class="tt"><b>Bagheera · запись</b><small>бот · Telegram и MAX</small></div>
+      <button class="adm" id="admBtn">Ольга</button>
+    </header>
+    <main class="scr" id="scr"></main>
+    <nav class="tabs" id="tabs">
+      <button data-tab="home" class="on"><span>🏠</span>Главная</button>
+      <button data-tab="sched"><span>📅</span>Расписание</button>
+      <button data-tab="chat"><span>💬</span>Вопрос</button>
+      <button data-tab="me"><span>💜</span>Мои</button>
+    </nav>
+    <div class="sheetbg" id="sheetbg"></div>
+    <div class="sheet" id="sheet"></div>
+    <div class="toasts" id="toasts"></div>
+    <div class="viewer" id="viewer"></div>
+    <div class="tourbar" id="tourbar"><b id="tourtxt"></b><button id="tourStop">Стоп</button></div>
+    <div class="tap" id="tap"></div>
+  </div></div>
 </div>
-<button class="fab" id="fab" type="button">▶ Показ</button>
 
 <script>
 (() => {
 'use strict';
-const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const Q = new URLSearchParams(location.search);
-const ID = (Q.get('id') || '37f5a4ce').replace(/[^a-z0-9]/gi, '');
 const PREVIEW = Q.has('preview');
-const FALLBACK = 'https://new-coder.ru';
-const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const DOW = ['вс','пн','вт','ср','чт','пт','сб'];
+const ID = '37f5a4ce', NS = 'novacode-demo-1d9b6a';
+const $ = s => document.querySelector(s);
+const scr = $('#scr'), app = $('#app');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+const V = n => `bagheera/v/${n}.mp4`, P = n => `bagheera/v/${n}.jpg`, I = n => `bagheera/i/${n}.jpg`;
+const wait = ms => new Promise(r => setTimeout(r, ms));
 
-let D, SV;
-const views = document.getElementById('views'), sheet = document.getElementById('sheet'), scrim = document.getElementById('scrim');
-const push = document.getElementById('push'), tapEl = document.getElementById('tap'), screen = document.getElementById('screen');
-const stepsEl = document.getElementById('steps');
-const state = { svc:null, day:null, slot:null };
-let stack = [];
-let touring = false;
-const sleep = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
+// ---------- данные студии (из канала @bagheeradance) ----------
+const ADDR = 'Красный Путь 101, офис 506';
+const GUARD = 'На охране назовите номер офиса 506, фамилию и имя';
+const DIRS = {
+  heels:   {n: 'High Heels', t: 'каблуки · пластика · женственность', v: 'heels', img: 'heels_b', k: 'fem', d: 'Танец на каблуках: красивая походка, пластика и уверенность. Опыт не нужен — только желание. Каблуки на первом занятии не обязательны.'},
+  strip:   {n: 'Strip', t: 'есть группа для начинающих', v: 'strip', img: 'strip_a', k: 'fem', d: 'Изящный strip с нуля: работа с телом, гибкость, раскрепощение. Отдельные группы для начинающих по выходным.'},
+  frameup: {n: 'Frame up Strip', t: 'для продолжающих', v: 'frameup', img: 'frame_b', k: 'fem', d: 'Хореография на каблуках с партером — «настоящее кино, продумано всё от движений до костюмов».'},
+  ladys:   {n: 'Lady’s dance', t: 'начинающие · сб и вс', v: null, img: 'ladys', k: 'fem', d: 'Женственная хореография для начинающих: мягкость, грация, удовольствие от движения.'},
+  choreo:  {n: 'Choreo', t: 'харизма и энергия', v: 'choreo', img: 'choreo_a', k: 'energy', d: 'Современная хореография без привязки к стилю: раскрывает пластику и уверенность. Есть начинающая группа.'},
+  jazz:    {n: 'Jazz Funk', t: 'драйв · набор с нуля', v: 'jazz', img: 'choreo_b', k: 'energy', d: 'Энергичный и дерзкий стиль. Набор в группу с нуля, по воскресеньям — начинающие.'},
+  twerk:   {n: 'Twerk', t: 'база + «вкусные хоряжки»', v: 'twerk', img: 'twerk_b', k: 'energy', d: 'Изучаем базу и учим хореографии. Отличная подкачка ягодиц, любой уровень.'},
+  dh:      {n: 'Female Dancehall', t: 'раскрепощает и заряжает', v: null, img: 'twerk_a', k: 'energy', d: 'Женский подстиль Dancehall: ритм, энергия, свобода в теле. Открытая группа.'},
+  mix:     {n: 'Mix Dance', t: 'научим двигаться с нуля', v: null, img: 'mix', k: 'energy', d: 'Разные стили в одной группе — идеальный старт, если хочется «просто танцевать». Обучаем с нуля.'},
+  free:    {n: 'Свободный стиль', t: 'без ограничений', v: 'free', img: 'pro2', k: 'energy', d: 'Стиль, где нет ограничений: импровизация, музыкальность и свой характер в движении.'},
+  stretch: {n: 'Подкачка + растяжка', t: 'с Ольгой и Ангелиной', v: 'olga', img: 'olga_a', k: 'body', d: 'Сильное и гибкое тело: подкачка + растяжка. Ольга ведёт группу сама и берёт на индивидуальные.'},
+  split:   {n: 'Растяжка (шпагаты)', t: 'любой уровень', v: null, img: 'olga_c', k: 'body', d: 'Работа на шпагаты и гибкость без боли, под контролем тренера.'},
+  back:    {n: 'Здоровая спина', t: 'осанка · мышечный корсет', v: 'back', img: 'olga_b', k: 'body', d: 'Укрепляем мышечный корсет, снимаем спазмы и гипертонус. После занятий — лёгкость и ровная осанка.'},
+};
+// [время, направление, тренер, уровень]; ключ — день недели JS (0 = вс). Расписание из закрепа канала.
+const SCHED = {
+  1: [['16:30', 'choreo', 'Анастасия', 'начинающие'], ['17:30', 'choreo', 'Соня', 'любой уровень'], ['18:30', 'heels', 'Настя К.', 'любой уровень'], ['19:30', 'frameup', 'Настя К.', 'продолжающие'], ['20:30', 'back', 'Алия', 'любой уровень']],
+  2: [['16:30', 'free', 'Эля', 'любой уровень'], ['17:30', 'strip', 'Настя К.', 'любой уровень'], ['18:30', 'stretch', 'Ангелина', 'любой уровень'], ['19:30', 'dh', 'Соня', 'любой уровень'], ['20:30', 'split', 'Ангелина', 'любой уровень']],
+  3: [['16:30', 'stretch', 'Ольга', 'любой уровень'], ['17:30', 'heels', 'Эля', 'любой уровень'], ['18:30', 'mix', 'Света', 'с нуля'], ['19:30', 'heels', 'Настя К.', 'любой уровень'], ['20:30', 'twerk', 'Соня', 'любой уровень']],
+  4: [['16:30', 'free', 'Эля', 'любой уровень'], ['17:30', 'jazz', 'Виктория', 'любой уровень'], ['18:30', 'stretch', 'Ангелина', 'любой уровень'], ['19:30', 'dh', 'Соня', 'любой уровень'], ['20:30', 'split', 'Ангелина', 'любой уровень']],
+  5: [['16:30', 'choreo', 'Анастасия', 'начинающие'], ['17:30', 'choreo', 'Соня', 'любой уровень'], ['18:30', 'strip', 'Настя К.', 'любой уровень'], ['19:30', 'frameup', 'Настя К.', 'продолжающие'], ['20:30', 'twerk', 'Соня', 'любой уровень']],
+  6: [['13:30', 'back', 'Алия', 'любой уровень'], ['15:30', 'mix', 'Света', 'с нуля'], ['16:30', 'strip', 'Настя П.', 'начинающие'], ['17:30', 'heels', 'Лиза', 'любой уровень'], ['18:30', 'ladys', 'Алина П.', 'начинающие']],
+  0: [['12:30', 'jazz', 'Виктория', 'начинающие'], ['13:30', 'stretch', 'Ольга', 'любой уровень'], ['15:30', 'strip', 'Настя П.', 'начинающие'], ['16:30', 'heels', 'Лиза', 'начинающие'], ['17:30', 'heels', 'Эля', 'любой уровень'], ['18:30', 'ladys', 'Алина П.', 'начинающие']],
+};
+const PRICES = [['Разовое', '850 ₽'], ['4 занятия', '3 000 ₽'], ['8 занятий', '3 900 ₽'], ['12 занятий', '4 300 ₽'], ['16 занятий', '4 600 ₽'], ['Безлимит', '5 300 ₽']];
+const REVIEWS = [
+  ['Мне нравится атмосфера, вы очень интересно рассказываете во время тренировки. После занятий приятная усталость, стала держать спину ровнее, изменилась осанка.', 'Здоровая спина'],
+  ['Перезагрузка от работы и быстрого темпа жизни. Очень люблю занятия за чувство лёгкости после. Хожу не первый год — есть прогресс.', 'Здоровая спина'],
+  ['Моя цель — укрепить мышечный корсет, снять спазмы и гипертонус. Ещё занятия приносят удовольствие и расслабление, главное — прийти.', 'Здоровая спина'],
+  ['Спасибо, Олечка, за такую продуктивную практику! Вернулась в своё ресурсное состояние, зарядилась отличным настроением.', 'практика с Ольгой'],
+];
+const CLIPS = [['heels2', 'High Heels', 'heels'], ['frameup', 'Frame up Strip', 'frameup'], ['strip2', 'Strip', 'strip'], ['free', 'Свободный стиль', 'free'], ['choreo', 'Choreo', 'choreo'], ['twerk', 'Twerk', 'twerk'], ['jazz', 'Jazz Funk', 'jazz']];
 
-/* дни, когда у группы занятия (расписание из канала), начиная с завтра */
-function dateAt(i){ const d = new Date(); d.setDate(d.getDate() + i); return d; }
-function svcDays(s){ const out = []; for (let i = 1; i <= 21 && out.length < 6; i++){ const d = dateAt(i);
-  const t = s.sched.filter(x => x[0] === d.getDay()).map(x => x[1]); if (t.length) out.push({i, d, t}); } return out; }
-const seats = (i, si, s) => 2 + ((i * 3 + si * 5 + s.id.charCodeAt(1)) % 5);
-function dayLabel(i){ const d = dateAt(i); return i === 1 ? 'завтра' : `${DOW[d.getDay()]}, ${d.getDate()}.${String(d.getMonth()+1).padStart(2,'0')}`; }
-const cur = () => SV.find(x => x.id === state.svc);
-const time = () => { const dd = svcDays(cur()).find(x => x.i === state.day); return dd ? dd.t[state.slot ?? 0] : ''; };
-function nearest(){ let best = null; for (const s of SV){ const dd = svcDays(s)[0]; if (!dd) continue;
-  const k = dd.i * 10000 + parseInt(dd.t[0].replace(':', ''), 10); if (!best || k < best.k) best = {k, s, dd}; } return best; }
-
-/* ---------- экраны ---------- */
-function svcRow(s){
-  return `<button type="button" class="svc ${state.svc === s.id ? 'on' : ''}" data-svc="${s.id}">
-    <span class="dot" style="--tb:${s.tb};--tc:${s.tc}">${esc(s.ic || s.name.slice(0,1))}</span>
-    <span class="nm">${esc(s.name)}<small>${esc(s.dur)}</small></span><span class="pr">пробное 0 ₽</span></button>`;
+// ---------- даты ----------
+const DOW = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
+const MON = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+const day0 = () => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; };
+const addD = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const dshort = d => `${DOW[d.getDay()]}, ${d.getDate()} ${MON[d.getMonth()]}`;
+const dlabel = d => { const n = Math.round((d - day0()) / 864e5); return n === 0 ? 'сегодня' : n === 1 ? 'завтра' : dshort(d); };
+const hm = t => t.split(':').map(Number);
+const seats = (d, t) => 2 + ((d.getDate() * 31 + d.getMonth() * 7 + hm(t)[0] * 3) % 6);
+function classesOn(d) {
+  const now = Date.now();
+  return (SCHED[d.getDay()] || []).filter(([t]) => { const [h, m] = hm(t); const x = new Date(d); x.setHours(h, m); return x - now > 45 * 60e3; })
+    .map(([t, dir, tr, lv]) => ({d, t, dir, tr, lv}));
 }
-function homeHTML(){
-  const groups = D.cats.map(c => ({c, list: SV.filter(s => s.cat === c)})).filter(g => g.list.length);
-  const n = nearest();
-  return `<div class="view" data-v="home">
-    <div class="brand"><h2 class="long">${esc(D.name)}</h2><span>${esc(D.sub)}</span></div>
-    <div class="tagline">${esc(D.tagline)}</div>
-    ${n ? `<div class="hero"><div><b>Ближайшее пробное</b><small>${esc(n.s.name)} · ${dayLabel(n.dd.i)} в ${n.dd.t[0]}</small></div><button type="button" data-act="quick">Записаться</button></div>` : ''}
-    ${groups.map(g => `<div class="group"><h4>${esc(g.c)}</h4>${g.list.map(svcRow).join('')}</div>`).join('')}
-    <button type="button" class="adminlink" data-act="admin"><span>Как это видит ${esc(D.admin || 'администратор')}<small>кабинет студии: записи, напоминания, абонементы</small></span>›</button>
-    <div style="height:90px"></div></div>`;
+function upcoming(dir, n = 8) {
+  const out = [];
+  for (let i = 0; i < 21 && out.length < n; i++) out.push(...classesOn(addD(day0(), i)).filter(c => !dir || c.dir === dir));
+  return out.slice(0, n);
 }
-function slotHTML(){
-  const s = cur(), ds = svcDays(s);
-  if (!ds.some(x => x.i === state.day)) { state.day = ds[0].i; state.slot = null; }
-  const dd = ds.find(x => x.i === state.day);
-  return `<div class="view" data-v="slot">
-    <button type="button" class="back" data-act="back" aria-label="Назад">‹</button>
-    <div class="pv" style="padding-top:70px">
-      <div class="brandline">${esc(s.name)}</div>
-      <div class="title">пробное занятие · бесплатно</div>
-      <h4 style="margin:18px 0 8px;font-size:13px;color:var(--cocoa-2)">Когда есть группа</h4>
-      <div class="days">${ds.map(x => `<button type="button" class="day ${state.day === x.i ? 'on' : ''}" data-day="${x.i}">${DOW[x.d.getDay()]}<b>${x.d.getDate()}</b></button>`).join('')}</div>
-      <h4 style="margin:16px 0 8px;font-size:13px;color:var(--cocoa-2)">Время</h4>
-      <div class="slots">${dd.t.map((t, si) => `<button type="button" class="slot ${state.slot === si ? 'on' : ''}" data-slot="${si}">${t}<small>осталось мест: ${seats(dd.i, si, s)}</small></button>`).join('')}</div>
-      <p class="hint">${esc(D.address)}. Форма — удобная, вода с собой.</p>
+const nearestDay = () => { for (let i = 0; i < 7; i++) { const c = classesOn(addD(day0(), i)); if (c.length) return {i, c}; } return {i: 0, c: []}; };
+const cKey = c => `${c.dir}|${+c.d}|${c.t}`;
+
+// ---------- состояние ----------
+const S = {view: null, stack: [], booking: null, pending: null, pickSlot: null, quiz: {}, quizRes: [], chat: [], chatInit: false, schedDay: 0};
+const slotMap = new Map();
+const keep = c => { slotMap.set(cKey(c), c); return cKey(c); };
+
+// ---------- экраны ----------
+const media = k => DIRS[k].v
+  ? `<video src="${V(DIRS[k].v)}" poster="${P(DIRS[k].v)}" muted loop playsinline autoplay preload="metadata"></video>`
+  : `<img src="${I(DIRS[k].img)}" alt="">`;
+
+const clsRow = c => `<div class="card cls"><div class="tm"><b>${c.t}</b><small>${dlabel(c.d)}</small></div>
+  <div class="nm"><b>${esc(DIRS[c.dir].n)}</b><small>${esc(c.tr)} · ${esc(c.lv)}</small><span class="seats">осталось мест: ${seats(c.d, c.t)}</span></div>
+  <button class="go" data-book="${keep(c)}">Пробное</button></div>`;
+
+function home() {
+  const nd = nearestDay();
+  const title = nd.i === 0 ? 'Сегодня в студии' : nd.i === 1 ? 'Завтра в студии' : `${dshort(addD(day0(), nd.i))}`;
+  return `<section class="hero">
+      <video src="${V('hero')}" poster="${P('hero')}" muted loop playsinline autoplay></video>
+      <span class="tag badge">🎁 Первое пробное — бесплатно</span>
+      <div class="in">
+        <img class="wm" src="${I('wordmark')}" alt="Bagheera">
+        <p>Студия танца в Омске · 15 лет · 13 направлений<br>Один абонемент — на все группы</p>
+        <div class="row"><button class="btn main" data-act="quiz" id="quizBtn">✨ Подобрать танец</button><button class="btn ghost" data-tab="sched">Расписание</button></div>
+      </div></section>
+    <section class="sec"><div class="h2"><h3>${title}</h3><button data-tab="sched">Всё →</button></div>${nd.c.slice(0, 4).map(clsRow).join('')}</section>
+    <section class="sec" id="dirsSec"><div class="h2"><h3>Направления</h3><span class="muted" style="font-size:12.5px">${Object.keys(DIRS).length} · листайте →</span></div>
+      <div class="hs">${Object.entries(DIRS).map(([k, D]) => `<button class="dcard" data-dir="${k}">
+        ${D.v ? `<video src="${V(D.v)}" poster="${P(D.v)}" muted loop playsinline preload="none"></video><span class="play">▶ видео</span>` : `<img src="${I(D.img)}" alt="" loading="lazy">`}
+        <span class="t"><b>${esc(D.n)}</b><small>${esc(D.t)}</small></span></button>`).join('')}</div></section>
+    <section class="sec"><div class="card clipbox"><div class="h2" style="margin:0"><h3>🎬 Клип после каждой хореографии</h3></div>
+      <p>Выучила танец — снимаемся с профессиональным светом. Вот что получается у наших учениц:</p>
+      <div class="reels">${CLIPS.map(([v, n], i) => `<button class="reel" data-clip="${i}"><img src="${P(v)}" alt="" loading="lazy"><span>${esc(n)}</span></button>`).join('')}</div></div></section>
+    <section class="sec"><div class="h2"><h3>Отзывы учениц</h3></div>
+      <div class="hs">${REVIEWS.map(([t, w]) => `<div class="card rev">«${esc(t)}»<div class="who"><i>★★★★★</i> ${esc(w)}</div></div>`).join('')}</div></section>
+    <section class="sec"><div class="h2"><h3>Абонементы</h3><span class="muted" style="font-size:12px">на 28 дней</span></div>
+      <div class="prices">${PRICES.map(([a, b], i) => `<div class="card price${i === 2 ? ' hot' : ''}"><small>${a}</small><b>${b}</b></div>`).join('')}</div>
+      <p class="note">По абонементу — любые группы и направления. Не получается прийти — заморозим или перенесём в другую группу.</p>
+      <div class="card promo"><span class="em">👯‍♀️</span><div><b>Приведи подругу — −20% каждой</b><small>на первый месяц. Бот сам пришлёт ссылку для подруги.</small></div></div></section>
+    <section class="sec"><div class="card addr"><span class="em">📍</span><div><b>${ADDR}</b><small>${GUARD} — бот напомнит накануне.</small><small>Администратор: Ольга · @olia_bagheera</small></div></div></section>
+    <div class="foot">Демо-бот для студии Bagheera · NOVACODE<br>Расписание, цены и видео — из вашего канала</div>`;
+}
+
+function dirScreen(k) {
+  const D = DIRS[k], ups = upcoming(k, 8);
+  const rows = Object.entries(SCHED).flatMap(([dw, rs]) => rs.filter(r => r[1] === k).map(r => [Number(dw), ...r]));
+  const trainers = [...new Set(rows.map(r => r[3]))];
+  const times = rows.sort((a, b) => ((a[0] + 6) % 7) - ((b[0] + 6) % 7)).map(r => `${DOW[r[0]]} ${r[1]}`);
+  return `<section class="dhero">${media(k)}<div class="in"><span class="tag ok">Пробное — бесплатно</span><h2>${esc(D.n)}</h2><p>${esc(D.t)}</p></div></section>
+    <section class="sec" style="padding-top:8px"><p style="color:#e7dcf5;font-size:14.5px">${esc(D.d)}</p>
+      <div class="chips">${times.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+      ${trainers.map(t => `<div class="card trn"><span class="av">${esc(t[0])}</span><div><b>${esc(t)}</b><small>тренер · ${esc(D.n)}</small></div></div>`).join('')}</section>
+    <section class="sec" id="slotsSec"><div class="h2"><h3>Выберите пробное</h3></div>
+      <div class="slots">${ups.map(c => `<button class="slot" data-slot="${keep(c)}"><b>${dlabel(c.d)}, ${c.t}</b><small>${esc(c.tr)}</small><span class="seats">мест: ${seats(c.d, c.t)}</span></button>`).join('')}</div></section>
+    <div class="sticky"><button class="btn main" id="dirBook" disabled style="opacity:.5">Выберите время</button></div>`;
+}
+
+function schedScreen() {
+  const days = [...Array(7)].map((_, i) => addD(day0(), i));
+  const list = classesOn(days[S.schedDay]);
+  return `<div class="days">${days.map((x, i) => `<button class="day${i === S.schedDay ? ' on' : ''}" data-day="${i}"><small>${i === 0 ? 'сег' : DOW[x.getDay()]}</small><b>${x.getDate()}</b></button>`).join('')}</div>
+    <section class="sec" style="padding-top:6px">${list.length ? list.map(clsRow).join('') : '<p class="muted" style="padding:20px 0">На сегодня занятия уже закончились — выберите другой день.</p>'}
+    <p class="note">Расписание из закрепа вашего канала. Ольга меняет его в боте сама — без программиста.</p></section>`;
+}
+
+const ticket = b => `<div class="card ticket">
+  <div class="r"><span>Направление</span><b>${esc(DIRS[b.dir].n)}</b></div>
+  <div class="r"><span>Когда</span><b>${dlabel(b.d)}, ${b.t}</b></div>
+  <div class="r"><span>Тренер</span><b>${esc(b.tr)}</b></div>
+  <div class="r"><span>Адрес</span><b>${ADDR}</b></div>
+  <div class="r"><span>Стоимость</span><b style="color:var(--ok)">бесплатно</b></div></div>`;
+
+function meScreen() {
+  const b = S.booking;
+  if (!b) return `<section class="sec"><div class="card" style="padding:20px;text-align:center"><p style="font-size:36px">💜</p><h3 style="font:700 21px var(--serif);margin:6px 0">Пока нет записей</h3><p class="muted" style="font-size:14px;margin-bottom:14px">Запишитесь на бесплатное пробное — оно появится здесь вместе с напоминанием.</p><button class="btn main" data-act="quiz">✨ Подобрать танец</button></div></section>`;
+  return `<section class="sec"><div class="h2"><h3>Мои записи</h3></div>${ticket(b)}
+    <div class="card promo"><span class="em">🎟</span><div><b>Абонемент −10% в день пробного</b><small>бот предложит сразу после занятия</small></div></div>
+    <div class="card promo"><span class="em">👯‍♀️</span><div><b>Позвать подругу</b><small>−20% вам обеим на первый месяц</small></div></div></section>`;
+}
+
+function doneScreen() {
+  const b = S.booking;
+  return `<div class="done"><div class="ok">✓</div><h2>Вы записаны!</h2><p>Анна, ждём вас на пробном ${esc(DIRS[b.dir].n)} 💜</p></div>${ticket(b)}
+    <div class="sec" style="padding-bottom:0"><div class="h2"><h3>Дальше бот всё сделает сам</h3></div></div>
+    <div class="tl" id="tl">
+      <div class="it"><span class="em">📨</span><div><b>Сейчас — заявка Ольге</b><small>имя, телефон, группа и кнопки «Подтвердить / Перенести»</small></div></div>
+      <div class="it"><span class="em">⏰</span><div><b>Накануне в 18:00 — напоминание</b><small>«Буду / Перенести», адрес и про охрану: офис 506</small></div></div>
+      <div class="it"><span class="em">💃</span><div><b>Через час после занятия — «Как вам?»</b><small>и абонемент −10%, если оформить сегодня</small></div></div>
+      <div class="it"><span class="em">🔁</span><div><b>Не пришла — предложит другое время</b><small>вместо того, чтобы потерять девушку</small></div></div>
+      <div class="it"><span class="em">👯‍♀️</span><div><b>После покупки — «приведи подругу»</b><small>готовая ссылка со скидкой 20%</small></div></div>
     </div>
-    <div class="cta"><button type="button" class="btn" data-act="confirm" ${state.slot == null ? 'disabled' : ''}>${state.slot == null ? 'Выберите время' : `Записаться на ${time()}`}</button></div>
-  </div>`;
-}
-function adminHTML(){
-  const a = SV[0], b = SV[2] || SV[1], c = SV[3] || SV[1];
-  const t = s => svcDays(s)[0];
-  return `<div class="view" data-v="admin">
-    <button type="button" class="back" data-act="back" aria-label="Назад">‹</button>
-    <div class="pv" style="padding-top:70px">
-      <div class="brandline">Кабинет · ${esc(D.admin || 'администратор')}</div>
-      <div class="title">записи на пробное и что бот сделал сам</div>
-      <div class="kpi"><div><b>14</b><span>записались<br>за неделю</span></div><div><b>11</b><span>пришли<br>на пробное</span></div><div><b>6</b><span>купили<br>абонемент</span></div></div>
-      <h4 style="margin:16px 0 8px;font-size:13px;color:var(--cocoa-2)">Ближайшие пробные</h4>
-      <div class="rec"><div><b>Анна · ${esc(b.name)}</b><span>${dayLabel(t(b).i)}, ${t(b).t[0]} · +7 912 ••• 12 40</span></div><span class="st">подтвердила</span></div>
-      <div class="rec"><div><b>Виктория · ${esc(a.name)}</b><span>${dayLabel(t(a).i)}, ${t(a).t[0]} · +7 913 ••• 55 08</span></div><span class="st wait">напомнили</span></div>
-      <div class="rec"><div><b>Дарья · ${esc(c.name)}</b><span>после пробного: «хочу абонемент»</span></div><span class="st buy">абонемент</span></div>
-      <h4 style="margin:16px 0 8px;font-size:13px;color:var(--cocoa-2)">Бот делает сам</h4>
-      <div class="auto">
-        <div><b>Напоминание накануне</b>с адресом и подъездом — «буду / перенести»</div>
-        <div><b>Не пришла — другой день</b>вежливо предлагает ближайшее занятие</div>
-        <div><b>После пробного — абонемент</b>«Как вам?» → «Хочу абонемент» → заявка вам</div>
-        <div><b>Новый набор в группу</b>одной кнопкой — пост в канал и рассылка тем, кто ждал</div>
-      </div>
-      <p class="note">Имена и цифры в кабинете — пример. Расписание групп взято из канала @${esc(D.channel)}.</p>
-    </div></div>`;
+    <div class="sec" style="padding-bottom:20px"><button class="btn main" style="width:100%" data-tab="chat">Посмотреть сообщения бота →</button></div>`;
 }
 
-/* ---------- навигация ---------- */
-function mount(html, dir){
-  const wrap = document.createElement('div'); wrap.innerHTML = html.trim();
-  const v = wrap.firstElementChild, old = views.lastElementChild;
-  if (old && !reduce){
-    v.classList.add(dir === 'back' ? 'back-enter' : 'enter'); views.appendChild(v); v.getBoundingClientRect();
-    v.classList.remove('enter','back-enter'); old.classList.add(dir === 'back' ? 'back-leave' : 'leave');
-    setTimeout(() => old.remove(), 450);
-  } else { if (old) old.remove(); views.appendChild(v); }
+// ---------- чат ----------
+const FAQ = [
+  [/сколько|стоим|цен|прайс|абонем/i, () => `Первое пробное — <b>бесплатно</b> 🎁<br>Абонементы на 28 дней: 4 занятия — 3 000 ₽, 8 — 3 900 ₽, 12 — 4 300 ₽, безлимит — 5 300 ₽. Разовое — 850 ₽.<br>По одному абонементу можно ходить на <b>любые</b> направления.`],
+  [/опыт|с нуля|не умею|новичок|начина|никогда/i, () => `Конечно можно! Большинство приходят с нуля 💜 Для старта советую:<br>• Choreo — пн и пт 16:30<br>• Strip — сб 16:30, вс 15:30<br>• High Heels — вс 16:30<br>• Mix Dance — ср 18:30, сб 15:30<br>Записать на бесплатное пробное?`],
+  [/адрес|где|добрат|находит|охран/i, () => `📍 ${ADDR}.<br>${GUARD} — так положено в бизнес-центре 🙏`],
+  [/заболе|пропущ|пропуст|заморо|не смогу|перенес/i, () => `Ничего не пропадёт: абонемент можно <b>заморозить</b> или прийти на занятие в другую группу. Напишите мне, когда будете готовы вернуться — подберу время.`],
+  [/взять|форм|одеть|надеть|каблук|туфл|наколен/i, () => `Удобная форма и вода 💧 На High Heels и Strip пригодятся туфли на каблуке и наколенники, но на первое занятие можно прийти и без них — тренер подскажет.`],
+  [/индивид|лично|персонал/i, () => `Индивидуальное занятие — 2 000 ₽, абонемент на 4 — 7 200 ₽. Ольга берёт и сама 💜 Передать ей, что вы хотите индивидуально?`],
+  [/подруг|вдвоём|вдвоем|вместе/i, () => `Приходите вдвоём! Постоянная акция: <b>−20% каждой</b> на первый месяц. Скинуть ссылку для подруги?`],
+];
+const botAnswer = q => { for (const [re, f] of FAQ) if (re.test(q)) return f(); return `Хороший вопрос! Передала его Ольге — она ответит здесь в течение часа 💜 А пока могу записать вас на бесплатное пробное.`; };
+const nowT = () => { const d = new Date(); return `${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`; };
+const msgHTML = m => m.sep ? `<div class="dsep">${m.sep}</div>`
+  : `<div class="msg ${m.bot ? 'bot' : 'me'}">${m.lbl ? `<span class="lbl">${m.lbl}</span>` : ''}${m.img ? `<img src="${m.img}" alt="">` : ''}${m.html}${m.kb ? `<div class="kb">${m.kb.map((k, i) => `<span class="${i ? '' : 'm'}">${k}</span>`).join('')}</div>` : ''}<span class="tme">${m.tm || nowT()}</span></div>`;
+function chatScreen() {
+  if (!S.chatInit) {
+    S.chatInit = true;
+    S.chat.unshift({sep: 'сегодня'}, {bot: 1, html: `Привет! Я бот студии Bagheera 💜 Подскажу по направлениям и ценам и запишу на <b>бесплатное</b> пробное. Спросите что угодно или выберите ниже 👇`});
+  }
+  return `<div class="chatwrap"><div class="scr2" id="chatScr"><div class="chat" id="chatBox">${S.chat.map(msgHTML).join('')}</div></div>
+    <div class="ainote">ИИ отвечает по вашему прайсу и правилам · сложное передаёт Ольге</div>
+    <div class="qr">${['Сколько стоит?', 'Я никогда не танцевала', 'Где вы находитесь?', 'Что взять с собой?', 'Если заболею?', 'Можно с подругой?'].map(q => `<button data-q="${q}">${q}</button>`).join('')}</div>
+    <form class="inp" id="chatForm"><input id="chatIn" placeholder="Сообщение" autocomplete="off"><button aria-label="Отправить">➤</button></form></div>`;
 }
-const render = n => n === 'home' ? homeHTML() : n === 'admin' ? adminHTML() : slotHTML();
-const inner = () => document.body.classList.toggle('inner', stack[stack.length - 1] !== 'home');
-function go(n){ stack.push(n); mount(render(n), 'fwd'); inner(); }
-function back(){ if (stack.length < 2) return; stack.pop(); mount(render(stack[stack.length - 1]), 'back'); inner(); }
-function rerender(){ const c = views.lastElementChild, top = c.scrollTop; const w = document.createElement('div');
-  w.innerHTML = render(stack[stack.length - 1]).trim(); c.replaceWith(w.firstElementChild); views.lastElementChild.scrollTop = top; }
+const scrollChat = () => { const s = $('#chatScr'); if (s) s.scrollTop = s.scrollHeight; };
+function pushMsg(m) { S.chat.push(m); const box = $('#chatBox'); if (box) { box.insertAdjacentHTML('beforeend', msgHTML(m)); scrollChat(); } }
+async function ask(q) {
+  pushMsg({html: esc(q)});
+  const box = $('#chatBox');
+  if (box) { box.insertAdjacentHTML('beforeend', '<div class="typing" id="typing"><i></i><i></i><i></i></div>'); scrollChat(); }
+  await wait(900);
+  const t = $('#typing'); t && t.remove();
+  pushMsg({bot: 1, html: botAnswer(q)});
+}
+const nextAlt = b => { const u = upcoming(b.dir, 4).find(c => cKey(c) !== cKey(b)); return u ? `${dlabel(u.d)} в ${u.t}` : 'другой день'; };
+function addBookingMsgs() {
+  const b = S.booking, D = DIRS[b.dir];
+  S.chat.push({sep: 'сейчас'},
+    {bot: 1, html: `Готово! Вы записаны на бесплатное пробное <b>${esc(D.n)}</b> — ${dlabel(b.d)}, ${b.t}, тренер ${esc(b.tr)} 💜`},
+    {sep: 'накануне, 18:00'},
+    {bot: 1, lbl: 'напоминание', tm: '18:00', html: `Анна, завтра в ${b.t} ждём вас на ${esc(D.n)} 💃<br>📍 ${ADDR}<br>🛡 ${GUARD}.<br>Возьмите удобную форму и воду.`, kb: ['Буду ✓', 'Перенести']},
+    {sep: 'через час после занятия'},
+    {bot: 1, lbl: 'после пробного', img: I(D.img), html: `Как вам ${esc(D.n)}? 😍 Если понравилось — оформите абонемент сегодня со скидкой <b>−10%</b>: 8 занятий <s>3 900</s> <b>3 510 ₽</b>. По нему — любые направления.`, kb: ['Оформить', 'Подумаю']},
+    {sep: 'если не пришла'},
+    {bot: 1, lbl: 'вернуть', html: `Жаль, что не получилось 🙏 Пробное всё ещё за вами. Может, ${nextAlt(b)}?`, kb: ['Записаться', 'Другое время']});
+}
 
-/* ---------- шторки и уведомления ---------- */
-function openSheet(html){ sheet.innerHTML = '<div class="grab"></div>' + html; scrim.classList.add('on'); sheet.classList.add('on'); }
-function closeSheet(){ scrim.classList.remove('on'); sheet.classList.remove('on'); }
-scrim.addEventListener('click', closeSheet);
-function confirmSheet(){
-  const s = cur();
-  openSheet(`<h3>Запись на пробное</h3><div class="sub">${esc(D.admin || 'Администратор')} получит заявку сразу</div>
-    <div class="sum"><div><span>Направление</span><b>${esc(s.name)}</b></div><div><span>Когда</span><b>${dayLabel(state.day)}, ${time()}</b></div>
-    <div><span>Стоимость</span><b>бесплатно</b></div></div>
-    <div class="field"><label>Имя</label><div>Анна</div></div>
-    <div class="field"><label>Телефон</label><div id="phoneF" style="color:#9a8783">Не указан</div></div>
-    <button type="button" class="share" data-act="share">Поделиться номером из Telegram</button>
-    <button type="button" class="btn" data-act="book" id="bookBtn" disabled>Записаться</button>`);
+// ---------- кабинет Ольги ----------
+function adminScreen() {
+  const ups = upcoming(null, 6);
+  const names = ['Анна', 'Мария К.', 'Дарья', 'Ксения', 'Виктория', 'Полина'];
+  const st = [['✓ подтвердила', 'ok'], ['⏳ ждём ответ', 'warn'], ['💳 купила абонемент', ''], ['✓ подтвердила', 'ok'], ['🔁 перенесла', 'warn'], ['✓ подтвердила', 'ok']];
+  const fill = [['High Heels · ср 19:30', 92], ['Choreo · пн 17:30', 85], ['Strip · сб 16:30', 78], ['Twerk · пт 20:30', 64], ['Lady’s dance · вс 18:30', 51]];
+  return `<div class="admin"><div class="hi"><img src="${I('olga_a')}" alt=""><div><b>Кабинет Ольги</b><small>так видит администратор · цифры для примера</small></div></div>
+    <div class="kpi"><div class="card"><b>23</b><span>заявки на пробное за неделю</span></div><div class="card"><b>17</b><span>пришли на занятие</span></div><div class="card"><b>9</b><span>купили абонемент</span></div></div>
+    <div class="card funnel">Без напоминаний на пробное доходит примерно половина записавшихся. Бот напоминает накануне и сразу предлагает перенос — <b>доходит заметно больше</b>, а «как вам?» после занятия превращает пробное в абонемент.</div>
+    <div class="h2"><h3>Ближайшие пробные</h3></div>
+    ${ups.map((c, i) => `<div class="card rec"><div class="nm"><b>${names[i]} · ${esc(DIRS[c.dir].n)}</b><small>${dlabel(c.d)}, ${c.t} · ${esc(c.tr)}</small></div><span class="tag ${st[i][1]}">${st[i][0]}</span></div>`).join('')}
+    <div class="h2" style="margin-top:16px"><h3>Заполненность групп</h3></div>
+    ${fill.map(([n, w]) => `<div class="bar"><div><span>${n}</span><b>${w}%</b></div><i style="--w:${w}%"></i></div>`).join('')}
+    <div class="h2" style="margin-top:16px"><h3>Бот делает сам</h3></div>
+    <div class="card auto">
+      <div><b>⏰ Напомнил 6 девушкам о завтрашних пробных</b>с адресом и «офис 506» для охраны</div>
+      <div><b>💳 Предложил абонемент после пробного — 4 раза</b>2 оформили сразу со скидкой 10%</div>
+      <div><b>📅 Абонемент заканчивается у 5 учениц</b>напомнил продлить или заморозить — 3 продлили</div>
+      <div><b>💬 Ответил на 31 вопрос ночью и в выходные</b>2 сложных передал вам</div></div>
+    <div class="card bc"><b>📣 Рассылка ученицам</b><p>«Новая хореография High Heels в среду 19:30 — присоединяйтесь! 💜»</p><button class="btn main" style="width:100%" id="bcBtn">Отправить 214 ученицам</button></div>
+    <p class="note" style="text-align:center;margin:14px 0 6px">Ольга ничего не настраивает — всё в одном чате с ботом.</p></div>`;
 }
-function doneSheet(){
-  const s = cur();
-  openSheet(`<div class="done"><div class="ring">✓</div><h3>Вы записаны</h3>
-    <div class="sub">Пробное ${esc(s.name)} — ${dayLabel(state.day)} в ${time()}. Накануне напомним и пришлём, как найти вход.</div></div>
-    <div class="mgr"><small>Так это видит ${esc(D.admin || 'администратор')}${D.manager ? ' ' + esc(D.manager) : ''} в Telegram</small>
-      <div class="bub"><b>Новая запись на пробное</b><br>${esc(s.name)}, ${dayLabel(state.day)} в ${time()}<br>Анна, +7 912 ••• 12 40</div>
-      <div class="acts"><span>✓ Подтвердить</span><span>Перенести</span></div></div>
-    <button type="button" class="btn" data-act="close">Готово</button>`);
-}
-function showPush(html, ms = 4200){
-  push.innerHTML = `<div class="ic">B</div><p>${html}</p>`;
-  push.classList.add('on'); return sleep(ms).then(() => push.classList.remove('on'));
-}
-const remindHTML = () => `<b>${esc(D.name)}</b><small>накануне</small><br>Завтра в ${time()} ждём вас на пробном ${esc(cur().name)} 💜 ${esc(D.address)}. Возьмите удобную форму и воду.<span class="btns"><span class="main">Буду</span><span>Перенести</span></span>`;
-const afterHTML = () => `<b>${esc(D.name)}</b><small>после занятия</small><br>Как вам ${esc(cur().name)}? 💜 Если понравилось — абонемент на все направления можно оформить прямо здесь.<span class="btns"><span class="main">Хочу абонемент</span><span>Подумаю</span></span>`;
 
-/* ---------- события ---------- */
-screen.addEventListener('click', e => {
-  const t = e.target.closest('[data-svc],[data-act],[data-day],[data-slot]'); if (!t) return;
-  if (t.dataset.svc){ state.svc = t.dataset.svc; state.day = null; state.slot = null; return go('slot'); }
-  if (t.dataset.day){ state.day = +t.dataset.day; state.slot = null; return rerender(); }
-  if (t.dataset.slot){ state.slot = +t.dataset.slot; return rerender(); }
-  const a = t.dataset.act;
-  if (a === 'back') back();
-  else if (a === 'admin') go('admin');
-  else if (a === 'quick'){ const n = nearest(); state.svc = n.s.id; state.day = n.dd.i; state.slot = 0; go('slot'); }
-  else if (a === 'confirm') confirmSheet();
-  else if (a === 'share'){ const f = document.getElementById('phoneF'); f.textContent = '+7 912 ••• 12 40'; f.style.color = ''; t.remove(); document.getElementById('bookBtn').disabled = false; }
-  else if (a === 'book'){ doneSheet(); if (!touring) setTimeout(() => showPush(remindHTML()).then(() => sleep(600)).then(() => showPush(afterHTML(), 5200)), 1800); }
-  else if (a === 'close') closeSheet();
+// ---------- навигация ----------
+const TABS = ['home', 'sched', 'chat', 'me'];
+function render(view, push = true) {
+  if (push && S.view && S.view !== view) S.stack.push(S.view);
+  S.view = view;
+  const [kind, arg] = view.split(':');
+  const html = kind === 'home' ? home() : kind === 'dir' ? dirScreen(arg) : kind === 'sched' ? schedScreen()
+    : kind === 'chat' ? chatScreen() : kind === 'me' ? meScreen() : kind === 'done' ? doneScreen() : adminScreen();
+  scr.style.scrollBehavior = 'auto'; scr.scrollTop = 0; scr.style.scrollBehavior = '';
+  scr.style.overflowY = kind === 'chat' ? 'hidden' : 'auto';
+  scr.innerHTML = html;
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === kind));
+  $('#admBtn').classList.toggle('on', kind === 'admin');
+  if (kind === 'chat') { scr.firstElementChild.style.height = '100%'; scrollChat(); }
+  if (kind === 'done') [...document.querySelectorAll('#tl .it')].forEach((it, i) => setTimeout(() => it.classList.add('on'), 400 + i * 500));
+  watchVideos();
+}
+const back = () => render(S.stack.pop() || 'home', false);
+
+let io;
+function watchVideos() {
+  io && io.disconnect();
+  io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause()), {root: scr, threshold: .5});
+  scr.querySelectorAll('.dcard video').forEach(v => io.observe(v));
+}
+
+// ---------- шторка: квиз и запись ----------
+const sheet = $('#sheet'), sheetbg = $('#sheetbg');
+const openSheet = html => { sheet.innerHTML = '<div class="grab"></div>' + html; sheet.scrollTop = 0; sheet.classList.add('on'); sheetbg.classList.add('on'); };
+const closeSheet = () => { sheet.classList.remove('on'); sheetbg.classList.remove('on'); };
+
+const QZ = [
+  {q: 'Вы танцевали раньше?', k: 'exp', o: [['🌱', 'Нет, с нуля', 'new'], ['💃', 'Немного', 'some'], ['🔥', 'Да, хочу сложнее', 'pro']]},
+  {q: 'Чего хочется больше всего?', k: 'want', o: [['👠', 'Женственность и каблуки', 'fem', 'грация, пластика, уверенность'], ['⚡️', 'Энергия и драйв', 'energy', 'выплеснуть эмоции, зарядиться'], ['🧘‍♀️', 'Тело и здоровье', 'body', 'растяжка, осанка, подкачка']]},
+  {q: 'Когда удобно заниматься?', k: 'when', o: [['🌤', 'Будни днём', 'day', '16:30–18:00'], ['🌙', 'Будни вечером', 'eve', 'с 18:30'], ['🗓', 'Выходные', 'wk', 'суббота и воскресенье']]},
+];
+function quiz(step = 0) {
+  if (step === 0) S.quiz = {};
+  if (step >= QZ.length) return quizResult();
+  const z = QZ[step];
+  openSheet(`<div class="prog">${QZ.map((_, i) => `<i class="${i <= step ? 'on' : ''}"></i>`).join('')}</div>
+    <h3>${z.q}</h3><p class="sub">Подберём направление и ближайшее бесплатное пробное</p>
+    <div class="opts">${z.o.map(([e, t, v, s]) => `<button class="opt" data-qz="${step}|${v}"><span>${e}</span><div>${t}${s ? `<small>${s}</small>` : ''}</div></button>`).join('')}</div>`);
+}
+function quizResult() {
+  const {exp, want, when} = S.quiz;
+  const okTime = c => { const wd = c.d.getDay(), h = hm(c.t)[0]; return when === 'wk' ? (wd === 0 || wd === 6) : (wd >= 1 && wd <= 5 && (when === 'day' ? h < 18 : h >= 18)); };
+  const easy = c => c.lv === 'начинающие' || c.lv === 'с нуля';
+  const all = upcoming(null, 80).filter(c => DIRS[c.dir].k === want && (exp === 'pro' || c.lv !== 'продолжающие'));
+  let pick = all.filter(okTime);
+  pick = pick.concat(all.filter(c => !pick.includes(c)));
+  if (exp === 'new') pick.sort((a, b) => easy(b) - easy(a));
+  if (exp === 'pro') pick.sort((a, b) => (b.lv === 'продолжающие') - (a.lv === 'продолжающие'));
+  const seen = new Set(), res = [];
+  for (const c of pick) if (!seen.has(c.dir)) { seen.add(c.dir); res.push(c); if (res.length === 3) break; }
+  const why = {fem: 'раскрывает женственность', energy: 'максимум энергии', body: 'тело, гибкость и осанка'}[want];
+  S.quizRes = res;
+  openSheet(`<div class="prog">${QZ.map(() => '<i class="on"></i>').join('')}</div>
+    <h3>Вам подойдёт ✨</h3><p class="sub">Нажмите — запишу на бесплатное пробное</p>
+    ${res.map((c, i) => `<button class="card res" data-qres="${i}"><img src="${I(DIRS[c.dir].img)}" alt=""><div><b>${esc(DIRS[c.dir].n)}</b><small>${dlabel(c.d)}, ${c.t} · ${esc(c.tr)}</small><small>${esc(c.lv)} · мест: ${seats(c.d, c.t)}</small><div class="why">${i === 0 ? '★ лучшее совпадение · ' : ''}${why}</div></div></button>`).join('')}`);
+}
+
+function bookSheet(c) {
+  S.pending = c;
+  const D = DIRS[c.dir];
+  openSheet(`<h3>Запись на пробное</h3><p class="sub">Бесплатно · подтверждение придёт сюда же</p>
+    <div class="card sum"><img src="${I(D.img)}" alt=""><div><b>${esc(D.n)}</b><small>${dlabel(c.d)}, ${c.t}</small><small>тренер ${esc(c.tr)} · ${esc(c.lv)}</small><span class="seats">осталось мест: ${seats(c.d, c.t)}</span></div></div>
+    <div class="fld"><div><small>Имя</small>Анна</div><span class="src">из Telegram</span></div>
+    <div class="fld"><div><small>Телефон</small>+7 913 ••• 45 12</div><span class="src">поделилась ✓</span></div>
+    <div class="chk"><i>✓</i>Напомнить накануне и прислать адрес</div>
+    <button class="btn main" style="width:100%" id="confirmBtn">Записаться бесплатно</button>`);
+}
+async function confirmBooking() {
+  $('#confirmBtn').textContent = 'Записываю…';
+  await wait(700);
+  S.booking = S.pending;
+  addBookingMsgs();
+  closeSheet();
+  render('done');
+  await wait(1100);
+  notifyOlga();
+}
+function toast(html, ms = 5000) {
+  const t = document.createElement('div');
+  t.className = 'toast'; t.innerHTML = html;
+  $('#toasts').prepend(t);
+  setTimeout(() => { t.style.transition = 'opacity .4s'; t.style.opacity = 0; setTimeout(() => t.remove(), 400); }, ms);
+}
+function notifyOlga() {
+  const b = S.booking, D = DIRS[b.dir];
+  toast(`<div class="hd"><img src="${I('logo')}" alt=""><b>Bagheera · бот</b> → Ольге · сейчас</div>
+    🆕 <b>Пробное: Анна</b>, +7 913 ••• 45 12<br>${esc(D.n)} · ${dlabel(b.d)}, ${b.t} · ${esc(b.tr)}<br><span style="color:var(--mut)">в группе осталось мест: ${seats(b.d, b.t) - 1} · пришла через бота</span>
+    <div class="kb"><span class="m">Подтвердить</span><span>Перенести</span><span>Позвонить</span></div>`, 5500);
+}
+
+// ---------- клипы ----------
+let clipI = 0, clipTimer;
+function openClip(i) {
+  clipI = (i + CLIPS.length) % CLIPS.length;
+  const [v, n] = CLIPS[clipI], vw = $('#viewer');
+  vw.innerHTML = `<div class="bars">${CLIPS.map((_, j) => `<i class="${j < clipI ? 'past' : j === clipI ? 'on' : ''}"></i>`).join('')}</div>
+    <button class="x" data-act="closeClip" aria-label="Закрыть">✕</button><button class="nav" style="left:0" data-act="prevClip" aria-label="Назад"></button><button class="nav" style="right:0" data-act="nextClip" aria-label="Дальше"></button>
+    <video src="${V(v)}" poster="${P(v)}" autoplay muted playsinline></video>
+    <div class="cap"><b>${esc(n)}</b><p>Снято в студии после изучения хореографии 🎬</p><button class="btn main" style="width:100%" data-clipbook="${clipI}">Хочу так же — пробное бесплатно</button></div>`;
+  vw.classList.add('on');
+  clearTimeout(clipTimer);
+  clipTimer = setTimeout(() => openClip(clipI + 1), 8000);
+}
+function closeClip() { clearTimeout(clipTimer); const vw = $('#viewer'); vw.classList.remove('on'); vw.innerHTML = ''; }
+
+// ---------- события ----------
+document.addEventListener('click', e => {
+  const t = e.target.closest('button');
+  if (!t) return;
+  if (e.isTrusted && TOUR.on && t.id !== 'tourBtn' && t.id !== 'tourBtnM') stopTour();
+  const ds = t.dataset;
+  if (ds.tab) { closeSheet(); closeClip(); S.stack = []; render(ds.tab, false); }
+  else if (ds.go === 'admin' || t.id === 'admBtn') render('admin');
+  else if (ds.dir) render('dir:' + ds.dir);
+  else if (ds.book) bookSheet(slotMap.get(ds.book));
+  else if (ds.slot) {
+    document.querySelectorAll('.slot').forEach(s => s.classList.toggle('on', s === t));
+    S.pickSlot = slotMap.get(ds.slot);
+    const b = $('#dirBook'); b.disabled = false; b.style.opacity = 1; b.textContent = `Записаться: ${dlabel(S.pickSlot.d)}, ${S.pickSlot.t}`;
+  }
+  else if (t.id === 'dirBook' && S.pickSlot) bookSheet(S.pickSlot);
+  else if (t.id === 'confirmBtn') confirmBooking();
+  else if (ds.act === 'quiz') quiz(0);
+  else if (ds.qz) { const [st, v] = ds.qz.split('|'); S.quiz[QZ[+st].k] = v; t.classList.add('on'); setTimeout(() => quiz(+st + 1), 250); }
+  else if (ds.qres) bookSheet(S.quizRes[+ds.qres]);
+  else if (ds.day) { S.schedDay = +ds.day; render('sched', false); }
+  else if (ds.clip) openClip(+ds.clip);
+  else if (ds.act === 'closeClip') closeClip();
+  else if (ds.act === 'nextClip') openClip(clipI + 1);
+  else if (ds.act === 'prevClip') openClip(clipI - 1);
+  else if (ds.clipbook) { const k = CLIPS[+ds.clipbook][2]; closeClip(); render('dir:' + k); }
+  else if (ds.q) ask(ds.q);
+  else if (t.id === 'backBtn') { if ($('#viewer').classList.contains('on')) closeClip(); else if (sheet.classList.contains('on')) closeSheet(); else back(); }
+  else if (t.id === 'bcBtn') { t.textContent = 'Отправлено ✓ · 214 получили'; t.disabled = true; }
+  else if (t.id === 'tourBtn' || t.id === 'tourBtnM') startTour(0);
+  else if (t.id === 'tourStop') stopTour();
 });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+sheetbg.addEventListener('click', closeSheet);
+document.addEventListener('submit', e => {
+  if (e.target.id !== 'chatForm') return;
+  e.preventDefault();
+  const i = $('#chatIn'), q = i.value.trim();
+  if (q) { i.value = ''; ask(q); }
+});
+document.querySelectorAll('#steps li').forEach(li => li.addEventListener('click', () => startTour(+li.dataset.s)));
 
-/* ---------- автопоказ ---------- */
-function mark(i){ stepsEl.querySelectorAll('li').forEach(li => li.classList.toggle('on', +li.dataset.s === i)); }
-async function tap(sel){
-  const el = typeof sel === 'string' ? screen.querySelector(sel) : sel; if (!el) return;
-  const r = el.getBoundingClientRect(), b = screen.getBoundingClientRect(), v = el.closest('.view');
-  if (v && (r.bottom > b.bottom - 20 || r.top < b.top + 120)){ const vr = v.getBoundingClientRect();
-    v.scrollTo({top: v.scrollTop + (r.top - vr.top) - vr.height / 2 + r.height / 2, behavior: reduce ? 'auto' : 'smooth'}); await sleep(650); }
-  const r2 = el.getBoundingClientRect();
-  tapEl.style.left = (r2.left - b.left + r2.width / 2) + 'px'; tapEl.style.top = (r2.top - b.top + r2.height / 2) + 'px'; tapEl.style.opacity = '1';
-  await sleep(560); tapEl.classList.remove('press'); void tapEl.offsetWidth; tapEl.classList.add('press'); await sleep(200); el.click(); await sleep(250);
+// ---------- автопоказ ----------
+const TOUR = {on: false, id: 0};
+const tap = $('#tap');
+function stepOn(i, txt) {
+  document.querySelectorAll('#steps li').forEach(li => li.classList.toggle('on', +li.dataset.s === i));
+  $('#tourtxt').textContent = txt;
 }
-async function scrollView(y){ views.lastElementChild.scrollTo({top:y, behavior: reduce ? 'auto' : 'smooth'}); await sleep(900); }
-function reset(){ closeSheet(); Object.assign(state, {svc:null, day:null, slot:null}); views.innerHTML = ''; stack = []; go('home'); }
-async function tour(){
-  if (touring) return; touring = true; document.getElementById('fab').style.display = 'none';
-  reset(); await sleep(900);
-  mark(0); await scrollView(260); await sleep(400); await scrollView(0);
-  const pick = SV[Math.min(2, SV.length - 1)];
-  await tap(`[data-svc="${pick.id}"]`); await sleep(900);
-  mark(1); const ds = svcDays(pick); await tap(`[data-day="${ds[Math.min(1, ds.length - 1)].i}"]`); await sleep(500);
-  await tap('[data-slot="0"]'); await sleep(500);
-  mark(2); await tap('[data-act="confirm"]'); await sleep(700);
-  await tap('[data-act="share"]'); await sleep(400); await tap('#bookBtn');
-  mark(3); await sleep(3400); await tap('[data-act="close"]'); await sleep(300);
-  tapEl.style.opacity = '0';
-  mark(4); await showPush(remindHTML()); await sleep(500);
-  mark(5); await showPush(afterHTML(), 4600); await sleep(300);
-  mark(6); await tap('[data-act="back"]'); await sleep(500); await tap('[data-act="admin"]'); await sleep(1200);
-  await scrollView(330); await sleep(1600); await scrollView(0);
-  tapEl.style.opacity = '0'; mark(-1); touring = false; document.getElementById('fab').style.display = '';
+function stopTour() {
+  TOUR.on = false; TOUR.id++;
+  $('#tourbar').classList.remove('on'); tap.classList.remove('on');
+  document.querySelectorAll('#steps li').forEach(li => li.classList.remove('on'));
+}
+async function startTour(from = 0) {
+  const id = ++TOUR.id; TOUR.on = true;
+  $('#tourbar').classList.add('on');
+  const go = async ms => { await wait(ms); if (TOUR.id !== id) throw 0; };
+  const tapOn = async sel => {
+    const el = $(sel); if (!el) return;
+    el.scrollIntoView({block: 'nearest', behavior: 'smooth'}); await go(450);
+    const r = el.getBoundingClientRect(), a = app.getBoundingClientRect();
+    tap.style.left = (r.left - a.left + r.width / 2) + 'px'; tap.style.top = (r.top - a.top + r.height / 2) + 'px';
+    tap.classList.add('on'); await go(550);
+    tap.classList.remove('click'); void tap.offsetWidth; tap.classList.add('click');
+    await go(250); el.click(); await go(150); tap.classList.remove('on');
+  };
+  const typeQ = async q => { const inp = $('#chatIn'); for (const ch of q) { inp.value += ch; await go(45); } await go(300); inp.value = ''; await ask(q); };
+  const smooth = async (el, to, ms) => { const from = el.scrollTop, n = Math.max(1, Math.round(ms / 16)); el.style.scrollBehavior = 'auto'; for (let i = 1; i <= n; i++) { el.scrollTop = from + (to - from) * i / n; await go(16); } el.style.scrollBehavior = ''; };
+  try {
+    closeSheet(); closeClip(); S.stack = [];
+    if (from <= 0) { stepOn(0, 'Первый экран — ваши клипы и бесплатное пробное'); render('home', false); await go(2600);
+      await smooth(scr, $('#dirsSec').offsetTop - 70, 900); await go(2000); await smooth(scr, 0, 600); await go(400); }
+    if (from <= 1) { stepOn(1, 'Девушка не знает, что выбрать — бот подберёт');
+      if (S.view !== 'home') { render('home', false); await go(500); }
+      await tapOn('#quizBtn'); await go(900);
+      await tapOn('[data-qz="0|new"]'); await go(900);
+      await tapOn('[data-qz="1|fem"]'); await go(900);
+      await tapOn('[data-qz="2|eve"]'); await go(2800); closeSheet(); await go(400); }
+    if (from <= 2) { stepOn(2, 'Видео направления, тренер и настоящее расписание'); render('dir:heels'); await go(2800);
+      await smooth(scr, $('#slotsSec').offsetTop - 90, 900); await go(1200); }
+    if (from <= 3) { stepOn(3, 'Запись в два тапа — имя и телефон из Telegram');
+      if (!S.view.startsWith('dir:')) { render('dir:heels'); await go(600); await smooth(scr, $('#slotsSec').offsetTop - 90, 600); }
+      await tapOn('.slot:nth-child(2)'); await go(700); await tapOn('#dirBook'); await go(1900); await tapOn('#confirmBtn'); await go(1000); }
+    if (from <= 4) { stepOn(4, 'Ольге сразу приходит заявка с кнопками');
+      if (!S.booking || S.view !== 'done') { S.booking = upcoming('heels', 2)[1]; addBookingMsgs(); render('done'); await go(1100); notifyOlga(); }
+      await go(4200); }
+    if (from <= 5) { stepOn(5, 'Бот сам напоминает, спрашивает «как вам?» и продаёт абонемент');
+      if (!S.booking) { S.booking = upcoming('heels', 2)[1]; addBookingMsgs(); }
+      if (S.view === 'done') { await smooth(scr, 420, 800); await go(1800); }
+      S.stack = []; render('chat', false); await go(700);
+      const s = $('#chatScr'); s.scrollTop = 0; await go(600); await smooth(s, s.scrollHeight - s.clientHeight, 5000); await go(1500); }
+    if (from <= 6) { stepOn(6, 'Отвечает на вопросы 24/7, сложное передаёт Ольге');
+      if (S.view !== 'chat') { render('chat', false); await go(500); }
+      await typeQ('сколько стоит абонемент?'); await go(2600); await typeQ('а если заболею?'); await go(2600); }
+    if (from <= 7) { stepOn(7, 'А это видит Ольга: кто записан, пришёл и купил'); render('admin'); await go(2800);
+      await smooth(scr, 600, 1200); await go(2000); await smooth(scr, 1150, 1000); await go(2400); }
+    stopTour(); S.stack = []; render('home', false);
+  } catch (_) { /* показ остановлен */ }
 }
 
-/* ---------- данные ---------- */
-function start(data){
-  D = data; SV = data.services;
-  document.getElementById('barTitle').textContent = D.name;
-  document.getElementById('credit').innerHTML =
-    `Демо от NOVACODE · <a href="https://new-coder.ru">new-coder.ru</a>. Направления и расписание взяты из канала @${esc(D.channel)} для примера.`;
-  document.getElementById('tourBtn').addEventListener('click', tour);
-  document.getElementById('fab').addEventListener('click', tour);
-  go('home'); document.getElementById('loading').classList.add('off');
-  if (!PREVIEW && D.ns) fetch(`https://abacus.jasoncameron.dev/hit/${encodeURIComponent(D.ns)}/${ID}`).catch(() => {});
-  if (location.hash === '#tour') setTimeout(tour, 600);
-}
-fetch(`d/${ID}.json`, {cache: 'no-cache'})
-  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-  .then(d => { if (!d.services || !d.services.length) throw new Error('empty'); start(d); })
-  .catch(() => location.replace(FALLBACK));
+// ---------- старт ----------
+render('home', false);
+if (location.hash === '#tour') setTimeout(() => startTour(0), 900);
+if (!PREVIEW) fetch(`https://abacus.jasoncameron.dev/hit/${encodeURIComponent(NS)}/${ID}`).catch(() => {});
 })();
-
 </script>
 </body>
 </html>
