@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Онлайн-запись в MAX · демо NOVACODE</title>
+<link rel="icon" href="data:,">
+<style>
+@font-face{font-family:"Manrope";src:url("fonts/manrope-cyrillic-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Manrope";src:url("fonts/manrope-latin-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{
+  --stage:#0E1116; --ink:#0F1720; --ink-2:#5B6675; --line:#E3E7EC; --bg:#F2F4F7; --paper:#fff;
+  --acc:#1F6FEB; --acc-2:#5AA0FF; --ok:#1A7F4B; --red:#D92D20; --gold:#B7791F;
+  --sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:radial-gradient(1100px 700px at 15% 10%,#1B2533 0,var(--stage) 60%);color:#E8EDF3;font:400 15px/1.45 var(--sans);-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;color:inherit}
+.stage{min-height:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(32px,6vw,96px);align-items:center;max-width:1180px;margin:0 auto;padding:40px clamp(20px,5vw,56px)}
+.kicker{font:700 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--acc-2)}
+.story h1{font:800 clamp(32px,3.8vw,50px)/1.06 var(--sans);margin:14px 0 16px;color:#fff;letter-spacing:-.01em}
+.story h1 em{font-style:normal;color:var(--acc-2)}
+.story p.lead{max-width:46ch;color:#AEB9C7;font-size:17px;margin:0 0 18px}
+.now{max-width:46ch;margin:0 0 20px;padding:12px 14px;border-radius:14px;background:rgba(217,45,32,.12);border:1px solid rgba(217,45,32,.4);color:#FFD9D5;font-size:14.5px}
+.now b{color:#fff}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s;max-width:46ch}
+.steps li{counter-increment:s;display:flex;gap:14px;padding:12px 0;border-top:1px solid #222C3A;color:#8C99AA;transition:color .3s}
+.steps li::before{content:counter(s);font:700 13px/1.6 var(--sans);color:#4E5B6D;min-width:18px}
+.steps li b{display:block;color:#C9D3DF;font-weight:700}
+.steps li.on{color:#E8EDF3}.steps li.on b{color:#fff}.steps li.on::before{color:var(--acc-2)}
+.tourbtn{margin-top:24px;display:inline-flex;gap:10px;background:#fff;color:var(--ink);border:0;border-radius:999px;padding:13px 22px;font-weight:800}
+.credit{margin-top:20px;font-size:13px;color:#6F7C8E;max-width:48ch}
+.credit a{color:#AEB9C7}
+
+.phone{position:relative;width:390px;height:812px;border-radius:52px;padding:12px;background:#05070A;box-shadow:0 0 0 1px #2A3546,0 50px 90px -40px rgba(0,0,0,.85)}
+.screen{position:relative;width:100%;height:100%;border-radius:41px;overflow:hidden;background:var(--bg);color:var(--ink)}
+.status{position:absolute;inset:0 0 auto;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font:700 14px/1 var(--sans);z-index:9;color:var(--ink)}
+.status i{font-style:normal;letter-spacing:2px;font-size:11px}
+.scr{position:absolute;inset:0;padding-top:44px;transition:opacity .35s,transform .45s var(--ease)}
+.scr.off{opacity:0;pointer-events:none;transform:translateX(30px)}
+
+/* аватарка студии: фото, если есть, иначе буква */
+.av{position:relative;flex:none;border-radius:50%;overflow:hidden;display:grid;place-items:center;color:#fff;font-weight:800;background:var(--avbg,#1F2937)}
+.av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+/* 1. карточка на карте */
+.place{background:#fff;overflow-y:auto;scrollbar-width:none}
+.place::-webkit-scrollbar{display:none}
+.place .map{height:190px;background:
+  linear-gradient(90deg,transparent 48%,#fff 48%,#fff 52%,transparent 52%) 0 0/120px 120px,
+  linear-gradient(0deg,transparent 46%,#fff 46%,#fff 50%,transparent 50%) 0 0/90px 90px,
+  linear-gradient(160deg,#DDE7D6,#E9EEF2 60%,#DCE4EC);position:relative}
+.place .map.photo{background:#222 center/cover no-repeat}.place .map.photo .pin{display:none}
+.place .pin{position:absolute;left:50%;top:58%;transform:translate(-50%,-100%);width:34px;height:34px;border-radius:50% 50% 50% 0;rotate:-45deg;background:var(--red);box-shadow:0 6px 14px -6px rgba(0,0,0,.5)}
+.place .body{padding:16px 18px 24px;margin-top:-18px;border-radius:20px 20px 0 0;background:#fff;position:relative}
+.place .head{display:flex;gap:12px;align-items:center}
+.place .head .av{width:56px;height:56px;font-size:22px}
+.place h2{margin:0;font:800 21px/1.15 var(--sans)}
+.place .kind{color:var(--ink-2);font-size:13.5px;margin-top:2px}
+.place .rate{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:14px;flex-wrap:wrap}
+.place .rate b{color:var(--gold)}
+.place .badge{font-size:12px;font-weight:700;padding:3px 8px;border-radius:7px;background:#FFF4DB;color:#8A5A00}
+.place .open{color:var(--ok);font-weight:700;font-size:13.5px;margin-top:6px}
+.place .acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.place .acts button{height:46px;border-radius:12px;border:0;font-weight:800;font-size:14.5px;background:#EEF1F4;color:var(--ink)}
+.place .acts .rec{background:var(--acc);color:#fff}
+.place .was{margin-top:14px;padding:11px 12px;border-radius:12px;background:#FDECEA;color:#8F1D14;font-size:13px;line-height:1.4}
+.place .was b{display:block;font-size:12px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:2px}
+.place .svc{margin-top:16px;border-top:1px solid var(--line)}
+.place .svc div{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #EEF1F4;font-size:14px}
+.place .svc span{color:var(--ink-2)}
+
+/* 2. чат в MAX */
+.chat{background:#E6EBF0;display:flex;flex-direction:column}
+.chat header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;border-bottom:1px solid var(--line)}
+.chat header .av{width:38px;height:38px;font-size:16px}
+.chat header b{display:block;font-size:15px}
+.chat header small{color:var(--ok);font-size:12px;font-weight:700}
+.msgs{flex:1;overflow-y:auto;padding:14px 12px 10px;display:flex;flex-direction:column;gap:8px;scrollbar-width:none}
+.msgs::-webkit-scrollbar{display:none}
+.m{max-width:84%;padding:9px 12px;border-radius:16px;font-size:14.5px;line-height:1.38;box-shadow:0 1px 1px rgba(0,0,0,.06);animation:pop .3s var(--ease) both}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}}
+.m.bot{align-self:flex-start;background:#fff;border-bottom-left-radius:5px}
+.m.me{align-self:flex-end;background:#D7ECFF;border-bottom-right-radius:5px}
+.m.sys{align-self:center;background:rgba(15,23,32,.07);box-shadow:none;font-size:12px;color:var(--ink-2);border-radius:999px;padding:5px 12px}
+.m .pr{display:block;margin-top:6px;padding:8px 10px;border-radius:10px;background:#F2F6FB;font-weight:700}
+.m .pr small{display:block;font-weight:500;color:var(--ink-2);font-size:12px}
+.typing{align-self:flex-start;background:#fff;border-radius:16px;padding:10px 14px;display:none}
+.typing.on{display:flex;gap:4px}
+.typing i{width:6px;height:6px;border-radius:50%;background:#9AA6B4;animation:tp 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes tp{50%{opacity:.3;transform:translateY(-2px)}}
+.quick{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px 14px;min-height:60px}
+.quick button{border:1px solid #BFD6F2;background:#fff;color:var(--acc);border-radius:999px;padding:9px 13px;font-weight:700;font-size:13.5px}
+.quick button:active{background:#EAF3FF}
+
+/* 3. мастер */
+.boss{background:var(--bg);overflow-y:auto;scrollbar-width:none}
+.boss::-webkit-scrollbar{display:none}
+.boss .top{padding:14px 18px 10px;display:flex;gap:10px;align-items:center}
+.boss .top .av{width:40px;height:40px;font-size:16px}
+.boss .top small{color:var(--ink-2);font-weight:700;font-size:12px}
+.boss .top h3{margin:2px 0 0;font:800 20px/1.2 var(--sans)}
+.card{margin:8px 14px;padding:14px;border-radius:18px;background:var(--paper);border:1px solid var(--line)}
+.card.new{border-color:#9CC3F5;box-shadow:0 10px 24px -16px rgba(31,111,235,.6)}
+.card .tag{display:inline-block;font-size:11px;font-weight:800;padding:3px 8px;border-radius:7px;background:#E8F1FD;color:var(--acc)}
+.card .tag.ok{background:#E3F4EA;color:var(--ok)}
+.card h4{margin:8px 0 6px;font:800 17px/1.25 var(--sans)}
+.card .row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-top:1px solid #EEF1F4;font-size:14px}
+.card .row span{color:var(--ink-2)}
+.card .row b{text-align:right}
+.card .acts{display:flex;gap:8px;margin-top:10px}
+.card .acts button{flex:1;height:42px;border-radius:12px;border:0;font-weight:800;font-size:13.5px}
+.card .acts .p{background:var(--ink);color:#fff}.card .acts .s{background:#EEF1F4;color:var(--ink)}
+.card.done .acts{display:none}
+.sum{margin:8px 14px 18px;padding:14px;border-radius:18px;background:var(--ink);color:#fff}
+.sum small{color:#9FB0C3;font-weight:700;font-size:12px}
+.sum .big{font:800 26px/1.15 var(--sans);margin:4px 0 2px}
+.sum p{margin:0;color:#C9D3DF;font-size:13.5px}
+
+.push{position:absolute;top:50px;left:10px;right:10px;z-index:20;display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:20px;background:rgba(255,255,255,.97);box-shadow:0 18px 40px -18px rgba(0,0,0,.55);transform:translateY(calc(-100% - 80px));transition:transform .5s var(--ease)}
+.push.on{transform:none}
+.push .av{width:36px;height:36px;border-radius:10px;font-size:15px}
+.push p{margin:0;font-size:13px;line-height:1.35;color:var(--ink)}
+.push small{float:right;margin-left:8px;color:#8C99AA;font-size:11.5px}
+.tap{position:absolute;z-index:40;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:2px solid var(--ink);background:rgba(15,23,32,.18);opacity:0;pointer-events:none;left:0;top:0;transition:translate .5s cubic-bezier(.45,.05,.55,.95),opacity .2s}
+.tap.press{animation:press .3s ease-out}
+@keyframes press{50%{transform:scale(.7);background:rgba(15,23,32,.4)}}
+.tabs{position:absolute;left:0;right:0;bottom:0;z-index:8;display:flex;background:#fff;border-top:1px solid var(--line);padding:6px 10px calc(8px + env(safe-area-inset-bottom,0px))}
+.tabs button{flex:1;border:0;background:none;padding:8px 4px;border-radius:12px;font-weight:800;font-size:12.5px;color:var(--ink-2)}
+.tabs button.on{background:#EAF3FF;color:var(--acc)}
+.scr.chat,.scr.boss{bottom:58px}
+
+@media (max-width:560px){
+  .stage{display:block;padding:0}
+  .story{display:none}
+  .phone{width:100%;height:100svh;border-radius:0;padding:0;background:none;box-shadow:none}
+  .screen{border-radius:0}
+  .status{display:none}
+  .scr{padding-top:0}
+  .push{top:8px}
+  .fab{position:fixed;right:14px;bottom:calc(74px + env(safe-area-inset-bottom,0px));z-index:50;border:0;border-radius:999px;background:var(--ink);color:#fff;font-weight:800;padding:11px 15px;box-shadow:0 12px 30px -12px rgba(0,0,0,.5)}
+}
+@media (min-width:561px){ .fab{display:none} }
+@media (max-width:980px) and (min-width:561px){ .stage{grid-template-columns:1fr;justify-items:center} }
+@media (prefers-reduced-motion:reduce){ *{transition-duration:0s!important;animation:none!important} }
+</style>
+</head>
+<body>
+<div class="stage">
+  <section class="story" aria-label="Что показывает демо">
+    <div class="kicker">Демо для «<span id="kName">вашей студии</span>»</div>
+    <h1>Клиент записывается сам — <em>пока вы заняты машиной</em></h1>
+    <p class="lead">Кнопка «Записаться» открывает запись в MAX: клиент выбирает услугу, класс машины и свободное время. Без переписки и без звонка. Вам приходит готовая заявка — подтверждаете одной кнопкой.</p>
+    <div class="now" id="now"></div>
+    <ol class="steps" id="steps">
+      <li data-s="0"><div><b>Клиент нажимает «Записаться»</b>в 2ГИС, на Яндекс Картах, в соцсетях или на сайте</div></li>
+      <li data-s="1"><div><b>Открывается запись в MAX</b>ничего не надо скачивать и никому писать</div></li>
+      <li data-s="2"><div><b>Услуга, машина, цена «от», время</b>из вашего прайса и вашего графика</div></li>
+      <li data-s="3"><div><b>Вам — готовая заявка</b>подтвердить, перезвонить или предложить другое время</div></li>
+      <li data-s="4"><div><b>Клиенту — напоминание накануне</b>меньше тех, кто забыл и не приехал</div></li>
+    </ol>
+    <button class="tourbtn" id="tourBtn" type="button">▶ Показать за 30 секунд</button>
+    <p class="credit">Демо-концепт от NOVACODE · <a href="https://new-coder.ru">new-coder.ru</a> · Telegram @n0vacode. Услуги, цены и имена — пример: в рабочей версии — ваш прайс и ваш график.</p>
+  </section>
+  <div class="phone">
+    <div class="screen" id="screen">
+      <div class="status"><span>12:40</span><i>●●● 4G ▮</i></div>
+
+      <section class="scr place" id="sPlace">
+        <div class="map" id="map"><span class="pin"></span></div>
+        <div class="body">
+          <div class="head"><div class="av" data-av></div><div><h2 class="nm"></h2><div class="kind" id="kind"></div></div></div>
+          <div class="rate" id="rate"></div>
+          <div class="open" id="open"></div>
+          <div class="acts"><button type="button" class="s">Позвонить</button><button type="button" class="rec" id="recBtn">Записаться онлайн</button></div>
+          <div class="was" id="was"></div>
+          <div class="svc" id="svc"></div>
+        </div>
+      </section>
+
+      <section class="scr chat off" id="sChat">
+        <header><div class="av" data-av></div><div><b class="nm"></b><small>запись онлайн · MAX</small></div></header>
+        <div class="msgs" id="msgs"></div>
+        <div class="quick" id="quick"></div>
+      </section>
+
+      <section class="scr boss off" id="sBoss">
+        <div class="top"><div class="av" data-av></div><div><small>Для мастера · MAX</small><h3>Записи</h3></div></div>
+        <div id="cards"></div>
+        <div class="sum" id="sum"></div>
+      </section>
+
+      <nav class="tabs" id="tabs" hidden>
+        <button type="button" data-tab="sChat" class="on">Клиент</button>
+        <button type="button" data-tab="sBoss">Мастер</button>
+      </nav>
+      <div class="push" id="push" role="status"></div>
+      <span class="tap" id="tap" aria-hidden="true"></span>
+    </div>
+  </div>
+</div>
+<button class="fab" id="fab" type="button">▶ Показ</button>
+
+<script>
+(() => {
+'use strict';
+const qs = new URLSearchParams(location.search);
+// Студии. img — файл в img/, если его нет, показывается буква.
+const S = {
+  depo: { name: 'Депо', kind: 'Детейлинг-студия', img: 'img/depo.jpg', photo: 'img/depo-photo.jpg', letter: 'Д', bg: '#1F2937',
+    rate: '', badge: '', open: 'Открыто',
+    now: '<b>Сейчас:</b> «Записаться онлайн» открывает личный Telegram. Клиенту надо написать и ждать ответа — а вы в это время с машиной.',
+    was: '<b>Было</b>Кнопка открывала личный Telegram — писать и ждать ответа' },
+  autolux: { name: 'Autolux', kind: 'Детейлинг · тюнинг · автомойка', img: 'img/autolux.jpg', photo: 'img/autolux-photo.jpg', photoPos: 'center 28%', letter: 'A', bg: '#0C2026',
+    rate: '<b>★ 5,0</b> 166 оценок', badge: 'Хорошее место 2026', open: 'Открыто до 20:00',
+    now: '<b>Сейчас:</b> записаться можно только звонком. Когда все в боксе на полировке или мойке — трубку брать некому.',
+    was: '<b>Было</b>Записаться можно было только по телефону' },
+};
+const key = (qs.get('s') || '').toLowerCase();
+const st = S[key] || { name: qs.get('name') || 'Детейлинг-студия', kind: 'Детейлинг-студия', img: '', letter: (qs.get('name') || 'Д')[0].toUpperCase(),
+  bg: '#1F2937', rate: '', badge: '', open: 'Открыто', now: '<b>Сейчас:</b> чтобы записаться, клиенту нужно звонить или писать и ждать ответа.', was: '<b>Было</b>Только звонок или переписка' };
+
+// услуги и цены — ПРИМЕР, в рабочей версии из их прайса
+const SVC = [
+  ['Комплексная мойка', 1500], ['Полировка кузова', 12000], ['Керамика', 20000],
+  ['Химчистка салона', 7000], ['Плёнка (антигравий)', 25000],
+];
+const CLS = [['Седан / хэтчбек', 1], ['Кроссовер', 1.2], ['Внедорожник / минивэн', 1.4]];
+const SLOTS = ['Завтра 10:00', 'Завтра 15:00', 'Сб 11:00', 'Сб 16:00'];
+const rub = n => (Math.round(n / 100) * 100).toLocaleString('ru-RU') + ' ₽';
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+function avHTML(){
+  const img = st.img ? `<img src="${esc(st.img)}" alt="" onerror="this.remove()">` : '';
+  return esc(st.letter) + img;
+}
+document.title = `Запись в «${st.name}» · демо NOVACODE`;
+document.querySelectorAll('[data-av]').forEach(e => { e.style.setProperty('--avbg', st.bg); e.innerHTML = avHTML(); });
+document.querySelectorAll('.nm').forEach(e => e.textContent = st.name);
+$('kName').textContent = st.name;
+$('kind').textContent = st.kind;
+if (st.photo){ const m = $('map'); m.classList.add('photo'); m.style.backgroundImage = `url("${st.photo}")`; if (st.photoPos) m.style.backgroundPosition = st.photoPos; }
+$('rate').innerHTML = (st.rate ? `<span>${st.rate}</span>` : '') + (st.badge ? `<span class="badge">${esc(st.badge)}</span>` : '');
+$('open').textContent = st.open;
+$('now').innerHTML = st.now;
+$('was').innerHTML = st.was + '<br><b style="margin-top:6px;color:#14532D">Стало</b>Запись в MAX за минуту — без переписки и звонка';
+$('svc').innerHTML = SVC.slice(0, 4).map(s => `<div><b>${esc(s[0])}</b><span>от ${rub(s[1])}</span></div>`).join('');
+
+const msgs = $('msgs'), quick = $('quick');
+let step = 0, pick = {}, touring = false;
+const typing = document.createElement('div'); typing.className = 'typing'; typing.innerHTML = '<i></i><i></i><i></i>';
+
+function mark(n){ document.querySelectorAll('#steps li').forEach(li => li.classList.toggle('on', +li.dataset.s === n)); }
+function show(id){
+  ['sPlace', 'sChat', 'sBoss'].forEach(s => $(s).classList.toggle('off', s !== id));
+  $('tabs').hidden = id === 'sPlace';
+  document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === id));
+}
+function add(html, who){ const d = document.createElement('div'); d.className = 'm ' + who; d.innerHTML = html; msgs.insertBefore(d, typing); msgs.scrollTop = 1e6; }
+async function botSay(html, ms = 800){
+  if (!typing.parentNode) msgs.appendChild(typing);
+  typing.classList.add('on'); msgs.scrollTop = 1e6;
+  await sleep(ms); typing.classList.remove('on'); add(html, 'bot');
+}
+function ask(opts){ quick.innerHTML = opts.map((o, i) => `<button type="button" data-a="${i}">${esc(o)}</button>`).join(''); }
+
+async function start(){
+  show('sChat'); mark(1); msgs.innerHTML = ''; msgs.appendChild(typing); quick.innerHTML = ''; step = 0; pick = {};
+  add('Запись онлайн · ' + esc(st.name), 'sys');
+  await botSay(`Здравствуйте! Это «${esc(st.name)}». Запишу вас за минуту — без звонка. Что нужно сделать?`, 900);
+  mark(2); ask(SVC.map(s => s[0])); step = 1;
+}
+async function answer(i){
+  quick.innerHTML = '';
+  if (step === 1){ pick.svc = SVC[i]; add(esc(SVC[i][0]), 'me'); step = 2;
+    await botSay('Какая у вас машина?'); ask(CLS.map(c => c[0])); }
+  else if (step === 2){ pick.cls = CLS[i]; add(esc(CLS[i][0]), 'me'); step = 3;
+    pick.price = 'от ' + rub(pick.svc[1] * pick.cls[1]);
+    await botSay(`${esc(pick.svc[0])}, ${esc(pick.cls[0].toLowerCase())}:<span class="pr">${pick.price}<small>Точную цену мастер скажет после осмотра</small></span>`, 1000);
+    await botSay('Когда удобно заехать? Вот свободное время:', 600); ask(SLOTS); }
+  else if (step === 3){ pick.slot = SLOTS[i]; add(esc(SLOTS[i]), 'me'); step = 4;
+    await botSay('Как к вам обращаться? Номер возьму из MAX — нажмите «Поделиться контактом».'); ask(['Поделиться контактом']); }
+  else if (step === 4){ add('Алексей · +7 920 ••• 37 15', 'me'); step = 5;
+    await botSay(`Заявка принята ✅<br><b>${esc(pick.svc[0])}</b>, ${esc(pick.slot.toLowerCase())}.<br>Мастер подтвердит время. Накануне пришлю напоминание и адрес.`, 1000);
+    mark(3); $('cards').innerHTML = cardsHTML(true); $('sum').innerHTML = sumHTML(true);
+    showPush(`<b>Новая запись</b> · Алексей, ${esc(pick.slot.toLowerCase())}<br>${esc(pick.svc[0])}, ${esc(pick.cls[0].toLowerCase())}`); }
+}
+quick.addEventListener('click', e => { const b = e.target.closest('button'); if (b && !touring) answer(+b.dataset.a); });
+
+function cardsHTML(withNew){
+  const n = withNew ? `<div class="card new" id="newCard"><span class="tag">Новая запись · кнопка в 2ГИС</span><h4>Алексей · ${esc(pick.svc[0])}</h4>
+    <div class="row"><span>Машина</span><b>${esc(pick.cls[0])}</b></div>
+    <div class="row"><span>Время</span><b>${esc(pick.slot)}</b></div>
+    <div class="row"><span>Цена по прайсу</span><b>${pick.price}</b></div>
+    <div class="row"><span>Телефон</span><b>+7 920 ••• 37 15</b></div>
+    <div class="acts"><button type="button" class="p" id="okBtn">Подтвердить</button><button type="button" class="s">Перезвоню</button><button type="button" class="s">Другое время</button></div></div>` : '';
+  return n + `<div class="card"><span class="tag ok">Подтверждено</span><h4>Ирина · Химчистка салона</h4><div class="row"><span>Время</span><b>Завтра 12:00</b></div></div>
+    <div class="card"><span class="tag ok">Подтверждено</span><h4>Сергей · Комплексная мойка</h4><div class="row"><span>Время</span><b>Сегодня 17:30</b></div></div>`;
+}
+function sumHTML(full){
+  return `<small>Сегодня · пример</small><div class="big">${full ? 3 : 2} записи сами</div><p>без звонков и переписки — пока вы работали.<br>Вечером — сводка, утром — список на день.</p>`;
+}
+$('cards').innerHTML = cardsHTML(false); $('sum').innerHTML = sumHTML(false);
+$('cards').addEventListener('click', e => {
+  if (e.target.id !== 'okBtn') return;
+  const c = $('newCard'); c.classList.add('done'); c.querySelector('.tag').className = 'tag ok'; c.querySelector('.tag').textContent = 'Подтверждено · клиенту пришло подтверждение';
+  mark(4);
+});
+
+let pushT;
+function showPush(html){
+  const p = $('push'); p.innerHTML = `<div class="av" style="--avbg:${st.bg}">${avHTML()}</div><p><small>сейчас</small>${html}</p>`;
+  p.classList.add('on'); clearTimeout(pushT); pushT = setTimeout(() => p.classList.remove('on'), 3800);
+}
+$('push').addEventListener('click', () => { $('push').classList.remove('on'); show('sBoss'); });
+$('recBtn').addEventListener('click', () => { if (!touring) start(); });
+document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => { if (!touring) show(b.dataset.tab); }));
+
+// автопоказ
+const tapEl = $('tap');
+async function tap(sel){
+  const el = document.querySelector(sel); if (!el) return;
+  const s = $('screen').getBoundingClientRect(), r = el.getBoundingClientRect();
+  tapEl.style.opacity = 1; tapEl.style.translate = `${r.left - s.left + r.width / 2}px ${r.top - s.top + r.height / 2}px`;
+  await sleep(650); tapEl.classList.remove('press'); void tapEl.offsetWidth; tapEl.classList.add('press'); await sleep(250);
+}
+async function waitQuick(){ for (let i = 0; i < 40 && !quick.children.length; i++) await sleep(150); await sleep(350); }
+async function tour(){
+  if (touring) return; touring = true;
+  show('sPlace'); mark(0); $('sPlace').scrollTop = 0; await sleep(900);
+  await tap('#recBtn'); touring = false; start(); touring = true;
+  const picks = [1, 1, 2, 0];
+  for (const p of picks){ await waitQuick(); await tap(`[data-a="${p}"]`); touring = false; answer(p); touring = true; }
+  await sleep(4200);
+  await tap('[data-tab="sBoss"]'); show('sBoss'); await sleep(1400);
+  await tap('#okBtn'); $('okBtn')?.click(); await sleep(900);
+  tapEl.style.opacity = 0; touring = false;
+}
+$('tourBtn').addEventListener('click', tour);
+$('fab').addEventListener('click', tour);
+show('sPlace'); mark(0);
+if (location.hash === '#tour') setTimeout(tour, 600);
+})();
+</script>
+</body>
+</html>
