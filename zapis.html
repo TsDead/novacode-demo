@@ -211,10 +211,13 @@ button{font:inherit;cursor:pointer;color:inherit}
 const qs = new URLSearchParams(location.search);
 // Студии. img — файл в img/, если его нет, показывается буква.
 const S = {
-  depo: { name: 'Депо', kind: 'Детейлинг-студия', img: 'img/depo.jpg', photo: 'img/depo-photo.jpg', letter: 'Д', bg: '#1F2937',
-    rate: '', badge: '', open: 'Открыто',
-    now: '<b>Сейчас:</b> «Записаться онлайн» открывает личный Telegram. Клиенту надо написать и ждать ответа — а вы в это время с машиной.',
-    was: '<b>Было</b>Кнопка открывала личный Telegram — писать и ждать ответа' },
+  depo: { name: 'Депо', kind: 'Детейлинг-студия · Спортивная, 12В', img: 'img/depo.jpg', photo: 'img/depo-photo.jpg', letter: 'Д', bg: '#141414',
+    rate: '', badge: '', open: 'Ежедневно 09:00–20:00',
+    // услуги — с их сайта depodetail.com; цен на сайте нет → «по осмотру»
+    svc: [['Оклейка защитной плёнкой', null], ['Полировка кузова', null], ['Керамическое покрытие', null], ['Химчистка салона', null],
+          ['Детейлинг-мойка', null], ['Тонировка / антихром', null], ['Оклейка цветной плёнкой', null]],
+    now: '<b>Сейчас:</b> на картах «Записаться онлайн» открывает личный Telegram, на сайте — форма «мы свяжемся с вами». В обоих случаях клиент ждёт, пока вы освободитесь.',
+    was: '<b>Было</b>Личный Telegram или форма «мы вам перезвоним» — клиент ждёт ответа' },
   autolux: { name: 'Autolux', kind: 'Детейлинг · тюнинг · автомойка', img: 'img/autolux.jpg', photo: 'img/autolux-photo.jpg', photoPos: 'center 28%', letter: 'A', bg: '#0C2026',
     rate: '<b>★ 5,0</b> 166 оценок', badge: 'Хорошее место 2026', open: 'Открыто до 20:00',
     now: '<b>Сейчас:</b> записаться можно только звонком. Когда все в боксе на полировке или мойке — трубку брать некому.',
@@ -225,13 +228,14 @@ const st = S[key] || { name: qs.get('name') || 'Детейлинг-студия'
   bg: '#1F2937', rate: '', badge: '', open: 'Открыто', now: '<b>Сейчас:</b> чтобы записаться, клиенту нужно звонить или писать и ждать ответа.', was: '<b>Было</b>Только звонок или переписка' };
 
 // услуги и цены — ПРИМЕР, в рабочей версии из их прайса
-const SVC = [
+const SVC = st.svc || [
   ['Комплексная мойка', 1500], ['Полировка кузова', 12000], ['Керамика', 20000],
   ['Химчистка салона', 7000], ['Плёнка (антигравий)', 25000],
 ];
 const CLS = [['Седан / хэтчбек', 1], ['Кроссовер', 1.2], ['Внедорожник / минивэн', 1.4]];
 const SLOTS = ['Завтра 10:00', 'Завтра 15:00', 'Сб 11:00', 'Сб 16:00'];
 const rub = n => (Math.round(n / 100) * 100).toLocaleString('ru-RU') + ' ₽';
+const from = (n, k = 1) => n == null ? 'по осмотру' : 'от ' + rub(n * k);
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -250,7 +254,7 @@ $('rate').innerHTML = (st.rate ? `<span>${st.rate}</span>` : '') + (st.badge ? `
 $('open').textContent = st.open;
 $('now').innerHTML = st.now;
 $('was').innerHTML = st.was + '<br><b style="margin-top:6px;color:#14532D">Стало</b>Запись в MAX за минуту — без переписки и звонка';
-$('svc').innerHTML = SVC.slice(0, 4).map(s => `<div><b>${esc(s[0])}</b><span>от ${rub(s[1])}</span></div>`).join('');
+$('svc').innerHTML = SVC.slice(0, 4).map(s => `<div><b>${esc(s[0])}</b><span>${from(s[1])}</span></div>`).join('');
 
 const msgs = $('msgs'), quick = $('quick');
 let step = 0, pick = {}, touring = false;
@@ -281,8 +285,9 @@ async function answer(i){
   if (step === 1){ pick.svc = SVC[i]; add(esc(SVC[i][0]), 'me'); step = 2;
     await botSay('Какая у вас машина?'); ask(CLS.map(c => c[0])); }
   else if (step === 2){ pick.cls = CLS[i]; add(esc(CLS[i][0]), 'me'); step = 3;
-    pick.price = 'от ' + rub(pick.svc[1] * pick.cls[1]);
-    await botSay(`${esc(pick.svc[0])}, ${esc(pick.cls[0].toLowerCase())}:<span class="pr">${pick.price}<small>Точную цену мастер скажет после осмотра</small></span>`, 1000);
+    pick.price = from(pick.svc[1], pick.cls[1]);
+    const prTxt = pick.svc[1] == null ? 'Цена зависит от машины — мастер назовёт после осмотра' : 'Точную цену мастер скажет после осмотра';
+    await botSay(`${esc(pick.svc[0])}, ${esc(pick.cls[0].toLowerCase())}:<span class="pr">${pick.svc[1] == null ? 'Стоимость — по осмотру' : pick.price}<small>${prTxt}</small></span>`, 1000);
     await botSay('Когда удобно заехать? Вот свободное время:', 600); ask(SLOTS); }
   else if (step === 3){ pick.slot = SLOTS[i]; add(esc(SLOTS[i]), 'me'); step = 4;
     await botSay('Как к вам обращаться? Номер возьму из MAX — нажмите «Поделиться контактом».'); ask(['Поделиться контактом']); }
