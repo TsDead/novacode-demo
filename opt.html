@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0E1116">
+<title>Заказы сами в 1С · демо NOVACODE</title>
+<link rel="icon" href="data:,">
+<style>
+@font-face{font-family:"Manrope";src:url("fonts/manrope-cyrillic-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Manrope";src:url("fonts/manrope-latin-wght-normal.woff2") format("woff2");font-weight:200 800;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{
+  --stage:#0E1116; --ink:#0F1720; --ink-2:#5B6675; --ink-3:#8A94A3; --line:#E3E7EC; --bg:#F2F4F7; --paper:#fff;
+  --acc:#1F6FEB; --acc-2:#5AA0FF; --ok:#1A7F4B; --ok-bg:#E6F4EA; --warn:#9A6700; --warn-bg:#FFF4CE; --bad:#B42318; --bad-bg:#FDE7E9;
+  --sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:radial-gradient(1100px 700px at 15% 10%,#1B2533 0,var(--stage) 60%);color:#E8EDF3;font:400 15px/1.45 var(--sans);-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;color:inherit;border:0;background:none}
+.stage{min-height:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(32px,6vw,96px);align-items:center;max-width:1180px;margin:0 auto;padding:40px clamp(20px,5vw,56px)}
+.kicker{font:700 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--acc-2)}
+.story h1{font:800 clamp(32px,3.8vw,48px)/1.06 var(--sans);margin:14px 0 16px;color:#fff}
+.story h1 em{font-style:normal;color:var(--acc-2)}
+.story p{max-width:46ch;color:#AEB9C7;font-size:17px;margin:0 0 18px}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s;max-width:46ch}
+.steps li{counter-increment:s;display:flex;gap:14px;padding:11px 0;border-top:1px solid #222C3A;color:#8C99AA;transition:color .3s}
+.steps li::before{content:counter(s);font:700 13px/1.6 var(--sans);color:#4E5B6D;min-width:18px}
+.steps li b{display:block;color:#C9D3DF}
+.steps li.on{color:#E8EDF3}.steps li.on b{color:#fff}.steps li.on::before{color:var(--acc-2)}
+.credit{margin-top:20px;font-size:13px;color:#6F7C8E}
+
+.phone{position:relative;width:390px;height:812px;border-radius:52px;padding:12px;background:#05070A;box-shadow:0 0 0 1px #2A3546,0 50px 90px -40px rgba(0,0,0,.85)}
+.screen{position:relative;width:100%;height:100%;border-radius:41px;overflow:hidden;background:var(--bg);color:var(--ink)}
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;transition:opacity .3s,transform .4s var(--ease);background:var(--bg)}
+.scr.off{opacity:0;pointer-events:none;transform:translateX(24px)}
+.top{padding:22px 18px 12px;background:#fff;border-bottom:1px solid var(--line)}
+.top small{display:block;color:var(--ink-3);font-size:12.5px;font-weight:600}
+.top h2{margin:2px 0 0;font:800 20px/1.2 var(--sans)}
+.back{font-weight:700;color:var(--acc);font-size:14px;margin-bottom:6px;padding:0}
+.body{flex:1;overflow-y:auto;padding:12px 14px 96px;scrollbar-width:none}
+.body::-webkit-scrollbar{display:none}
+.foot{position:absolute;left:0;right:0;bottom:0;padding:12px 14px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(242,244,247,0),var(--bg) 35%)}
+.btn{width:100%;padding:15px 18px;border-radius:14px;background:var(--acc);color:#fff;font-weight:800;font-size:16px}
+.btn.dark{background:var(--ink)}
+.btn:disabled{opacity:.5}
+.note{font-size:12.5px;color:var(--ink-2);margin:10px 4px 0;text-align:center}
+.banner{border-radius:14px;padding:11px 13px;font-size:13.5px;margin-bottom:10px;background:var(--bad-bg);color:#7A1C14}
+.banner b{color:#5C140E}
+.banner.ok{background:var(--ok-bg);color:#14532D}
+
+/* входящие */
+.chat{display:flex;gap:11px;align-items:flex-start;background:#fff;border-radius:16px;padding:12px;margin-bottom:8px;width:100%;text-align:left;box-shadow:0 1px 0 var(--line)}
+.ava{flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;font-size:16px}
+.chat .mid{flex:1;min-width:0}
+.chat .row{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.chat .who{font-weight:800;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat .t{color:var(--ink-3);font-size:12px;flex:none}
+.chat .txt{color:var(--ink-2);font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:1px}
+.ch{display:inline-block;font-size:11px;font-weight:800;border-radius:6px;padding:1px 6px;margin-right:6px;vertical-align:1px;background:#EEF2F6;color:var(--ink-2)}
+.chip{display:inline-flex;align-items:center;gap:5px;margin-top:7px;font-size:12px;font-weight:800;border-radius:999px;padding:3px 9px;background:#EEF2F6;color:var(--ink-2);transition:background .3s,color .3s}
+.chip.ok{background:var(--ok-bg);color:var(--ok)}.chip.warn{background:var(--warn-bg);color:var(--warn)}.chip.bad{background:var(--bad-bg);color:var(--bad)}
+.spin{width:11px;height:11px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:r .7s linear infinite}
+@keyframes r{to{transform:rotate(1turn)}}
+
+/* заказ */
+.msg{background:#fff;border-radius:16px 16px 16px 4px;padding:11px 13px;font-size:14.5px;white-space:pre-line;box-shadow:0 1px 0 var(--line);margin-bottom:12px}
+.msg small{display:block;color:var(--ink-3);font-size:11.5px;margin-top:4px}
+.lbl{font-size:12px;font-weight:800;color:var(--ink-3);letter-spacing:.04em;margin:4px 4px 6px}
+.ln{display:flex;gap:10px;align-items:flex-start;background:#fff;border-radius:14px;padding:11px 12px;margin-bottom:6px;width:100%;text-align:left;border:1px solid transparent}
+.ln .ic{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:900}
+.ln.ok .ic{background:var(--ok-bg);color:var(--ok)}
+.ln.check{border-color:#F2D38A;background:#FFFBEB}.ln.check .ic{background:var(--warn-bg);color:var(--warn)}
+.ln.miss{border-color:#F5C2C0;background:#FFF7F7}.ln.miss .ic{background:var(--bad-bg);color:var(--bad)}
+.ln .nm,.ln .sub{display:block}
+.ln .nm{font-weight:700;font-size:14px;line-height:1.3}
+.ln .sub{font-size:12px;color:var(--ink-3);margin-top:2px}
+.ln .q{margin-left:auto;flex:none;font-weight:800;font-size:14px;text-align:right;padding-left:6px}
+.ln .q small{display:block;font-weight:600;color:var(--ink-3);font-size:11px}
+.ln.check .sub b{color:var(--warn)}
+
+/* шторка выбора */
+.sheet{position:absolute;inset:0;background:rgba(15,23,32,.45);display:flex;align-items:flex-end;z-index:20;transition:opacity .25s}
+.sheet.off{opacity:0;pointer-events:none}
+.sheet .in{background:#fff;width:100%;border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom))}
+.sheet h3{margin:0 0 4px;font-size:17px}
+.sheet p{margin:0 0 12px;color:var(--ink-2);font-size:13.5px}
+.opt{display:block;width:100%;text-align:left;padding:13px 14px;border-radius:12px;border:1px solid var(--line);margin-bottom:8px;font-weight:700;font-size:14px}
+.opt:active{background:#EEF2F6}
+.toast{position:absolute;left:14px;right:14px;top:16px;z-index:30;background:var(--ink);color:#fff;border-radius:14px;padding:12px 14px;font-size:13.5px;transition:opacity .3s,transform .3s var(--ease)}
+.toast.off{opacity:0;transform:translateY(-10px);pointer-events:none}
+
+/* окно 1С (условно) */
+.onec{background:#FBFAF3;border:1px solid #D8D3B8;border-radius:12px;overflow:hidden;font-size:13px}
+.onec .bar{background:#F7E9A0;padding:9px 12px;font-weight:800;color:#3D3A20;display:flex;justify-content:space-between}
+.onec .f{padding:8px 12px;border-bottom:1px solid #ECE7CC;display:flex;gap:8px}
+.onec .f span{color:#7A7656;min-width:72px}
+.onec table{width:100%;border-collapse:collapse}
+.onec th{font-size:11px;text-align:left;color:#7A7656;padding:6px 8px;background:#F3EFD9}
+.onec td{padding:7px 8px;border-top:1px solid #ECE7CC;vertical-align:top}
+.onec td:last-child,.onec th:last-child{text-align:right;white-space:nowrap}
+.onec tr.new td{animation:hl 1.2s var(--ease)}
+@keyframes hl{from{background:#FFF1A8}to{background:transparent}}
+.stamp{margin:12px auto 0;width:max-content;border:2px solid var(--ok);color:var(--ok);font-weight:900;border-radius:10px;padding:6px 14px;transform:rotate(-4deg);letter-spacing:.06em}
+
+/* итоги */
+.big{background:#fff;border-radius:18px;padding:16px;margin-bottom:10px}
+.big .n{font:800 40px/1 var(--sans)}
+.big .n small{font-size:16px;color:var(--ink-3);font-weight:700}
+.bars{display:flex;height:12px;border-radius:999px;overflow:hidden;margin:12px 0 8px;background:#EEF2F6}
+.bars i{display:block;height:100%}
+.leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--ink-2)}
+.leg b{color:var(--ink)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cmp div{background:#fff;border-radius:14px;padding:12px}
+.cmp div b{display:block;font-size:20px}
+.cmp div span{font-size:12px;color:var(--ink-3)}
+
+/* давно не заказывали */
+.dz{background:#fff;border-radius:16px;padding:13px 14px;margin-bottom:8px}
+.dz .row{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.dz .who{font-weight:800}
+.dz .late{font-weight:800;color:var(--bad);font-size:13px;flex:none}
+.dz .sub{font-size:12.5px;color:var(--ink-2);margin-top:3px}
+.dz .items{font-size:12.5px;color:var(--ink-3);margin-top:6px}
+.dz .call{margin-top:9px;font-size:13px;font-weight:800;color:var(--acc);padding:0}
+.dz .call.done{color:var(--ok)}
+
+/* финал */
+.cta{background:var(--ink);color:#fff;border-radius:20px;padding:20px 18px;margin-bottom:10px}
+.cta h3{margin:0 0 8px;font-size:20px;line-height:1.2}
+.cta p{margin:0;color:#C9D3DF;font-size:14px}
+.ol{counter-reset:o;list-style:none;margin:0;padding:0}
+.ol li{counter-increment:o;background:#fff;border-radius:14px;padding:12px 12px 12px 44px;position:relative;margin-bottom:6px;font-size:14px}
+.ol li::before{content:counter(o);position:absolute;left:12px;top:11px;width:22px;height:22px;border-radius:50%;background:#EEF2F6;font-weight:800;font-size:12px;display:grid;place-items:center}
+.contact{display:block;text-align:center;margin-top:12px;color:var(--acc);font-weight:800;text-decoration:none}
+
+.dots{display:flex;gap:5px;justify-content:center;margin-bottom:9px}
+.dots i{width:6px;height:6px;border-radius:50%;background:#C7CED8;transition:width .3s,background .3s}
+.dots i.on{width:18px;border-radius:3px;background:var(--acc)}
+
+@media (max-width:860px){
+  body{background:var(--bg)}
+  .stage{display:block;padding:0;max-width:none}
+  .story{display:none}
+  .phone{width:100%;height:100dvh;border-radius:0;padding:0;background:var(--bg);box-shadow:none}
+  .screen{border-radius:0}
+  .top{padding-top:calc(16px + env(safe-area-inset-top))}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <section class="story">
+    <div class="kicker">Демо · NOVACODE</div>
+    <h1>Заказы клиентов <em>сами</em> приходят в 1С готовыми</h1>
+    <p>Клиенты пишут как удобно им: «как обычно + сметаны 2 ящика», голосовые, фото списков. Сейчас менеджер перебивает каждый заказ руками. Здесь заказ приходит уже разобранным, менеджер только проверяет и проводит.</p>
+    <ol class="steps" id="steps">
+      <li class="on"><span><b>Утро: заказы во всех чатах</b>Telegram, MAX, почта — вперемешку</span></li>
+      <li><span><b>Разбор за секунды</b>товары подобраны из вашей номенклатуры</span></li>
+      <li><span><b>Сомнительное подсвечено</b>менеджер смотрит только жёлтые строки</span></li>
+      <li><span><b>Загрузка в заказ 1С</b>и «Провести»</span></li>
+      <li><span><b>Итог утра</b>сколько строк без правки</span></li>
+      <li><span><b>Давно не заказывали</b>кто из клиентов пропал</span></li>
+    </ol>
+    <p class="credit">Пример на учебных данных: товары и клиенты вымышленные. На встрече то же самое делаю на ваших заявках.</p>
+  </section>
+
+  <div class="phone"><div class="screen" id="screen">
+
+    <!-- 0. входящие -->
+    <section class="scr" id="s0">
+      <div class="top"><small id="coName">Ваша оптовая компания</small><h2>Заказы · сегодня</h2></div>
+      <div class="body">
+        <div class="banner" id="nowBanner"><b>Сейчас:</b> каждый заказ менеджер открывает, ищет товары в 1С и вбивает руками.</div>
+        <div id="inbox"></div>
+      </div>
+      <div class="foot"><div class="dots" data-i="0"></div><button class="btn" id="parseAll">Разобрать все заказы</button></div>
+    </section>
+
+    <!-- 1. заказ -->
+    <section class="scr off" id="s1">
+      <div class="top"><button class="back" data-go="0">‹ Все заказы</button><small id="oCh"></small><h2 id="oWho"></h2></div>
+      <div class="body">
+        <div class="lbl">КЛИЕНТ НАПИСАЛ</div>
+        <div class="msg" id="oMsg"></div>
+        <div class="lbl">ГОТОВЫЙ ЗАКАЗ</div>
+        <div id="oLines"></div>
+        <p class="note" id="oHint"></p>
+      </div>
+      <div class="foot"><div class="dots" data-i="1"></div><button class="btn" id="to1c">Загрузить в заказ 1С</button></div>
+      <div class="sheet off" id="sheet"><div class="in">
+        <h3>Какой товар имел в виду клиент?</h3>
+        <p id="shWhat"></p>
+        <div id="shOpts"></div>
+      </div></div>
+    </section>
+
+    <!-- 2. 1С -->
+    <section class="scr off" id="s2">
+      <div class="top"><button class="back" data-go="1">‹ Назад</button><small>Так это выглядит у менеджера в 1С</small><h2>Заказ клиента</h2></div>
+      <div class="body">
+        <div class="onec">
+          <div class="bar"><span>Заказ клиента (создание)</span><span>№ 0412</span></div>
+          <div class="f"><span>Клиент</span><b id="cWho"></b></div>
+          <div class="f"><span>Дата</span><b>04.11.2026</b></div>
+          <table><thead><tr><th>Номенклатура</th><th>Кол-во</th></tr></thead><tbody id="cRows"></tbody></table>
+        </div>
+        <div id="stamp" hidden class="stamp">ПРОВЕДЁН</div>
+        <p class="note">Таблица вставляется в заказ штатной загрузкой. В вашу базу снаружи никто не заходит.</p>
+      </div>
+      <div class="foot"><div class="dots" data-i="2"></div><button class="btn dark" id="post">Провести</button></div>
+    </section>
+
+    <!-- 3. итог -->
+    <section class="scr off" id="s3">
+      <div class="top"><button class="back" data-go="0">‹ Все заказы</button><small>Итог утра</small><h2>Сколько работы осталось менеджеру</h2></div>
+      <div class="body">
+        <div class="big">
+          <div class="n" id="sumOk"></div>
+          <div class="bars" id="sumBars"></div>
+          <div class="leg" id="sumLeg"></div>
+        </div>
+        <div class="cmp">
+          <div><b>руками</b><span>каждую строку найти в 1С и вбить</span></div>
+          <div><b id="cmpCheck"></b><span>проверить жёлтые и красные строки, остальное — провести</span></div>
+        </div>
+        <p class="note">Пример на учебных данных. На ваших заявках точность покажу до любых договорённостей.</p>
+      </div>
+      <div class="foot"><div class="dots" data-i="3"></div><button class="btn" data-go="4">А ещё — кто давно не заказывал</button></div>
+    </section>
+
+    <!-- 4. давно не заказывали -->
+    <section class="scr off" id="s4">
+      <div class="top"><button class="back" data-go="3">‹ Назад</button><small>Каждую неделю — из ваших продаж</small><h2>Давно не заказывали</h2></div>
+      <div class="body">
+        <div class="banner ok">Обычно эти клиенты заказывают регулярно, а сейчас пропали. Один звонок менеджера — и они снова заказывают у вас, а не у соседа.</div>
+        <div id="dorm"></div>
+      </div>
+      <div class="foot"><div class="dots" data-i="4"></div><button class="btn" data-go="5">Как попробовать у вас</button></div>
+    </section>
+
+    <!-- 5. финал -->
+    <section class="scr off" id="s5">
+      <div class="top"><button class="back" data-go="4">‹ Назад</button><small>NOVACODE</small><h2>Покажу на ваших заказах</h2></div>
+      <div class="body">
+        <div class="cta"><h3>Через 2 дня — ваши же заявки, уже готовыми заказами</h3><p>Бесплатно и ни к чему не обязывает. Если пользы нет — так и скажу.</p></div>
+        <div class="lbl">ЧТО НУЖНО ОТ ВАС</div>
+        <ol class="ol">
+          <li><b>50 последних заявок</b> — скриншоты, пересылкой или файлами. Телефоны можно замазать.</li>
+          <li><b>Список товаров из 1С</b> — «Ещё → Вывести список», сохранить в Excel.</li>
+          <li><b>Продажи за 3 месяца</b> — тоже выгрузкой, для «давно не заказывали».</li>
+        </ol>
+        <p class="note">Данные храню только у себя, нейросети — российские, сервер — в России. Могу подписать соглашение о неразглашении.</p>
+        <a class="contact" href="https://t.me/n0vacode">Степан · Telegram @n0vacode</a>
+        <a class="contact" href="https://new-coder.ru" style="margin-top:6px;font-weight:700">new-coder.ru</a>
+      </div>
+      <div class="foot"><div class="dots" data-i="5"></div><button class="btn dark" data-go="0" id="again">Показать ещё раз</button></div>
+    </section>
+
+    <div class="toast off" id="toast"></div>
+  </div></div>
+</div>
+
+<script>
+const D = {"orders":[{"client":"Кафе «Ромашка»","channel":"telegram","time":"08:12","text":"Лен привет. Как обычно + сметаны 2 ящика","lines":[{"raw":"Как обычно","art":"1001","name":"Молоко «Луговое» 3,2% 0,9 л","qty":10.0,"unit":"шт","status":"ok","why":"как обычно (обычный заказ клиента)","alts":null},{"raw":"сметаны 2 ящика","art":"1010","name":"Сметана «Луговое» 20% 300 г","qty":2.0,"unit":"кор","status":"ok","why":"этот клиент брал 12 раз","alts":null},{"raw":"Как обычно","art":"1090","name":"Масло подсолнечное рафинированное 1 л","qty":5.0,"unit":"шт","status":"ok","why":"как обычно (обычный заказ клиента)","alts":null},{"raw":"Как обычно","art":"1100","name":"Майонез Провансаль 67% 800 г","qty":6.0,"unit":"шт","status":"ok","why":"как обычно (обычный заказ клиента)","alts":null},{"raw":"Как обычно","art":"1060","name":"Яйцо куриное С1 10 шт","qty":4.0,"unit":"уп","status":"ok","why":"как обычно (обычный заказ клиента)","alts":null}],"summary":{"lines":5,"ok":5,"check":0,"miss":0,"ok_share":1.0}},{"client":"Магазин «Берёзка»","channel":"max","time":"08:20","text":"Молоко 3,2 — 20 шт\nкефир 10\nтворог 9% 15 шт\nяйцо С1 10 уп","lines":[{"raw":"Молоко 3.2 — 20 шт","art":"1003","name":"Молоко «Ока» 3,2% 1 л","qty":20.0,"unit":"шт","status":"ok","why":"этот клиент брал 17 раз","alts":null},{"raw":"кефир 10","art":"1020","name":"Кефир «Луговое» 3,2% 0,9 л","qty":10.0,"unit":"шт","status":"ok","why":"этот клиент брал 19 раз","alts":null},{"raw":"творог 9% 15 шт","art":"1030","name":"Творог «Луговое» 9% 200 г","qty":15.0,"unit":"шт","status":"ok","why":"этот клиент брал 19 раз","alts":null},{"raw":"яйцо С1 10 уп","art":"1060","name":"Яйцо куриное С1 10 шт","qty":10.0,"unit":"уп","status":"ok","why":"этот клиент брал 18 раз","alts":null}],"summary":{"lines":4,"ok":4,"check":0,"miss":0,"ok_share":1.0}},{"client":"Кофейня «Зерно»","channel":"почта","time":"08:31","text":"Добрый день! На завтра: молоко 3,2 Ока 30, сливки 33 6 шт, стаканы 250 2 кор","lines":[{"raw":"молоко 3.2 Ока 30","art":"1003","name":"Молоко «Ока» 3,2% 1 л","qty":30.0,"unit":"шт","status":"ok","why":"этот клиент брал 28 раз","alts":null},{"raw":"сливки 33 6 шт","art":"1035","name":"Сливки «Ока» 33% 0,5 л","qty":6.0,"unit":"шт","status":"ok","why":"этот клиент брал 25 раз","alts":null},{"raw":"стаканы 250 2 кор","art":"1150","name":"Стаканы бумажные 250 мл (уп 50 шт)","qty":2.0,"unit":"кор","status":"check","why":"похоже, но есть вариант: Крышки для стаканов 250 мл (уп 50 шт)","alts":[["1151","Крышки для стаканов 250 мл (уп 50 шт)"]]}],"summary":{"lines":3,"ok":2,"check":1,"miss":0,"ok_share":0.667}},{"client":"Пекарня «Колосок»","channel":"telegram","time":"08:47","text":"мука 3 мешка, сахар мешок 1, масло сливочное 82 20шт, яйца с0 15","lines":[{"raw":"мука 3 мешка","art":"1081","name":"Мука пшеничная в/с мешок 50 кг","qty":3.0,"unit":"меш","status":"ok","why":"этот клиент брал 11 раз","alts":null},{"raw":"сахар мешок 1","art":"1071","name":"Сахар песок мешок 50 кг","qty":1.0,"unit":"меш","status":"ok","why":"этот клиент брал 11 раз","alts":null},{"raw":"масло сливочное 82 20шт","art":"1040","name":"Масло сливочное «Луговое» 82,5% 180 г","qty":20.0,"unit":"шт","status":"ok","why":"этот клиент брал 10 раз","alts":null},{"raw":"яйца с0 15","art":"1061","name":"Яйцо куриное С0 10 шт","qty":15.0,"unit":"уп","status":"ok","why":"этот клиент брал 12 раз","alts":null}],"summary":{"lines":4,"ok":4,"check":0,"miss":0,"ok_share":1.0}},{"client":"Пиццерия «Тесто»","channel":"max","time":"09:05","text":"моцарелла 10 кг\nкетчуп 6\nфри 8 уп\nмасло подсолнечное 5л 4 шт","lines":[{"raw":"моцарелла 10 кг","art":"1051","name":"Сыр Моцарелла для пиццы 1 кг","qty":10.0,"unit":"кг","status":"ok","why":"этот клиент брал 10 раз","alts":null},{"raw":"кетчуп 6","art":"1101","name":"Кетчуп томатный 1 кг","qty":6.0,"unit":"шт","status":"ok","why":"этот клиент брал 12 раз","alts":null},{"raw":"фри 8 уп","art":"1110","name":"Картофель фри замороженный 2,5 кг","qty":8.0,"unit":"уп","status":"ok","why":"этот клиент брал 14 раз","alts":null},{"raw":"масло подсолнечное 5л 4 шт","art":"1091","name":"Масло подсолнечное рафинированное 5 л","qty":4.0,"unit":"шт","status":"ok","why":"этот клиент брал 13 раз","alts":null}],"summary":{"lines":4,"ok":4,"check":0,"miss":0,"ok_share":1.0}},{"client":"Кафе «Ромашка»","channel":"telegram","time":"21:40","text":"И ещё на пятницу майонез 4 шт и хлеб 10 буханок","lines":[{"raw":"И ещё на пятницу майонез 4 шт","art":"1100","name":"Майонез Провансаль 67% 800 г","qty":4.0,"unit":"шт","status":"ok","why":"этот клиент брал 9 раз","alts":null},{"raw":"хлеб 10 буханок","art":"","name":"—","qty":10.0,"unit":"шт","status":"miss","why":"не нашёл в номенклатуре","alts":null}],"summary":{"lines":2,"ok":1,"check":0,"miss":1,"ok_share":0.5}}],"dormant":[{"client":"Магазин «Продукты 24»","last":"11.10","every":3.0,"since":24,"weekday":"вс","items":["Масло сливочное «Мещёра» 72,5% 180 г","Кефир «Ока» 1% 1 л","Яйцо куриное С1 10 шт"]},{"client":"Столовая «Заря»","last":"06.10","every":7.0,"since":29,"weekday":"ср","items":["Сахар песок 1 кг","Пельмени «Мещёра» 800 г","Майонез Провансаль 67% 800 г"]},{"client":"Минимаркет «Солнечный»","last":"15.10","every":5.0,"since":20,"weekday":"пт","items":["Сок яблочный 1 л","Вода питьевая негаз. 0,5 л (уп 12 шт)","Сметана «Ока» 20% 400 г"]}]};
+const $ = s => document.querySelector(s);
+const dec = s => String(s).replace(/(\d)\.(\d)/g, '$1,$2');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const P = new URLSearchParams(location.search);
+const CO = (P.get('name') || '').trim().slice(0, 60);
+if (CO) { $('#coName').textContent = CO; document.title = `Заказы сами в 1С · ${CO}`; }
+const CH = { telegram: 'Telegram', max: 'MAX', 'почта': 'Почта' };
+const COLORS = ['#2F6F5E', '#8A4B2A', '#3D4E9A', '#7A3E7A', '#9A6B1F', '#2C6E8F', '#6B4A2F', '#4C6A2A'];
+const color = s => COLORS[[...s].reduce((a, c) => a + c.charCodeAt(0), 0) % COLORS.length];
+const letter = s => (s.replace(/^[^«]*«/, '').trim()[0] || s[0]).toUpperCase();
+const qtyFmt = (q, u) => `${String(q).replace(/\.0$/, '').replace('.', ',')}${u ? ' ' + u : ''}`;
+let parsed = false, cur = 0, screen = 0;
+const learned = {};
+
+// точки прогресса
+document.querySelectorAll('.dots').forEach(d => { const i = +d.dataset.i; d.innerHTML = [0,1,2,3,4,5].map(k => `<i class="${k===i?'on':''}"></i>`).join(''); });
+
+function go(n) {
+  for (let i = 0; i < 6; i++) $('#s' + i).classList.toggle('off', i !== n);
+  screen = n; $('#toast').classList.add('off');
+  document.querySelectorAll('#steps li').forEach((li, k) => li.classList.toggle('on', k === [0,2,3,4,5,5][n] || (n === 1 && k === 1)));
+  const b = $('#s' + n + ' .body'); if (b) b.scrollTop = 0;
+}
+document.addEventListener('click', e => { const g = e.target.closest('[data-go]'); if (g) go(+g.dataset.go); });
+
+function stats(o) {
+  const s = { ok: 0, check: 0, miss: 0 };
+  o.lines.forEach((l, k) => { const st = learned[`${D.orders.indexOf(o)}:${k}`] ? 'ok' : l.status; s[st]++; });
+  return s;
+}
+function chipFor(o) {
+  const s = stats(o);
+  if (s.miss) return ['bad', `❌ ${s.miss} нет в номенклатуре`];
+  if (s.check) return ['warn', `⚠️ ${s.check} проверить`];
+  return ['ok', `✅ готов, ${o.lines.length} строк`];
+}
+function renderInbox() {
+  $('#inbox').innerHTML = D.orders.map((o, i) => {
+    const [cls, txt] = parsed ? chipFor(o) : ['', 'не разобран'];
+    return `
+    <button class="chat" data-o="${i}">
+      <span class="ava" style="background:${color(o.client)}">${esc(letter(o.client))}</span>
+      <span class="mid">
+        <span class="row"><span class="who">${esc(o.client)}</span><span class="t">${esc(o.time)}</span></span>
+        <span class="txt"><span class="ch">${esc(CH[o.channel] || o.channel)}</span>${esc(o.text)}</span>
+        <span class="chip ${cls}" id="chip${i}">${txt}</span>
+      </span>
+    </button>`;
+  }).join('');
+}
+$('#inbox').addEventListener('click', e => { const b = e.target.closest('[data-o]'); if (!b) return; if (!parsed) { parseAll(); return; } openOrder(+b.dataset.o); });
+
+async function parseAll() {
+  if (parsed) { openOrder(firstInteresting()); return; }
+  const btn = $('#parseAll'); btn.disabled = true; btn.textContent = 'Разбираю…';
+  for (let i = 0; i < D.orders.length; i++) {
+    const c = $('#chip' + i); c.className = 'chip'; c.innerHTML = '<span class="spin"></span> разбираю';
+    await new Promise(r => setTimeout(r, 380));
+    const [cls, txt] = chipFor(D.orders[i]); c.className = 'chip ' + cls; c.textContent = txt;
+  }
+  parsed = true;
+  const all = D.orders.reduce((a, o) => a + o.lines.length, 0);
+  $('#nowBanner').className = 'banner ok';
+  $('#nowBanner').innerHTML = `<b>Готово:</b> ${D.orders.length} заказов, ${all} строк. Откройте любой.`;
+  btn.disabled = false; btn.textContent = 'Открыть заказ с вопросом';
+}
+$('#parseAll').addEventListener('click', parseAll);
+function firstInteresting() { const i = D.orders.findIndex(o => o.lines.some(l => l.status === 'check')); return i < 0 ? 0 : i; }
+
+function renderLines() {
+  const o = D.orders[cur];
+  $('#oLines').innerHTML = o.lines.map((l, k) => {
+    const key = `${cur}:${k}`; const fix = learned[key];
+    const st = fix ? 'ok' : l.status;
+    const name = fix ? fix.name : (l.status === 'miss' ? 'Нет в вашей номенклатуре' : l.name);
+    const sub = fix ? `исправлено · система запомнила` :
+      l.status === 'check' ? `<b>Не уверена — нажмите, чтобы выбрать</b> · написано: «${esc(dec(l.raw))}»` :
+      l.status === 'miss' ? `написано: «${esc(dec(l.raw))}» — менеджер решит сам` :
+      l.why.startsWith('как обычно') ? `«как обычно» — обычный заказ этого клиента` : `написано: «${esc(dec(l.raw))}» · ${esc(l.why)}`;
+    const ic = st === 'ok' ? '✓' : st === 'check' ? '?' : '✕';
+    return `<button class="ln ${st}" data-k="${k}"><span class="ic">${ic}</span><span><span class="nm">${esc(name)}</span><span class="sub">${sub}</span></span><span class="q">${qtyFmt(l.qty, l.unit)}</span></button>`;
+  }).join('');
+  const s = stats(o);
+  $('#oHint').textContent = s.check ? 'Жёлтую строку менеджер выбирает в один тап — и система запоминает этот выбор.' :
+    s.miss ? 'Красное — такого товара у вас нет в номенклатуре. Остальное готово.' : 'Всё подобрано. Менеджеру остаётся провести.';
+}
+function openOrder(i) {
+  cur = i; const o = D.orders[i];
+  $('#oWho').textContent = o.client;
+  $('#oCh').textContent = `${CH[o.channel] || o.channel} · ${o.time}`;
+  $('#oMsg').innerHTML = `${esc(o.text)}<small>${esc(o.time)}</small>`;
+  renderLines(); go(1);
+}
+$('#oLines').addEventListener('click', e => {
+  const b = e.target.closest('.ln.check'); if (!b) return;
+  const k = +b.dataset.k; const l = D.orders[cur].lines[k];
+  $('#shWhat').textContent = `Клиент написал: «${dec(l.raw)}»`;
+  const opts = [[l.art, l.name], ...(l.alts || [])];
+  $('#shOpts').innerHTML = opts.map(([a, n]) => `<button class="opt" data-a="${esc(a)}" data-n="${esc(n)}">${esc(n)}</button>`).join('');
+  $('#sheet').dataset.k = k; $('#sheet').classList.remove('off');
+});
+$('#sheet').addEventListener('click', e => {
+  const b = e.target.closest('.opt');
+  if (!b) { if (e.target.id === 'sheet') $('#sheet').classList.add('off'); return; }
+  const k = $('#sheet').dataset.k; const l = D.orders[cur].lines[k];
+  learned[`${cur}:${k}`] = { art: b.dataset.a, name: b.dataset.n };
+  $('#sheet').classList.add('off'); renderLines(); renderInbox();
+  toast(`Запомнил: «${dec(l.raw)}» у «${D.orders[cur].client.replace(/^.*«|»$/g,'')}» — это ${b.dataset.n}. В следующий раз подставлю сам.`);
+});
+function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.remove('off'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.add('off'), 3600); }
+
+$('#to1c').addEventListener('click', () => {
+  const o = D.orders[cur];
+  $('#cWho').textContent = o.client; $('#stamp').hidden = true;
+  $('#post').disabled = false; $('#post').textContent = 'Провести';
+  const rows = o.lines.map((l, k) => ({ l, fix: learned[`${cur}:${k}`] })).filter(x => x.fix || x.l.status !== 'miss');
+  $('#cRows').innerHTML = rows.map((x, i) => `<tr class="new" style="animation-delay:${i * 90}ms"><td>${esc(x.fix ? x.fix.name : x.l.name)}</td><td>${qtyFmt(x.l.qty, x.l.unit)}</td></tr>`).join('');
+  go(2);
+});
+$('#post').addEventListener('click', () => {
+  if ($('#post').textContent === 'Итог утра →') { renderSummary(); go(3); return; }
+  $('#stamp').hidden = false; $('#post').textContent = 'Итог утра →';
+});
+
+function renderSummary() {
+  let ok = 0, check = 0, miss = 0;
+  D.orders.forEach(o => { const s = stats(o); ok += s.ok; check += s.check; miss += s.miss; });
+  const all = ok + check + miss;
+  $('#sumOk').innerHTML = `${ok} <small>из ${all} строк — без правки</small>`;
+  $('#sumBars').innerHTML = `<i style="width:${ok/all*100}%;background:var(--ok)"></i><i style="width:${check/all*100}%;background:#E3B341"></i><i style="width:${miss/all*100}%;background:#E5484D"></i>`;
+  $('#sumLeg').innerHTML = `<span><b>${ok}</b> готовы</span><span><b>${check}</b> проверить</span><span><b>${miss}</b> нет в номенклатуре</span><span><b>${D.orders.length}</b> заказов</span>`;
+  $('#cmpCheck').textContent = `${check + miss} из ${all}`;
+}
+function renderDorm() {
+  $('#dorm').innerHTML = D.dormant.map((d, i) => `
+    <div class="dz">
+      <div class="row"><span class="who">${esc(d.client)}</span><span class="late">${d.since} дн. тишины</span></div>
+      <div class="sub">Обычно заказывает раз в ${String(d.every).replace(/\.0$/,'')} дн. Последний заказ — ${esc(d.last)}.</div>
+      <div class="items">Обычно берёт: ${d.items.map(esc).join(' · ')}</div>
+      <button class="call" data-d="${i}">Отметить: менеджер позвонил</button>
+    </div>`).join('');
+}
+$('#dorm').addEventListener('click', e => { const b = e.target.closest('.call'); if (!b) return; b.classList.add('done'); b.textContent = '✓ Позвонили — посмотрим, вернётся ли заказ'; });
+$('#again').addEventListener('click', () => { parsed = false; for (const k in learned) delete learned[k]; $('#nowBanner').className = 'banner'; $('#nowBanner').innerHTML = '<b>Сейчас:</b> каждый заказ менеджер открывает, ищет товары в 1С и вбивает руками.'; $('#parseAll').textContent = 'Разобрать все заказы'; renderInbox(); });
+
+renderInbox(); renderDorm();
+</script>
+</body>
+</html>
